@@ -1,0 +1,5 @@
+C:\Users\drako\source\repos\ClasesBaseDatosTPC\obj\Debug\net8.0\browser-wasm\ClasesBaseDatosTPC.csproj.AssemblyReference.cache
+C:\Users\drako\source\repos\ClasesBaseDatosTPC\obj\Debug\net8.0\browser-wasm\ClasesBaseDatosTPC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\drako\source\repos\ClasesBaseDatosTPC\obj\Debug\net8.0\browser-wasm\ClasesBaseDatosTPC.AssemblyInfoInputs.cache
+C:\Users\drako\source\repos\ClasesBaseDatosTPC\obj\Debug\net8.0\browser-wasm\ClasesBaseDatosTPC.AssemblyInfo.cs
+C:\Users\drako\source\repos\ClasesBaseDatosTPC\obj\Debug\net8.0\browser-wasm\ClasesBaseDatosTPC.csproj.CoreCompileInputs.cache

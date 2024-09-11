@@ -1,0 +1,85 @@
+[
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
+    "Method": "GetAllServicio",
+    "RelativePath": "api/ControladorBienServicio",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
+    "Method": "NuevoBienServicio",
+    "RelativePath": "api/ControladorBienServicio",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bs",
+        "Type": "BaseDatosTPC.BienServicio",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.BienServicio",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
+    "Method": "getServicio",
+    "RelativePath": "api/ControladorBienServicio/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
+    "Method": "ModificarBienServicio",
+    "RelativePath": "api/ControladorBienServicio/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "alumno",
+        "Type": "BaseDatosTPC.BienServicio",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.BienServicio",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

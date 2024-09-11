@@ -1,0 +1,12 @@
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\bin\Debug\net8.0\BaseDatosTPC.deps.json
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\bin\Debug\net8.0\BaseDatosTPC.dll
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\bin\Debug\net8.0\BaseDatosTPC.pdb
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.AssemblyInfoInputs.cache
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.AssemblyInfo.cs
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.csproj.CoreCompileInputs.cache
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.dll
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\refint\BaseDatosTPC.dll
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.pdb
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\ref\BaseDatosTPC.dll
+C:\Users\drako\Documents\GitHub\BaseDatosTPC\obj\Debug\net8.0\BaseDatosTPC.csproj.AssemblyReference.cache

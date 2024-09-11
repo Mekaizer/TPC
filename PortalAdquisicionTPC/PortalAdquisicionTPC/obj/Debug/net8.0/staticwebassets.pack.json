@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PortalAdquisicionTPC.bundle.scp.css",
+      "PackagePath": "staticwebassets\\PortalAdquisicionTPC.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PortalAdquisicionTPC.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.PortalAdquisicionTPC.props",
+      "PackagePath": "build\\PortalAdquisicionTPC.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.PortalAdquisicionTPC.props",
+      "PackagePath": "buildMultiTargeting\\PortalAdquisicionTPC.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.PortalAdquisicionTPC.props",
+      "PackagePath": "buildTransitive\\PortalAdquisicionTPC.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

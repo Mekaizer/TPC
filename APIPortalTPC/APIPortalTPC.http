@@ -1,0 +1,6 @@
+@APIPortalTPC_HostAddress = http://localhost:5237
+
+GET {{APIPortalTPC_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
