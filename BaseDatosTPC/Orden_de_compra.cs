@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Orden_de_compra
+    public class Orden_de_compra
     {
         [Key]
         public int Numero_OC {  get; set; }

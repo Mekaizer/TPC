@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Ordenes_Estadisticas
+    public class Ordenes_Estadisticas
     {
         [Key]
         public string? Codigo_OE { get; set; }

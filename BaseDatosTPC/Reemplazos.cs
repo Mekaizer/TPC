@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Reemplazos
+    public class Reemplazos
     {
         public string? Rut_Usuario_Vacaciones { get; set; }
 

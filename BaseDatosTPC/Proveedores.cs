@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Proveedores
+    public class Proveedores
     {
         [Key]
         public int ID_Proveedores {  get; set; }
@@ -34,6 +34,14 @@ namespace BaseDatosTPC
         public string? Email_Representante { get; set; }
 
         public bool Bloqueado { get; set; }
-        
+
+        public int Numero_Cuenta { get; set; }
+
+        public string? Nombre_Banco { get; set; }
+
+        public string? Swift1 { get; set; }
+
+        public string? Swift2 { get; set; }
+
     }
 }

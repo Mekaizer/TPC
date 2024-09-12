@@ -1,5 +1,7 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 /*
  * Este controlador permite conectar Base datos y los repositoriosBien_Servicio para ejecutar los metodos necesarios
@@ -8,6 +10,7 @@ namespace APIPortalTPC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     public class ControladorBienServicio : ControllerBase
     {
@@ -63,19 +66,19 @@ namespace APIPortalTPC.Controllers
             }
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<BienServicio>> ModificarBienServicio(BienServicio alumno,int id)
+        public async Task<ActionResult<BienServicio>> ModificarBienServicio(BienServicio bs,int id)
         {
             try
             {
-                if (id != alumno.ID_Bien_Servicio)
-                    return BadRequest("Alumno Id no coincide");
+                if (id != bs.ID_Bien_Servicio)
+                    return BadRequest("La Id no coincide");
 
-                var alumnoModificar = await RBS.GetServicio(id);
+                var bienServicioModificar = await RBS.GetServicio(id);
 
-                if (alumnoModificar == null)
+                if (bienServicioModificar == null)
                     return NotFound($"Alumno con = {id} no encontrado");
 
-                return await RBS.ModificarBien_Servicio(alumno);
+                return await RBS.ModificarBien_Servicio(bs);
             }
             catch (Exception)
             {

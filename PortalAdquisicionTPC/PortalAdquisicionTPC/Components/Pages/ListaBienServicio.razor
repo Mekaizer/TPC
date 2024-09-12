@@ -1,0 +1,21 @@
+﻿@page "/weather"
+<h3>Lista Bienes y Servicios</h3>
+
+@inherits ListaBienServicioBase
+
+@if (BS == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="card-deck">
+        @foreach (var bs in BS)
+        {
+            <div class="card-footer text-center">
+                <a href="#" class="btn btn-primary m-1">ID Bien/Servicio</a>
+                <a href="#" class="btn btn-primary m-1">Nombre del Bien/Servicio</a>
+            </div>
+        }
+    </div>
+}

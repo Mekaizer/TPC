@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Departamento
+    public class Departamento
     {
         [Key]
         public string Nombre { get; set; }

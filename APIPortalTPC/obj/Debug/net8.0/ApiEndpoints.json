@@ -60,7 +60,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "alumno",
+        "Name": "bs",
         "Type": "BaseDatosTPC.BienServicio",
         "IsRequired": true
       },
@@ -81,5 +81,15 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCotizacion",
+    "Method": "GetAllCotizacion",
+    "RelativePath": "api/ControladorCotizacion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

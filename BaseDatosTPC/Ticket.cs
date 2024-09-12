@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Ticket
+    public class Ticket
     {
         [Key]
         public int ID_Ticket { get; set; }

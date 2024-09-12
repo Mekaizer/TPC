@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaseDatosTPC
 {
-    internal class Centro_de_costo
+    public class Centro_de_costo
     {
         [Key]
         public string Codigo_Ceco { get; set; }
