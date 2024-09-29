@@ -1,23 +1,23 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PortalAdquisicionTPC.bundle.scp.css",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PortalAdquisicionTPC.bundle.scp.css",
       "PackagePath": "staticwebassets\\PortalAdquisicionTPC.bundle.scp.css"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\app.css",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\favicon.png",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {

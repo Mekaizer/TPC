@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj": {}
+    "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj": {
+    "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj",
+        "projectUniqueName": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj",
         "projectName": "PortalAdquisicionTPC.Client",
-        "projectPath": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj",
+        "projectPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\PortalAdquisicionTPC.Client.csproj",
         "packagesPath": "C:\\Users\\drako\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\obj\\",
+        "outputPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\drako\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -50,6 +50,14 @@
               "target": "Package",
               "version": "[7.3.1, )"
             },
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.AspNetCore.Components.WebAssembly": {
               "target": "Package",
               "version": "[8.0.8, )"
@@ -77,6 +85,14 @@
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.6, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Threading.Tasks": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

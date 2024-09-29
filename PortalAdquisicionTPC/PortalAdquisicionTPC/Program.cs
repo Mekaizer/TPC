@@ -1,5 +1,7 @@
 using PortalAdquisicionTPC.Client.Pages;
 using PortalAdquisicionTPC.Components;
+using PortalAdquisicionTPC.Components.Servicios;
+  
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddHttpClient<IServicioBS, ServicioBS>(cliente => cliente.BaseAddress= new Uri("https://localhost:5237/"));
+
 
 var app = builder.Build();
 

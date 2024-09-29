@@ -1,19 +1,19 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\obj\\Debug\\net8.0\\compressed\\1gsk4hztip.gz",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\obj\\Debug\\net8.0\\compressed\\1gsk4hztip.gz",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\wwwroot\\appsettings.Development.json",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\wwwroot\\appsettings.Development.json",
       "PackagePath": "staticwebassets\\appsettings.Development.json"
     },
     {
-      "Id": "C:\\Users\\drako\\Documents\\GitHub\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\wwwroot\\appsettings.json",
+      "Id": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\PortalAdquisicionTPC.Client\\wwwroot\\appsettings.json",
       "PackagePath": "staticwebassets\\appsettings.json"
     },
     {

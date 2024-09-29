@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BaseDatosTPC
-build_property.ProjectDir = C:\Users\drako\Documents\GitHub\BaseDatosTPC\
+build_property.ProjectDir = C:\Users\drako\Documents\GitHub\TPC\BaseDatosTPC\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

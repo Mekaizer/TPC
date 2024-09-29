@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\drako\\Documents\\GitHub\\BaseDatosTPC\\BaseDatosTPC.csproj": {}
+    "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\BaseDatosTPC.csproj": {}
   },
   "projects": {
-    "C:\\Users\\drako\\Documents\\GitHub\\BaseDatosTPC\\BaseDatosTPC.csproj": {
+    "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\BaseDatosTPC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\drako\\Documents\\GitHub\\BaseDatosTPC\\BaseDatosTPC.csproj",
+        "projectUniqueName": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\BaseDatosTPC.csproj",
         "projectName": "BaseDatosTPC",
-        "projectPath": "C:\\Users\\drako\\Documents\\GitHub\\BaseDatosTPC\\BaseDatosTPC.csproj",
+        "projectPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\BaseDatosTPC.csproj",
         "packagesPath": "C:\\Users\\drako\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\drako\\Documents\\GitHub\\BaseDatosTPC\\obj\\",
+        "outputPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\drako\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -50,6 +50,14 @@
               "target": "Package",
               "version": "[7.3.1, )"
             },
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -61,6 +69,14 @@
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.6, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Threading.Tasks": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

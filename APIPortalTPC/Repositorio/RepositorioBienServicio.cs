@@ -9,9 +9,9 @@ namespace APIPortalTPC.Repositorio
         //Variable que guarda el string para la conexion con la base de datos
         private string Conexion;
 
+        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
         public RepositorioBienServicio(AccesoDatos CD)
         {
-        
             Conexion = CD.ConexionDatosSQL;
         }
         private SqlConnection conectar()
@@ -43,7 +43,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = id;
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-
                 while (reader.Read())
                 {
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
@@ -62,8 +61,7 @@ namespace APIPortalTPC.Repositorio
                     else
                     {
                         bs.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]);
-                    }
-                    
+                    }       
                 }
             }
             catch (SqlException ex)
@@ -80,7 +78,7 @@ namespace APIPortalTPC.Repositorio
             }
             return bs;
         }
-
+        //Metodo que retorna una lista con los objetos
         public async Task<IEnumerable<BienServicio>> GetAllServicio()
         {
             List<BienServicio> lista = new List<BienServicio>();
@@ -94,7 +92,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "SELECT * FROM dbo.Bien_Servicio"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
-
+                //acontinuacion se procede a pasar los datos a una clase y luego se guardan en una lista
                 while (reader.Read())
                 {
                     BienServicio bs = new BienServicio();
@@ -131,9 +129,10 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         public async Task<BienServicio> ModificarBien_Servicio(BienServicio bs)
         {
-            BienServicio alumnoModificado = null;
+            BienServicio bsmodificado = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand Comm = null;
             SqlDataReader reader = null;
@@ -144,17 +143,14 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Bien_Servicio SET Bien_Servicio = @Bien_Servicio WHERE ID_Bien_Servicio = @ID_Bien_Servicio";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = bs.ID_Bien_Servicio;
-                //Usar cuando se corrija el ingresar datos, porque por ahora no se como meter una clase
-                 Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = bs.Bien_Servicio;
-                
-                //Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = "Pan";
+                Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = bs.Bien_Servicio;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
-                    alumnoModificado = await GetServicio(Convert.ToInt32(reader["ID_Bien_Servicio"]));
+                    bsmodificado = await GetServicio(Convert.ToInt32(reader["ID_Bien_Servicio"]));
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error modificando el alumno " + ex.Message);
+                throw new Exception("Error modificando el bien/servicio " + ex.Message);
             }
             finally
             {
@@ -165,27 +161,9 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Close();
                 sqlConexion.Dispose();
             }
-
-            return alumnoModificado;
+            return bsmodificado;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //Se crea una en un nuevo objeto y se agrega a la base de datos
         public async Task<BienServicio> NuevoBienServicio(BienServicio bs)
         {
             SqlConnection sql = conectar();
@@ -200,7 +178,6 @@ namespace APIPortalTPC.Repositorio
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
                 bs.ID_Bien_Servicio = id;
-               
             }
             catch (SqlException ex)
             {
@@ -214,7 +191,5 @@ namespace APIPortalTPC.Repositorio
             }
             return bs;
         }
-    }
-
-     
+    }    
 }
