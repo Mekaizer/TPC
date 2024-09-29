@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+
 
 namespace BaseDatosTPC
 {
@@ -11,6 +7,7 @@ namespace BaseDatosTPC
     {
         [Key]
         public int ID_Proveedores {  get; set; }
+
         public string? Rut_Proveedor {  get; set; }
         
         public string? Razon_Social { get; set; }
@@ -35,9 +32,9 @@ namespace BaseDatosTPC
 
         public bool Bloqueado { get; set; }
 
-        public int Numero_Cuenta { get; set; }
+        public int N_Cuenta { get; set; }
 
-        public string? Nombre_Banco { get; set; }
+        public string? Banco { get; set; }
 
         public string? Swift1 { get; set; }
 
