@@ -30,11 +30,11 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_Grupo,Id_Responsable) " +
-                    "VALUES (@Id_Grupo,@Id_Responsable); " +
+                    "(Id_Archivo,Id_Responsable) " +
+                    "VALUES (@Id_Archivo,@Id_Responsable); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Relacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
                 R.Id_Relacion = (int)await Comm.ExecuteScalarAsync();
             }
@@ -76,7 +76,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@ID_Relacion", SqlDbType.Int).Value = id;
 
                 reader = await Comm.ExecuteReaderAsync();
-                R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
+                R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                 R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
                 R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
 
@@ -113,7 +113,7 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Relacion R = new();
-                    R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
+                    R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                     R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                     lista.Add(R);
@@ -145,12 +145,12 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_Grupo = @Id_Grupo " +
+                    "Id_Archivo = @Id_Archivo " +
                     "Id_Responsable = @Id_Responsable " +
                     "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
-                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
 
 

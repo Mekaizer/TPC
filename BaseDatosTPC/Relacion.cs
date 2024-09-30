@@ -7,7 +7,7 @@ namespace BaseDatosTPC
     {
         [Key]
         public int Id_Relacion { get; set; }
-        public int? Id_Grupo { get; set; }
+        public int? Id_Archivo { get; set; }
         public int? Id_Responsable { get; set; }
     }
 }

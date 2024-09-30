@@ -30,13 +30,13 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_compra " +
-                    "(Numero_OC,Solped,Codigo_OE,Posicion) " +
-                    "VALUES (@Numero_OC,@Solped,@Codigo_OE,@Posicion); " +
+                    "(Numero_OC,Solped,Id_OE,Posicion) " +
+                    "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Codigo_OE", SqlDbType.Int).Value = OC.Codigo_OE;
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
             }
@@ -84,7 +84,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
+                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]); 
                 }
@@ -122,7 +122,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Orden_de_compra oc = new();
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
+                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     lista.Add(oc);
@@ -156,13 +156,13 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Orden_de_compra SET " +
                     "Numero_OC = @Numero_OC " +
                     "Solped = @Solped " +
-                    "Codigo_OE = @Codigo_OE " +
+                    "Id_OE = @Id_OE " +
                     "Posicion = @Posicion " +
                     "WHERE Id_Orden_compra = @Id_Orden_compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Codigo_OE", SqlDbType.Int).Value = OC.Codigo_OE;
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
 

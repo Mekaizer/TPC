@@ -9,7 +9,7 @@ namespace BaseDatosTPC
         public int Id_Orden_Compra { get; set; }
         public int Numero_OC {  get; set; }
         public int? Solped { get; set; }
-        public int? Codigo_OE { get; set; }
+        public int? Id_OE { get; set; }
         public string? posicion { get; set; }
 
     }
