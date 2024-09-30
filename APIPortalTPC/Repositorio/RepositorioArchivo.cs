@@ -37,19 +37,19 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Archivo where Id_Archivo = @Id_Archivo";
+                Comm.CommandText = "SELECT * FROM dbo.Archivo " +
+                    "where Id_Archivo = @Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = id;
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read()) {
-                    a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    a.Id_ArchivoCotizacion = Convert.ToInt32(reader["Id_Archivo"]);
-                    a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                    a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
-                    a.Grupo_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                }
+                a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
+                a.Id_ArchivoCotizacion = Convert.ToInt32(reader["Id_Archivo"]);
+                a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
+                a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                a.Grupo_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
+               
 
             }
             catch (SqlException ex)
@@ -115,7 +115,13 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Archivo SET Archivo = @Archivo WHERE Id_Archivo = @Id_Archivo";
+                Comm.CommandText = "UPDATE dbo.Archivo SET " +
+                    "Id_Archivo = @Id_Archivo " +
+                    "Id_ArchivoCotizacion = @Id_ArchivoCotizacion " +
+                    "IsPrincipal = @IsPrincipal " +
+                    "ArchivoDoc = @ArchivoDoc " +
+                    "Grupo_archivo = @Grupo_archivo " +
+                    "WHERE Id_Archivo = @Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
                 Comm.Parameters.Add("@Id_ArchivoCotizacion", SqlDbType.Int, 50).Value = A.Id_ArchivoCotizacion;
@@ -150,7 +156,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Archivo (Archivo) VALUES (@Archivo); SELECT SCOPE_IDENTITY() AS Id_Archivo";
+                Comm.CommandText = "INSERT INTO Archivo " +
+                    "(Id_ArchivoCotizacion,IsPrincipal,ArchivoDoc,Id_ArchivoCotizacion,Grupo_archivo) " +
+                    "VALUES (@Id_ArchivoCotizacion,@IsPrincipal,@ArchivoDoc,@Id_ArchivoCotizacion,@Grupo_archivo); " +
+                    "SELECT SCOPE_IDENTITY() AS Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_ArchivoCotizacion", SqlDbType.VarChar, 50).Value =A.Id_ArchivoCotizacion;
                 Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit, 50).Value = A.IsPrincipal;

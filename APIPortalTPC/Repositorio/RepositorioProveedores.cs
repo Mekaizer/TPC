@@ -20,47 +20,6 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
-        public async Task<Proveedores> NuevoProveedor(Proveedores P)
-        {
-            SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Proveedores (Proveedores) VALUES (@Proveedores); SELECT SCOPE_IDENTITY() AS ID_Proveedores";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar,10).Value = P.Rut_Proveedor;
-                Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 10).Value = P.Razon_Social;
-                Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar,10).Value = P.Razon_Social;
-                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
-                Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 50).Value = P.Razon_Social;
-                Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 50).Value = P.Comuna;
-                Comm.Parameters.Add("@Correo_Proveedor", SqlDbType.VarChar, 50).Value = P.Correo_Proveedor;
-                Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.Int).Value = P.Telefono_Proveedor;
-                Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 50).Value = P.Nombre_Representante;
-                Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 50).Value = P.Email_Representante;
-                Comm.Parameters.Add("@Bloqueado", SqlDbType.Bit).Value = P.Bloqueado;
-                Comm.Parameters.Add("@N_Cuenta", SqlDbType.Int).Value = P.N_Cuenta;
-                Comm.Parameters.Add("@Banco", SqlDbType.VarChar).Value = P.Banco;
-                Comm.Parameters.Add("@Swift1", SqlDbType.VarChar).Value = P.Swift1;
-                Comm.Parameters.Add("@Swift2", SqlDbType.VarChar).Value = P.Swift2;
-                P.ID_Bien_Servicio = (int)await Comm.ExecuteScalarAsync();
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error creando los datos en tabla Proveedores " + ex.Message);
-            }
-            finally
-            {
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return P;
-        }
-
         //Metodo que permite conseguir un objeto usando su llave foranea
         public async Task<Proveedores> GetProveedor(int id)
         {
@@ -80,33 +39,33 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Proveedores where ID_Proveedores = @ID_Proveedores";
+                Comm.CommandText = "SELECT * FROM dbo.Proveedores " +
+                    "where ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@ID_Proveedores", SqlDbType.Int).Value = id;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
-                    P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
-                    P.Razon_Social = Convert.ToString(reader["Razon_social"]);
-                    P.Nombre_Fantasia = Convert.ToString(reader["Nombre_Fantasia"]);
-                    P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    P.Direccion = Convert.ToString(reader["Direccion"]);
-                    P.Comuna = Convert.ToString(reader["Comuna"]);
-                    P.Correo_Proveedor = Convert.ToString(reader["Correo_Proveedor"]);
-                    P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
-                    P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]);
-                    P.Nombre_Representante = Convert.ToString(reader["Nombre_Representante"]);
-                    P.Email_Representante = Convert.ToString(reader["Email_Representante"]);
-                    P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
-                    P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
-                    P.Banco = Convert.ToString(reader["Banco"]);
-                    P.Swift1 = Convert.ToString(reader["Swift1"]);
-                    P.Swift2 = Convert.ToString(reader["Swift2"]);
-                }
+
+                P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
+                P.Razon_Social = Convert.ToString(reader["Razon_social"]);
+                P.Nombre_Fantasia = Convert.ToString(reader["Nombre_Fantasia"]);
+                P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+                P.Direccion = Convert.ToString(reader["Direccion"]);
+                P.Comuna = Convert.ToString(reader["Comuna"]);
+                P.Correo_Proveedor = Convert.ToString(reader["Correo_Proveedor"]);
+                P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
+                P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]);
+                P.Nombre_Representante = Convert.ToString(reader["Nombre_Representante"]);
+                P.Email_Representante = Convert.ToString(reader["Email_Representante"]);
+                P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
+                P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
+                P.Banco = Convert.ToString(reader["Banco"]);
+                P.Swift1 = Convert.ToString(reader["Swift1"]);
+                P.Swift2 = Convert.ToString(reader["Swift2"]);
+                P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
+
             }
             catch (SqlException ex)
             {
@@ -156,6 +115,7 @@ namespace APIPortalTPC.Repositorio
                     P.Banco = Convert.ToString(reader["Banco"]);
                     P.Swift1 = Convert.ToString(reader["Swift1"]);
                     P.Swift2 = Convert.ToString(reader["Swift2"]);
+                    P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                     lista.Add(P);
                 }
             }
@@ -184,7 +144,22 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Proveedores SET Proveedores = @Proveedores WHERE ID_Proveedores = @ID_Proveedores";
+                Comm.CommandText = "UPDATE dbo.Proveedores SET " +
+                    "Rut_Proveedor = @Rut_Proveedor " +
+                    "Nombre_Fantasia = @Nombre_Fantasia " +
+                    "ID_Bien_Servicio = @ID_Bien_Servicio " +
+                    "Comuna = @Comuna " +
+                    "Correo_Proveedor = @Correo_Proveedor " +
+                    "Telefono_Proveedor = @Telefono_Proveedor " +
+                    "Cargo_Representante = @Cargo_Representante " +
+                    "Nombre_Representante = @Nombre_Representante " +
+                    "Email_Representante = @Email_Representante " +
+                    "Bloqueado = @Bloqueado " +
+                    "N_Cuenta = @N_Cuenta " +
+                    "Banco = @Banco " +
+                    "Swift1 = @Swift1 " +
+                    "Swift2 = @Swift2 " +
+                    "WHERE ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
                 P.Razon_Social = Convert.ToString(reader["Razon_social"]);
@@ -202,7 +177,6 @@ namespace APIPortalTPC.Repositorio
                 P.Banco = Convert.ToString(reader["Banco"]);
                 P.Swift1 = Convert.ToString(reader["Swift1"]);
                 P.Swift2 = Convert.ToString(reader["Swift2"]);
-
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Pmod = await GetProveedor(Convert.ToInt32(reader["ID_Proveedores"]));
@@ -221,6 +195,50 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Pmod;
+        }        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        public async Task<Proveedores> NuevoProveedor(Proveedores P)
+        {
+            SqlConnection sql = conectar();
+            SqlCommand Comm = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "INSERT INTO Proveedores " +
+                    "(Rut_Proveedor,Razon_Social,Nombre_Fantasia,ID_Bien_Servicio,Direccion,Comuna,Correo_Proveedor,Telefono_Proveedor,Nombre_Representante,Email_Representante,Bloqueado,N_Cuenta,Banco,Swift1,Swift2) " +
+                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante,@Email_Representante,@Bloqueado,@N_Cuenta,@Banco,@Swift1,@,Swift2); " +
+                    "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 10).Value = P.Rut_Proveedor;
+                Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 10).Value = P.Razon_Social;
+                Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 10).Value = P.Razon_Social;
+                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
+                Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 50).Value = P.Razon_Social;
+                Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 50).Value = P.Comuna;
+                Comm.Parameters.Add("@Correo_Proveedor", SqlDbType.VarChar, 50).Value = P.Correo_Proveedor;
+                Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.Int).Value = P.Telefono_Proveedor;
+                Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 50).Value = P.Nombre_Representante;
+                Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 50).Value = P.Email_Representante;
+                Comm.Parameters.Add("@Bloqueado", SqlDbType.Bit).Value = P.Bloqueado;
+                Comm.Parameters.Add("@N_Cuenta", SqlDbType.Int).Value = P.N_Cuenta;
+                Comm.Parameters.Add("@Banco", SqlDbType.VarChar).Value = P.Banco;
+                Comm.Parameters.Add("@Swift1", SqlDbType.VarChar).Value = P.Swift1;
+                Comm.Parameters.Add("@Swift2", SqlDbType.VarChar).Value = P.Swift2;
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                int id = (int)idDecimal;
+                P.ID_Bien_Servicio = id;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error creando los datos en tabla Proveedores " + ex.Message);
+            }
+            finally
+            {
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return P;
         }
 
     }

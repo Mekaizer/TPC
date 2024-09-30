@@ -47,6 +47,7 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
+                    cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceo"]);
                     cc.Nombre = Convert.ToString(reader["Nombre"]);
                     cc.Codigo_Ceco= Convert.ToString(reader["Codigo_Ceco"]);
                 }
@@ -102,7 +103,6 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-
         //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         public async Task<Centro_de_costo> ModificarCeCo(Centro_de_costo CeCo)
         {
@@ -114,7 +114,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Centro_de_costo SET Centro_de_costo = @Centro_de_costo WHERE Centro_de_costo = @Centro_de_costo";
+                Comm.CommandText = "UPDATE dbo.Centro_de_costo SET " +
+                    "Nombre = @Nombre" +
+                    "Codigo_Ceco = @Codigo_Ceco" +
+                    "WHERE Id_Ceco = @Id_Ceco";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = ccmod.Id_Ceco;
                 //Usar cuando se corrija el ingresar datos, porque por ahora no se como meter una clase
@@ -150,7 +153,9 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Centro_de_costo (Nombre,Centro_de_costo) VALUES (@Nombre,@Centro_de_costo); SELECT SCOPE_IDENTITY() AS Id_Ceco";
+                Comm.CommandText = "INSERT INTO Centro_de_costo (Nombre,Codigo_Ceco) " +
+                    "VALUES (@Nombre,@Codigo_Ceco); " +
+                    "SELECT SCOPE_IDENTITY() AS Id_Ceco";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = Ceco.Codigo_Ceco;

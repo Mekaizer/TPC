@@ -29,7 +29,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Orden_de_compra (Orden_de_compra) VALUES (@Orden_de_compra); SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
+                Comm.CommandText = "INSERT INTO Orden_de_compra " +
+                    "(Numero_OC,Solped,Codigo_OE,Posicion) " +
+                    "VALUES (@Numero_OC,@Solped,@Codigo_OE,@Posicion); " +
+                    "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
@@ -69,7 +72,8 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Orden_de_compra where Id_Orden_Compra = @Id_Orden_Compra";
+                Comm.CommandText = "SELECT * FROM dbo.Orden_de_compra " +
+                    "where Id_Orden_Compra = @Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = id;
@@ -80,17 +84,9 @@ namespace APIPortalTPC.Repositorio
                 {
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    object COE = Convert.ToInt32(reader["Codigo_OE"]);
-                    if (COE != DBNull.Value)
-                    {
-                        oc.Codigo_OE = (int)COE;
-                    }
-                    else
-                    {
-                        oc.Codigo_OE = null;
-                    }
+                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
-
+                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]); 
                 }
             }
             catch (SqlException ex)
@@ -125,18 +121,10 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Orden_de_compra oc = new();
-                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    object COE = Convert.ToInt32(reader["Codigo_OE"]);
-                    if (COE != DBNull.Value)
-                    {
-                        oc.Codigo_OE = (int)COE;
-                    }
-                    else
-                    {
-                        oc.Codigo_OE = null;
-                    }
+                    oc.Codigo_OE = = Convert.ToInt32(reader["Codigo_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
+                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     lista.Add(oc);
                 }
             }
@@ -165,7 +153,12 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Orden_de_compra SET Orden_de_compra = @Orden_de_compra WHERE Id_Orden_compra = @Id_Orden_compra";
+                Comm.CommandText = "UPDATE dbo.Orden_de_compra SET " +
+                    "Numero_OC = @Numero_OC " +
+                    "Solped = @Solped " +
+                    "Codigo_OE = @Codigo_OE " +
+                    "Posicion = @Posicion " +
+                    "WHERE Id_Orden_compra = @Id_Orden_compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;

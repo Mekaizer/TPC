@@ -29,7 +29,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Reemplazos (Reemplazos) VALUES (@Reemplazos); SELECT SCOPE_IDENTITY() AS ID_Reemplazos";
+                Comm.CommandText = "INSERT INTO Reemplazos " +
+                    "(Rut_Usuario_Vacaciones,Rut_Usuario_Reemplazante,Comentario,Fecha_Retorno) " +
+                    "VALUES (@Rut_Usuario_Vacaciones,@Rut_Usuario_Reemplazante,@Comentario,@Fecha_Retorno); " +
+                    "SELECT SCOPE_IDENTITY() AS ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Rut_Usuario_Vacaciones", SqlDbType.Int).Value = R.Rut_Usuario_Vacaciones;
                 Comm.Parameters.Add("@Rut_Usuario_Reemplazante", SqlDbType.Int).Value = R.Rut_Usuario_Reemplazante;
@@ -152,7 +155,13 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Reemplazos SET Reemplazos = @Reemplazos WHERE ID_Reemplazos = @ID_Reemplazos";
+                Comm.CommandText = "UPDATE dbo.Reemplazos SET " +
+                    "ID_Reemplazos = @ID_Reemplazos " +
+                    "Rut_Usuario_Vacaciones = @Rut_Usuario_Vacaciones " +
+                    "Rut_Usuario_Reemplazante = @Rut_Usuario_Reemplazante " +
+                    "Comentario = @Comentario " +
+                    "Fecha_Retorno = @Fecha_Retorno " +
+                    "WHERE ID_Reemplazos = @ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = R.ID_Reemplazos;
                 Comm.Parameters.Add("@Rut_Usuario_Vacaciones", SqlDbType.Int).Value = R.Rut_Usuario_Vacaciones;
