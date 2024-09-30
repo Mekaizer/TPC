@@ -91,9 +91,9 @@ namespace APIPortalTPC.Controllers
 
                 return await RU.ModificarUsuario(U);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+ex);
             }
         }
     }

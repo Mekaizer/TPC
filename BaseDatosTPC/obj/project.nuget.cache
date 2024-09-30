@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "HuKuoV4+sI8=",
+  "dgSpecHash": "ntOEFW9pQwA=",
   "success": true,
   "projectFilePath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\BaseDatosTPC.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\drako\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\drako\\.nuget\\packages\\epplus\\7.3.1\\epplus.7.3.1.nupkg.sha512",
     "C:\\Users\\drako\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",
     "C:\\Users\\drako\\.nuget\\packages\\epplus.system.drawing\\6.1.1\\epplus.system.drawing.6.1.1.nupkg.sha512",

@@ -150,7 +150,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Centro_de_costo (Centro_de_costo) VALUES (@Centro_de_costo); SELECT SCOPE_IDENTITY() AS Id_Ceco";
+                Comm.CommandText = "INSERT INTO Centro_de_costo (Nombre,Centro_de_costo) VALUES (@Nombre,@Centro_de_costo); SELECT SCOPE_IDENTITY() AS Id_Ceco";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = Ceco.Codigo_Ceco;

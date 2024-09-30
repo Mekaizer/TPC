@@ -9,6 +9,7 @@
       "APIPortalTPC/1.0.0": {
         "dependencies": {
           "BaseDatosTPC": "1.0.0",
+          "Dapper": "2.1.35",
           "EPPlus": "7.3.1",
           "Microsoft.AspNet.WebApi.Client": "6.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8",
@@ -20,6 +21,14 @@
         },
         "runtime": {
           "APIPortalTPC.dll": {}
+        }
+      },
+      "Dapper/2.1.35": {
+        "runtime": {
+          "lib/net7.0/Dapper.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.35.13827"
+          }
         }
       },
       "EPPlus/7.3.1": {
@@ -432,6 +441,7 @@
       "System.Threading.Tasks.Extensions/4.5.4": {},
       "BaseDatosTPC/1.0.0": {
         "dependencies": {
+          "Dapper": "2.1.35",
           "EPPlus": "7.3.1",
           "Microsoft.AspNet.WebApi.Client": "6.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8",
@@ -455,6 +465,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Dapper/2.1.35": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw==",
+      "path": "dapper/2.1.35",
+      "hashPath": "dapper.2.1.35.nupkg.sha512"
     },
     "EPPlus/7.3.1": {
       "type": "package",
