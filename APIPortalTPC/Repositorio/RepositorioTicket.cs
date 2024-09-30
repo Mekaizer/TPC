@@ -29,7 +29,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Ticket (Ticket) VALUES (@Ticket); SELECT SCOPE_IDENTITY() AS ID_Ticket";
+                Comm.CommandText = "INSERT INTO Ticket " +
+                    "(Id_OC,Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor,Fecha_OC_Enviada,Fecha_OC_Liberada) " +
+                    "VALUES (@Id_OC,@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor,@Fecha_OC_Enviada,@Fecha_OC_Liberada); " +
+                    "SELECT SCOPE_IDENTITY() AS ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_OC", SqlDbType.Int).Value = T.Id_OC;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
@@ -90,6 +93,7 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]);
+                    T.ID_Ticket=Convert.ToInt32(reader["ID_Ticket"]);
                 }
             }
             catch (SqlException ex)
@@ -133,6 +137,7 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]);
+                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     lista.Add(T);
                 }
             }
@@ -161,7 +166,15 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Ticket SET Ticket = @Ticket WHERE ID_Ticket = @ID_Ticket";
+                Comm.CommandText = "UPDATE dbo.Ticket SET " +
+                    "Id_OC = @Id_OC " +
+                    "Estado = @Estado " +
+                    "Fecha_Creacion_OC = @Fecha_Creacion_OC " +
+                    "Id_Usuario = @Id_Usuario " +
+                    "Id_Proveedor = @Id_Proveedor " +
+                    "Fecha_OC_Enviada = @Fecha_OC_Enviada " +
+                    "Fecha_OC_Liberada = @Fecha_OC_Liberada " +
+                    "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_OC", SqlDbType.Int).Value = T.Id_OC;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;

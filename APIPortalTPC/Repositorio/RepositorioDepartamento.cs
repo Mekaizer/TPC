@@ -21,35 +21,6 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
-        public async Task<Departamento> NuevoDepartamento(Departamento D)
-        {
-            SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Departamento (Departamento) VALUES (@Departamento); SELECT SCOPE_IDENTITY() AS Id_Departamento";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
-                Comm.Parameters.Add("@Encargado", SqlDbType.VarChar,50).Value = D.Encargado;
-                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = D.Nombre;
-                D.Id_Departamento = (int)await Comm.ExecuteScalarAsync();
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error creando los datos en tabla Departamento " + ex.Message);
-            }
-            finally
-            {
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return D;
-        }
-
         //Metodo que permite conseguir un objeto usando su llave foranea
         public async Task<Departamento> GetDepartamento(int id)
         {
@@ -73,7 +44,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = id;
-
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
@@ -146,7 +116,11 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Departamento SET Departamento = @Departamento WHERE Id_Departamento = @Id_Departamento";
+                Comm.CommandText = "UPDATE dbo.Departamento SET " +
+                    "Descripcion = @Descripcion " +
+                    "Encargado = @Encargado " +
+                    "Nombre = @Nombre " +
+                    "WHERE Id_Departamento = @Id_Departamento";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
                 Comm.Parameters.Add("@Encargado", SqlDbType.VarChar, 50).Value = D.Encargado;
@@ -170,6 +144,37 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Dmod;
+        }
+        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        public async Task<Departamento> NuevoDepartamento(Departamento D)
+        {
+            SqlConnection sql = conectar();
+            SqlCommand Comm = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "INSERT INTO " +
+                    "Departamento (Descripcion,Encargado,Nombre) " +
+                    "VALUES (@Descripcion,@Encargado,@Nombre); " +
+                    "SELECT SCOPE_IDENTITY() AS Id_Departamento";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
+                Comm.Parameters.Add("@Encargado", SqlDbType.VarChar, 50).Value = D.Encargado;
+                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = D.Nombre;
+                D.Id_Departamento = (int)await Comm.ExecuteScalarAsync();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error creando los datos en tabla Departamento " + ex.Message);
+            }
+            finally
+            {
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return D;
         }
 
     }

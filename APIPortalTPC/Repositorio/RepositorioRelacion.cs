@@ -29,7 +29,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Relacion (Relacion) VALUES (@Relacion); SELECT SCOPE_IDENTITY() AS ID_Relacion";
+                Comm.CommandText = "INSERT INTO Relacion " +
+                    "(Id_Grupo,Id_Responsable) " +
+                    "VALUES (@Id_Grupo,@Id_Responsable); " +
+                    "SELECT SCOPE_IDENTITY() AS ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
                 Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
@@ -72,14 +75,11 @@ namespace APIPortalTPC.Repositorio
                 //se guarda el parametro 
                 Comm.Parameters.Add("@ID_Relacion", SqlDbType.Int).Value = id;
 
-                //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
-                    R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
-    
-                }
+                R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
+                R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
+                R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
+
             }
             catch (SqlException ex)
             {
@@ -115,6 +115,7 @@ namespace APIPortalTPC.Repositorio
                     Relacion R = new();
                     R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
                     R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
+                    R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                     lista.Add(R);
                 }
             }
@@ -143,7 +144,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Relacion SET Relacion = @Relacion WHERE ID_Relacion = @ID_Relacion";
+                Comm.CommandText = "UPDATE dbo.Relacion SET " +
+                    "Id_Grupo = @Id_Grupo " +
+                    "Id_Responsable = @Id_Responsable " +
+                    "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
                 Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;

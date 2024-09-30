@@ -45,15 +45,8 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
-                    if (reader["ID_Bien_Servicio"] == System.DBNull.Value)
-                    {
-                        bs.ID_Bien_Servicio = 0;
-                    }
-                    else
-                    {
-                        bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    }
+                    bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+
                     if (reader["Bien_Servicio"] == System.DBNull.Value)
                     {
                         bs.Bien_Servicio = " ";
@@ -96,14 +89,8 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     BienServicio bs = new BienServicio();
-                    if (reader["ID_Bien_Servicio"] == System.DBNull.Value)
-                    {
-                        bs.ID_Bien_Servicio = 0;
-                    }
-                    else
-                    {
-                        bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    }
+                    bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+                    
                     if (reader["Bien_Servicio"] == System.DBNull.Value)
                     {
                         bs.Bien_Servicio = " ";
