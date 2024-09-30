@@ -107,7 +107,7 @@ namespace APIPortalTPC.Repositorio
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error cargando los datos tabla Usuario "  +ex.Message);
+                throw new Exception("Error cargando los datos tabla Usuario " + ex.Message);
             }
             finally
             {
