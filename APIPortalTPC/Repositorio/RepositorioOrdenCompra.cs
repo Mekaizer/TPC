@@ -122,7 +122,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Orden_de_compra oc = new();
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Codigo_OE = = Convert.ToInt32(reader["Codigo_OE"]);
+                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     lista.Add(oc);

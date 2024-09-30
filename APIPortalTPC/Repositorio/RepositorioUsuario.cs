@@ -42,10 +42,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Usuario where Id_usuario = @Id_usuario";
+                Comm.CommandText = "SELECT * FROM dbo.Usuario where Id_Usuario = @Id_Usuario";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@Id_usuario", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = id;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();

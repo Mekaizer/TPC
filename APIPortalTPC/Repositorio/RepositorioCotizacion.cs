@@ -48,7 +48,7 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                 cot.ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]);
-                cot.Rut_Solicitante = Convert.ToInt32(reader["Rut_Solicitante"]);
+                cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
                 object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                 cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                 cot.Estado = Convert.ToString(reader["Estado"]);
@@ -90,7 +90,7 @@ namespace APIPortalTPC.Repositorio
                     Cotizacion cot = new Cotizacion();
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     cot.ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]);
-                    cot.Rut_Solicitante = Convert.ToInt32(reader["Rut_Solicitante"]);
+                    cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = Convert.ToString(reader["Estado"]);
@@ -126,7 +126,7 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
-                    "Rut_Solicitante = @Rut_Solicitante " +
+                    "Id_Solicitante = @Id_Solicitante " +
                     "Fecha_Creacion_Cotizacion = @Fecha_Creacion_Cotizacion " +
                     "Estado = @Estado " +
                     "Id_Proveedor = @Id_Proveedor " +
@@ -136,7 +136,7 @@ namespace APIPortalTPC.Repositorio
                     "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion.ID_Cotizacion;
-                Comm.Parameters.Add("@Rut_Solicitante", SqlDbType.VarChar, 50).Value = cotizacion.Rut_Solicitante;
+                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.VarChar, 50).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = cotizacion.Fecha_Creacion_Cotizacion;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = cotizacion.Id_Proveedor;
@@ -174,11 +174,11 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO " +
-                    "Cotizacion (Rut_Solicitante,Fecha_Creacion_Cotizacion,Estado,Id_Proveedor,Detalle,Solped,Id_Orden_Compra) " +
-                    "VALUES (@Rut_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@Id_Proveedor,@Detalle,@Solped,@Id_Orden_Compra); " +
+                    "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,Id_Proveedor,Detalle,Solped,Id_Orden_Compra) " +
+                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@Id_Proveedor,@Detalle,@Solped,@Id_Orden_Compra); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Rut_Solicitante", SqlDbType.Int).Value = cotizacion.Rut_Solicitante;
+                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = cotizacion.Fecha_Creacion_Cotizacion;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = cotizacion.Id_Proveedor;

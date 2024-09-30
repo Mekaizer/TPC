@@ -20,48 +20,6 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
-        public async Task<Relacion> ModificarRelacion(Relacion R)
-        {
-            Relacion Rmod = null;
-            SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
-            try
-            {
-                sqlConexion.Open();
-                Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_Grupo = @Id_Grupo " +
-                    "Id_Responsable = @Id_Responsable " +
-                    "WHERE ID_Relacion = @ID_Relacion";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
-                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
-                Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
-
-
-                reader = await Comm.ExecuteReaderAsync();
-                if (reader.Read())
-                    Rmod = await GetRelacion(Convert.ToInt32(reader["ID_Relacion"]));
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error modificando la cotización " + ex.Message);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-
-                Comm.Dispose();
-                sqlConexion.Close();
-                sqlConexion.Dispose();
-            }
-            return Rmod;
-        }
-
         //Se crea una en un nuevo objeto y se agrega a la base de datos
         public async Task<Relacion> NuevaRelacion(Relacion R)
         {
@@ -173,6 +131,47 @@ namespace APIPortalTPC.Repositorio
                 sql.Dispose();
             }
             return lista;
+        }
+
+        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        public async Task<Relacion> ModificarRelacion(Relacion R)
+        {
+            Relacion Rmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Relacion SET " +
+                    "Id_Grupo = @Id_Grupo " +
+                    "Id_Responsable = @Id_Responsable " +
+                    "WHERE ID_Relacion = @ID_Relacion";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
+                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
+                Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
+
+
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    Rmod = await GetRelacion(Convert.ToInt32(reader["ID_Relacion"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando la cotización " + ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return Rmod;
         }
 
     }
