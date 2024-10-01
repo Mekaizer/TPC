@@ -8,22 +8,78 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioUsuario : IRepositorioUsuario
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioUsuario(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea  un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="id">Id del Objeto Usuario a buscar</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Usuario> NuevoUsuario(Usuario U)
+        {
+            SqlConnection sql = conectar();
+            SqlCommand Comm = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "INSERT INTO Usuario" +
+                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Departamento_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Activado) " +
+                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Departamento_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones, @Activado);" +
+                    "SELECT SCOPE_IDENTITY() AS Id_Usuario";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
+                Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
+                Comm.Parameters.Add("@Rut_Usuario_Sin_Digito", SqlDbType.Int).Value = U.Rut_Usuario_Sin_Digito;
+                Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
+                Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
+                Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
+                Comm.Parameters.Add("@Departamento_Usuario", SqlDbType.Int).Value = U.Departamento_Usuario;
+                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
+                Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
+                Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                int id = (int)idDecimal;
+                U.Id_Usuario = id;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error creando los datos en tabla Usuario " + ex.Message);
+            }
+            finally
+            {
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return U;
+        }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Usuario> GetUsuario(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -80,7 +136,11 @@ namespace APIPortalTPC.Repositorio
             }
             return U;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna la lista de objetos Usuarios de la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Usuario>> GetAllUsuario()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -125,7 +185,12 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="U">Objeto Usuario que se usa para reemplazar su homonimo dentro de la base de datos</param>
+        /// <returns>Retorna el objeto Usuario modificado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Usuario> ModificarUsuario(Usuario U)
         {
             Usuario Umod = null;
@@ -181,46 +246,6 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Umod;
-        }
-        public async Task<Usuario> NuevoUsuario(Usuario U)
-        {
-            SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Usuario" +
-                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Departamento_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Activado) " +
-                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Departamento_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones, @Activado);" +
-                    "SELECT SCOPE_IDENTITY() AS Id_Usuario";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
-                Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
-                Comm.Parameters.Add("@Rut_Usuario_Sin_Digito", SqlDbType.Int).Value = U.Rut_Usuario_Sin_Digito;
-                Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
-                Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
-                Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Departamento_Usuario", SqlDbType.Int).Value = U.Departamento_Usuario;
-                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
-                Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
-                Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
-                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
-                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                int id = (int)idDecimal;
-                U.Id_Usuario = id;
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error creando los datos en tabla Usuario " + ex.Message);
-            }
-            finally
-            {
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return U;
         }
 
     }

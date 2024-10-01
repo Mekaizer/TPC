@@ -6,19 +6,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioArchivo : IRepositorioArchivo
     {
-        //Variable que guarda el string para la conexion con la base de datos
+        /// <value>Variable que guarda el string para la conexion con la base de datos </value>
         private string Conexion;
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioArchivo(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        ///  Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Corresponde al Id a buscar</param>
+        /// <returns>El archivo con la id a buscar</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Archivo> GetArchivo(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -66,7 +78,11 @@ namespace APIPortalTPC.Repositorio
             }
             return a;
         }
-        //Metodo que retorna una lista con los Archivoa
+        /// <summary>
+        /// Metodo que retorna una lista con los Archivos
+        /// </summary>
+        /// <returns>Una lista con los archivos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Archivo>> GetAllArchivo()
         {
             List<Archivo> lista = new List<Archivo>();
@@ -104,7 +120,12 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        //Pide un objetivo ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objetivo ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="A">Corresponde al Objeto Archivo a reemplazar</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Archivo> ModificarArchivo(Archivo A)
         {
             Archivo Archmod = null;
@@ -147,7 +168,12 @@ namespace APIPortalTPC.Repositorio
             }
             return Archmod;
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="A">Corresponde al Objeto Archivo a añadir</param>
+        /// <returns>Retorna el Objeto Archivo que se ha añadido</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Archivo> NuevoArchivo(Archivo A)
         {
             SqlConnection sql = conectar();

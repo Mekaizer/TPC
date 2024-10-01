@@ -7,20 +7,32 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioOrdenCompra : IRepositorioOrdenCompra
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioOrdenCompra(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
+        
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="OC">Objeto Orden_de_compra a añadir a la base de datos</param>
+        /// <returns>El objeto Orden_de_compra a añadir</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Orden_de_compra> NuevoOC(Orden_de_compra OC)
         {
             SqlConnection sql = conectar();
@@ -30,13 +42,13 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_compra " +
-                    "(Numero_OC,Solped,Codigo_OE,Posicion) " +
-                    "VALUES (@Numero_OC,@Solped,@Codigo_OE,@Posicion); " +
+                    "(Numero_OC,Solped,Id_OE,Posicion) " +
+                    "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Codigo_OE", SqlDbType.Int).Value = OC.Codigo_OE;
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
             }
@@ -53,7 +65,12 @@ namespace APIPortalTPC.Repositorio
             return OC;
         }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id que pertenece al objeto Orden_de_compra a buscar</param>
+        /// <returns>Retorna el objeto cuya Id coincide con el pedido</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Orden_de_compra> GetOC(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -84,7 +101,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
+                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]); 
                 }
@@ -103,7 +120,11 @@ namespace APIPortalTPC.Repositorio
             }
             return oc;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna la lista con todos los objetos Orden_de_compra</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Orden_de_compra>> GetAllOC()
         {
             List<Orden_de_compra> lista = new List<Orden_de_compra>();
@@ -122,7 +143,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Orden_de_compra oc = new();
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Codigo_OE = Convert.ToInt32(reader["Codigo_OE"]);
+                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]);
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     lista.Add(oc);
@@ -142,7 +163,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="OC">Objetivo del tipo Orden_de_compra que va a modificarse en la base de datos</param>
+        /// <returns>Retorna el objeto Orden_de_compra modificado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Orden_de_compra> ModificarOC(Orden_de_compra OC)
         {
             Orden_de_compra ocmod = null;
@@ -156,13 +182,13 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Orden_de_compra SET " +
                     "Numero_OC = @Numero_OC " +
                     "Solped = @Solped " +
-                    "Codigo_OE = @Codigo_OE " +
+                    "Id_OE = @Id_OE " +
                     "Posicion = @Posicion " +
                     "WHERE Id_Orden_compra = @Id_Orden_compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Codigo_OE", SqlDbType.Int).Value = OC.Codigo_OE;
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
 

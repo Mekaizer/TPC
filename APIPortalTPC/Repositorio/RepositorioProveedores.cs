@@ -7,20 +7,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioProveedores : IRepositorioProveedores
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioProveedores(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del proveedor a buscar</param>
+        /// <returns>Retorna objeto del tipo Proveedor con la Id solicitada</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Proveedores> GetProveedor(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -81,7 +92,11 @@ namespace APIPortalTPC.Repositorio
             }
             return P;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna lista con todos los proveedores de la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Proveedores>> GetAllProveedores()
         {
             List<Proveedores> lista = new List<Proveedores>();
@@ -133,7 +148,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="P">Objeto del tipo Proveedor que se usara para modificar</param>
+        /// <returns>Retorna el objeto Proveedores que se modifico</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Proveedores> ModificarProveedor(Proveedores P)
         {
             Proveedores Pmod = null;
@@ -195,7 +215,13 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Pmod;
-        }        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        }
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="P">Objeto del tipo Proveedores que se agregará a la base de datos</param>
+        /// <returns>Retorna el objeto Proveedores que se agrego a la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Proveedores> NuevoProveedor(Proveedores P)
         {
             SqlConnection sql = conectar();

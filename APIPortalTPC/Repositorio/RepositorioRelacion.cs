@@ -7,20 +7,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioRelacion : IRepositorioRelacion
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioRelacion(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="R">Objeto Relacion que se va a añadir a la base de datos</param>
+        /// <returns>Retorna el objeto Relacion que fue añadida</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Relacion> NuevaRelacion(Relacion R)
         {
             SqlConnection sql = conectar();
@@ -30,11 +41,11 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_Grupo,Id_Responsable) " +
-                    "VALUES (@Id_Grupo,@Id_Responsable); " +
+                    "(Id_Archivo,Id_Responsable) " +
+                    "VALUES (@Id_Archivo,@Id_Responsable); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Relacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
                 R.Id_Relacion = (int)await Comm.ExecuteScalarAsync();
             }
@@ -50,8 +61,13 @@ namespace APIPortalTPC.Repositorio
             }
             return R;
         }
-
-        //Metodo que permite conseguir un objeto usando su llave foranea
+       
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del objeto Relacion a buscar</param>
+        /// <returns>Retorna el objeto Relacion cuya Id se pide</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Relacion> GetRelacion(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -76,7 +92,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@ID_Relacion", SqlDbType.Int).Value = id;
 
                 reader = await Comm.ExecuteReaderAsync();
-                R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
+                R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                 R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
                 R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
 
@@ -95,7 +111,11 @@ namespace APIPortalTPC.Repositorio
             }
             return R;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos Relacion de la lsita</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Relacion>> GetAllRelacion()
         {
             List<Relacion> lista = new List<Relacion>();
@@ -113,7 +133,7 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Relacion R = new();
-                    R.Id_Grupo = Convert.ToInt32(reader["Id_Grupo"]);
+                    R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                     R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                     lista.Add(R);
@@ -133,7 +153,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="R">Objeto del tipo Relacion que se usará para modificar su homonimo por Id</param>
+        /// <returns>Retorna el objeto Modificado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Relacion> ModificarRelacion(Relacion R)
         {
             Relacion Rmod = null;
@@ -145,12 +170,12 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_Grupo = @Id_Grupo " +
+                    "Id_Archivo = @Id_Archivo " +
                     "Id_Responsable = @Id_Responsable " +
                     "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
-                Comm.Parameters.Add("@Id_Grupo", SqlDbType.Int).Value = R.Id_Grupo;
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
 
 

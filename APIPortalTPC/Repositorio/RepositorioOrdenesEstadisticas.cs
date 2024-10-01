@@ -7,20 +7,30 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioOrdenesEstadisticas : IRepositorioOrdenesEstadisticas
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
-
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioOrdenesEstadisticas(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadisticas que se agregara a la base de datos</param>
+        /// <returns>Retorna el objeto creado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> NuevoOE(Ordenes_Estadisticas OE)
         {
             SqlConnection sql = conectar();
@@ -30,14 +40,13 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ordenes_estadisticas " +
-                    "(Nombre,Codigo_Nave,Centro_de_Costo,Id_Orden_Compra) " +
-                    "VALUES (@Nombre,@Codigo_Nave,@Centro_de_Costo,@Id_Orden_Compra); " +
+                    "(Nombre,Codigo_Nave,Id_Centro_de_Costo) " +
+                    "VALUES (@Nombre,@Codigo_Nave,@Id_Centro_de_Costo); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.Int).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_Nave", SqlDbType.VarChar,50).Value = OE.Codigo_Nave;
-                Comm.Parameters.Add("@Centro_de_Costo", SqlDbType.Int).Value = OE.Centro_de_Costo;
-                Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.VarChar,50).Value = OE.Id_Orden_Compra;
+                Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
                 OE.Id_Orden_Estadistica  = (int)await Comm.ExecuteScalarAsync();
             }
             catch (SqlException ex)
@@ -53,7 +62,12 @@ namespace APIPortalTPC.Repositorio
             return OE;
         }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del objeto </param>
+        /// <returns>Retorna el objeto Ordenes_Estadisticas con la Id pedida</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> GetOE(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -83,8 +97,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     OE.Nombre = Convert.ToString(reader["Nombre"]);
                     OE.Codigo_Nave = Convert.ToString(reader["Codigo_Nave"]);
-                    OE.Centro_de_Costo = Convert.ToInt32(reader["Centro_de_Costo"]);
-                    OE.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                 }
             }
@@ -102,7 +115,11 @@ namespace APIPortalTPC.Repositorio
             }
             return OE;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos Ordenes_Estadisticas</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Ordenes_Estadisticas>> GetAllOE()
         {
             List<Ordenes_Estadisticas> lista = new List<Ordenes_Estadisticas>();
@@ -122,8 +139,7 @@ namespace APIPortalTPC.Repositorio
                     Ordenes_Estadisticas OE = new();
                     OE.Nombre = Convert.ToString(reader["Nombre"]);
                     OE.Codigo_Nave = Convert.ToString(reader["Codigo_Nave"]);
-                    OE.Centro_de_Costo = Convert.ToInt32(reader["Centro_de_Costo"]);
-                    OE.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     lista.Add(OE);
                 }
@@ -142,7 +158,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadisticas que se va a modificar</param>
+        /// <returns>Retorna el objeto a modificar</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> ModificarOE(Ordenes_Estadisticas OE)
         {
             Ordenes_Estadisticas OEmod = null;
@@ -156,14 +177,12 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET" +
                     "Nombre = @Nombre " +
                     "Codigo_Nave = @Codigo_Nave " +
-                    "Centro_de_Costo = @Centro_de_Costo " +
-                    "Id_Orden_Compra = @Id_Orden_Compra " +
+                    "Id_Centro_de_Costo = @Id_Centro_de_Costo " +
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.Int).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_Nave", SqlDbType.VarChar, 50).Value = OE.Codigo_Nave;
-                Comm.Parameters.Add("@Centro_de_Costo", SqlDbType.Int).Value = OE.Centro_de_Costo;
-                Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.VarChar, 50).Value = OE.Id_Orden_Compra;
+                Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
                 OE.Id_Orden_Estadistica = (int)await Comm.ExecuteScalarAsync();
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

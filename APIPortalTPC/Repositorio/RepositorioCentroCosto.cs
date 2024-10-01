@@ -7,20 +7,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioCentroCosto : IRepositorioCentroCosto
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioCentroCosto(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="IdCECO">Id a buscar para el Centro Costo</param>
+        /// <returns>Retorna el objeto Centro_de_costo cuyo Id sea el dado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Centro_de_costo> GetCeCo(int IdCECO)
         {
             //Parametro para guardar el objeto a mostrar
@@ -66,7 +77,11 @@ namespace APIPortalTPC.Repositorio
             }
             return cc;
         }
-        //Metodo que retorna una lista con los objetos
+        /// <summary>
+        /// Metodo que retorna una lista con los objetos
+        /// </summary>
+        /// <returns>Retorna una lista con todos los Centro de Costo</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Centro_de_costo>> GetAllCeCo()
         {
             List<Centro_de_costo> lista = new List<Centro_de_costo>();
@@ -103,7 +118,12 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="CeCo">Objeto del tipo Centro_de_Costo que se usará para reemplazar el Centro_de_costo antiguo</param>
+        /// <returns>Regresa el centro_de_costo que va a reemplazar</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Centro_de_costo> ModificarCeCo(Centro_de_costo CeCo)
         {
             Centro_de_costo ccmod = null;
@@ -144,7 +164,12 @@ namespace APIPortalTPC.Repositorio
             }
             return ccmod;
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="Ceco">Objeto del tipo Centro_de_costo que se va a añadir a la base de datos</param>
+        /// <returns>Regresa el objeto a añadirse</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Centro_de_costo> Nuevo_CeCo(Centro_de_costo Ceco)
         {
             SqlConnection sql = conectar();
