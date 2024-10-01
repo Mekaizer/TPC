@@ -7,21 +7,33 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioCotizacion : IRepositorioCotizacion
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioCotizacion(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
+            
             return new SqlConnection(Conexion);
         }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del objeto Cotizacion a buscar</param>
+        /// <returns>Regresa el objeto Cotizacion a buscar por id</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Cotizacion> GetCotizacion(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -69,8 +81,12 @@ namespace APIPortalTPC.Repositorio
                 sql.Dispose();
             }
             return cot;
-        } 
-        //Metodo que retorna una lista con los objeto
+        }
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Lista con todos los objetos Cotizacion de la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Cotizacion>> GetAllCotizacion()
         {
             List<Cotizacion> lista = new List<Cotizacion>();
@@ -114,7 +130,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="cotizacion">Objeto del tipo Cotizacion que se usará para reemplazarlo en la base de datos</param>
+        /// <returns>Retorna el objeto que va a cambiar la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Cotizacion> ModificarCotizacion(Cotizacion cotizacion)
         {
             Cotizacion cotmod = null;
@@ -163,8 +184,13 @@ namespace APIPortalTPC.Repositorio
             }
             return cotmod;
         }
-        
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="cotizacion">Objeto del tipo Cotizacion que va a añadirse a la base de datos</param>
+        /// <returns>Retorna el objeto Cotizacion que se va a añadir</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Cotizacion> NuevaCotizacion(Cotizacion cotizacion)
         {
             SqlConnection sql = conectar();

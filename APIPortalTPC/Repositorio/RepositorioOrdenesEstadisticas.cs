@@ -7,20 +7,30 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioOrdenesEstadisticas : IRepositorioOrdenesEstadisticas
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
-
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioOrdenesEstadisticas(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadisticas que se agregara a la base de datos</param>
+        /// <returns>Retorna el objeto creado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> NuevoOE(Ordenes_Estadisticas OE)
         {
             SqlConnection sql = conectar();
@@ -52,7 +62,12 @@ namespace APIPortalTPC.Repositorio
             return OE;
         }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del objeto </param>
+        /// <returns>Retorna el objeto Ordenes_Estadisticas con la Id pedida</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> GetOE(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -100,7 +115,11 @@ namespace APIPortalTPC.Repositorio
             }
             return OE;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos Ordenes_Estadisticas</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Ordenes_Estadisticas>> GetAllOE()
         {
             List<Ordenes_Estadisticas> lista = new List<Ordenes_Estadisticas>();
@@ -139,7 +158,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadisticas que se va a modificar</param>
+        /// <returns>Retorna el objeto a modificar</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ordenes_Estadisticas> ModificarOE(Ordenes_Estadisticas OE)
         {
             Ordenes_Estadisticas OEmod = null;

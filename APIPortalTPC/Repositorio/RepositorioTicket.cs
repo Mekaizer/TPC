@@ -7,20 +7,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioTicket : IRepositorioTicket
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioTicket(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="T">Objeto del tipo Ticket que se va a agregar a la base de datos</param>
+        /// <returns>Retorna el objeto a modificar</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ticket> NewTicket(Ticket T)
         {
             SqlConnection sql = conectar();
@@ -56,7 +67,12 @@ namespace APIPortalTPC.Repositorio
             return T;
         }
 
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del objeto Ticket a buscar</param>
+        /// <returns>Retorna el objeto Ticket que se busca</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ticket> GetTicket(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -110,7 +126,11 @@ namespace APIPortalTPC.Repositorio
             }
             return T;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna lista con todos los objetos Ticket de la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Ticket>> GetAllTicket()
         {
             List<Ticket> lista = new List<Ticket>();
@@ -155,7 +175,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="T">Objeto del tipo Ticket que se quiere modificar</param>
+        /// <returns>Retorna el objeto modificado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ticket> ModificarTicket(Ticket T)
         {
             Ticket Tmod = null;

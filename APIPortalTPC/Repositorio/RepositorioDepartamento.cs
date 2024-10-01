@@ -8,20 +8,31 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioDepartamento : IRepositorioDepartamento
     {
-        //Variable que guarda el string para la conexion con la base de datos
+       
         private string Conexion;
 
-        //Metodo que permite interactuar con la base de datos, aqui se guarda la conexion con la base de datos
+        /// <summary>
+        /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
+        /// </summary>
+        /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
         public RepositorioDepartamento(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
+        /// <summary>
+        /// Metodo que realiza la conexión a la base de datos
+        /// </summary>
+        /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            //Se realiza la conexion
             return new SqlConnection(Conexion);
         }
-        //Metodo que permite conseguir un objeto usando su llave foranea
+        /// <summary>
+        /// Metodo que permite conseguir un objeto usando su llave foranea
+        /// </summary>
+        /// <param name="id">Id del departamento a buscar</param>
+        /// <returns>retorna el objeto Departamento</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Departamento> GetDepartamento(int id)
         {
             //Parametro para guardar el objeto a mostrar
@@ -67,7 +78,11 @@ namespace APIPortalTPC.Repositorio
             }
             return dep;
         }
-        //Metodo que retorna una lista con los objeto
+        /// <summary>
+        /// Metodo que retorna una lista con los objeto
+        /// </summary>
+        /// <returns>Retorna lista de todos los departamentos de la base de datos</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Departamento>> GetAllDepartamento()
         {
             List<Departamento> lista = new List<Departamento>();
@@ -105,7 +120,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
-        //Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// <summary>
+        /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
+        /// </summary>
+        /// <param name="D">Objeto clase del tipo Departamento que reemplaza su homonimo por id en la base</param>
+        /// <returns>Retorna el objeto Departamento modificado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Departamento> ModificarDepartamento(Departamento D)
         {
             Departamento Dmod = null;
@@ -145,7 +165,12 @@ namespace APIPortalTPC.Repositorio
             }
             return Dmod;
         }
-        //Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// <summary>
+        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// </summary>
+        /// <param name="D">Objeto departamento que se va a ingresar a la base de datos</param>
+        /// <returns>Retorna el objeto insertado</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Departamento> NuevoDepartamento(Departamento D)
         {
             SqlConnection sql = conectar();
