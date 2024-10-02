@@ -168,7 +168,7 @@ namespace APIPortalTPC.Repositorio
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
         /// <param name="R"></param>
-        /// <returns></returns>
+        /// <returns>Retorna el objeto Reemplazos modificado Objetos Reemplazos </returns>
         /// <exception cref="Exception"></exception>
         public async Task<Reemplazos> ModificarReemplazos(Reemplazos R)
         {

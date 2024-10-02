@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioOrdenesEstadisticas ROE;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="ROE">Interface de RepositorioOrdenesEstadisticas</param>
 
         public ControladorOrdenesEstadisticas(IRepositorioOrdenesEstadisticas ROE)
         {
             this.ROE = ROE;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Lista con todos los objetos Ordenes_Estadisticas</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener la orden estadistica: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id que se usa para buscar el Objeto Ordenes_Estadisticas</param>
+        /// <returns>Retorna el objeto Ordenes_Estadisticas buscado</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,7 +66,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadistica que se añadirá a la base de datos</param>
+        /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
         public async Task<ActionResult<Ordenes_Estadisticas>> Nuevo(Ordenes_Estadisticas OE)
         {
@@ -74,13 +88,18 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="OE">Objeto Ordenes_Estadisticas que se usara para reemplazar su homonimo en la base de datos</param>
+        /// <param name="id">Id del objeto Ordenes_Estadisticas que se quiere reemplazar</param>
+        /// <returns>Retorna el objeto nuevo </returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Ordenes_Estadisticas>> Modificar(Ordenes_Estadisticas OE, int id)
         {
             try
             {
-                if (id != OE.Id_Orden_Compra)
+                if (id != OE.Id_Orden_Estadistica)
                     return BadRequest("La Id no coincide");
 
                 var Modificar = await ROE.GetOE(id);

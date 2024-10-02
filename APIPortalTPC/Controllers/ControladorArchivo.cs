@@ -47,8 +47,8 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna el objeto a buscar por Id</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -69,8 +69,8 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para crear nuevo objeto
         /// </summary>
-        /// <param name="A"></param>
-        /// <returns></returns>
+        /// <param name="A">Objeto del tipo de Archivo</param>
+        /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
         public async Task<ActionResult<Archivo>> Nuevo(Archivo A)
         {
@@ -89,11 +89,11 @@ namespace APIPortalTPC.Controllers
         }
 
         /// <summary>
-        /// Metodo asincrónico para modificar un objeto por ID
+        /// Metodo asincrónico para modificar un objeto por ID, si el objeto coincide con la Id se procede a agregarse a la base de datos
         /// </summary>
-        /// <param name="A"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="A">Objeto del tipo Archivo que se quiere modificar</param>
+        /// <param name="id">Id del objeto que se quiere buscar</param>
+        /// <returns>Regresa el Objeto modificado</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Archivo>> Modificar(Archivo A, int id)
         {

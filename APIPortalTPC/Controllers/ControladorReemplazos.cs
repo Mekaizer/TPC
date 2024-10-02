@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioReemplazos RR;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RR">Interface de RepositorioReemplazos</param>
 
         public ControladorReemplazos(IRepositorioReemplazos RR)
         {
             this.RR = RR;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos del tipo Reemplazos</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Reemplazo: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id"> Id del objeto a buscar</param>
+        /// <returns>Retorna el objeto Reemplazos cuya Id coincida con la que se busca</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,7 +66,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="R">Objeto del tipo Reemplazos que se quiere agregar a la base de datos</param>
+        /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
         public async Task<ActionResult<Reemplazos>> Nuevo(Reemplazos R)
         {
@@ -74,7 +88,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="R">Objeto del tipo Reemplazos que se usará para cambiar a su homonimo</param>
+        /// <param name="id">Id del objeto a modificar</param>
+        /// <returns>Retorna el objeto Reemplazos modificado</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Reemplazos>> Modificar(Reemplazos R, int id)
         {
