@@ -41,12 +41,13 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_Archivo,Id_Responsable) " +
-                    "VALUES (@Id_Archivo,@Id_Responsable); " +
+                    "(Id_Archivo,Id_Responsable1,Id_Responsable2) " +
+                    "VALUES (@Id_Archivo,@Id_Responsable,@,Id_Responsable2); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
+                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
+                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
                 R.Id_Relacion = (int)await Comm.ExecuteScalarAsync();
             }
             catch (SqlException ex)
@@ -93,7 +94,8 @@ namespace APIPortalTPC.Repositorio
 
                 reader = await Comm.ExecuteReaderAsync();
                 R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
+                R.Id_Responsable1 = Convert.ToInt32(reader["Id_Responsable1"]);
+                R.Id_Responsable2 = Convert.ToInt32(reader["Id_Responsable2"]);
                 R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
 
             }
@@ -134,7 +136,8 @@ namespace APIPortalTPC.Repositorio
                 {
                     Relacion R = new();
                     R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Responsable = Convert.ToInt32(reader["Id_Responsable"]);
+                    R.Id_Responsable1 = Convert.ToInt32(reader["Id_Responsable1"]);
+                    R.Id_Responsable2 = Convert.ToInt32(reader["Id_Responsable2"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                     lista.Add(R);
                 }
@@ -171,12 +174,14 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
                     "Id_Archivo = @Id_Archivo " +
-                    "Id_Responsable = @Id_Responsable " +
+                    "Id_Responsable1 = @Id_Responsable1 " +
+                    "Id_Responsable2 = @Id_Responsable2 " +
                     "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable", SqlDbType.Int).Value = R.Id_Responsable;
+                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
+                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
 
 
                 reader = await Comm.ExecuteReaderAsync();

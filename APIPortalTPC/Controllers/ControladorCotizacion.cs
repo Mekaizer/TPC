@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioCotizacion RC;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RC">Interface de RepositorioCotizacion</param>
 
         public ControladorCotizacion(IRepositorioCotizacion RC)
         {
             this.RC = RC;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener la cotizacion: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna e objeto de la Id a buscar</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,7 +66,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="c">Objeto tipo cotizacion que se quiere agregar a la base de datos</param>
+        /// <returns>Se muestra el objeto agregado</returns>
         [HttpPost]
         public async Task<ActionResult<Cotizacion>> Nuevo(Cotizacion c)
         {
@@ -74,7 +88,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="c">Objeto Cotizacion que tiene el mismo Id que el objeto existente en la base de datos</param>
+        /// <param name="id">Id del objeto a cambiar</param>
+        /// <returns></returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Cotizacion>> Modificar(Cotizacion c, int id)
         {

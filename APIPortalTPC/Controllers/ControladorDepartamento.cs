@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioDepartamento RD;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RD">Interface de RepositorioDepartamento</param>
 
         public ControladorDepartamento(IRepositorioDepartamento RD)
         {
             this.RD = RD;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Departamento: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id a buscar del objeto</param>
+        /// <returns>Retorna un objeto del tipo Departamento cuyo Id sea el buscado</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,7 +66,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="D">Objeto Departamento que se agregara a la base de datos</param>
+        /// <returns>Retorna el objeto a añadir</returns>
         [HttpPost]
         public async Task<ActionResult<Departamento>> Nuevo(Departamento D)
         {
@@ -74,7 +88,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="D">Objeto Departamento que va a reemplazar a su homonido en la base de datos</param>
+        /// <param name="id">Id del objeto a reemplazar</param>
+        /// <returns></returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Departamento>> Modificar(Departamento D, int id)
         {

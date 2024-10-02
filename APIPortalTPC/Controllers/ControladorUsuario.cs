@@ -19,13 +19,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioUsuario RU;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RU">Interface de RepositorioUsuario</param>
 
         public ControladorUsuario(IRepositorioUsuario RU)
         {
             this.RU = RU;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos del tipo Usuario de la base de datos</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -39,7 +45,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Usuario: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna el objeto Usuario cuyo Id coincida con el buscado</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -57,7 +67,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="U">Objeto del tipo Usuario que se quiere agregar a la base de datos</param>
+        /// <returns>Retorna el objeto Usuario agregado</returns>
         [HttpPost]
         public async Task<ActionResult<Usuario>> Nuevo(Usuario U)
         {
@@ -75,7 +89,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="U">Objeto del tipo Usuario que se reemplazará por su homonimo</param>
+        /// <param name="id">Id del objeto Usuario a modifcar</param>
+        /// <returns>Retorna el nuevo objeto Usuario</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Usuario>> Modificar(Usuario U, int id)
         {

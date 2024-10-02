@@ -57,7 +57,6 @@ namespace APIPortalTPC.Repositorio
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
                 a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                a.Id_ArchivoCotizacion = Convert.ToInt32(reader["Id_Archivo"]);
                 a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
                 a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
                 a.Grupo_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
@@ -100,7 +99,6 @@ namespace APIPortalTPC.Repositorio
                 {
                     Archivo a = new Archivo();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    a.Id_ArchivoCotizacion = Convert.ToInt32(reader["Id_ArchivoCotizacion"]);
                     a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
                     a.ArchivoDoc = (byte[])reader["ArchivoDoc"];
                     a.Grupo_Archivo = Convert.ToInt32(reader["Grupo_Archivo"]);
@@ -124,7 +122,7 @@ namespace APIPortalTPC.Repositorio
         /// Pide un objetivo ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
         /// <param name="A">Corresponde al Objeto Archivo a reemplazar</param>
-        /// <returns></returns>
+        /// <returns>Retorna el objeto Archivo modificado</returns>
         /// <exception cref="Exception"></exception>
         public async Task<Archivo> ModificarArchivo(Archivo A)
         {
@@ -138,14 +136,12 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Archivo SET " +
                     "Id_Archivo = @Id_Archivo " +
-                    "Id_ArchivoCotizacion = @Id_ArchivoCotizacion " +
                     "IsPrincipal = @IsPrincipal " +
                     "ArchivoDoc = @ArchivoDoc " +
                     "Grupo_archivo = @Grupo_archivo " +
                     "WHERE Id_Archivo = @Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
-                Comm.Parameters.Add("@Id_ArchivoCotizacion", SqlDbType.Int, 50).Value = A.Id_ArchivoCotizacion;
                 Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit, 50).Value = A.IsPrincipal;
                 Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
                 Comm.Parameters.Add("@Grupo_archivo",SqlDbType.Int).Value=A.Id_Archivo;
@@ -183,14 +179,12 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Archivo " +
-                    "(Id_ArchivoCotizacion,IsPrincipal,ArchivoDoc,Id_ArchivoCotizacion,Grupo_archivo) " +
-                    "VALUES (@Id_ArchivoCotizacion,@IsPrincipal,@ArchivoDoc,@Id_ArchivoCotizacion,@Grupo_archivo); " +
+                    "(IsPrincipal,ArchivoDoc,Grupo_archivo) " +
+                    "VALUES (@IsPrincipal,@ArchivoDoc,@Grupo_archivo); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Archivo";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_ArchivoCotizacion", SqlDbType.VarChar, 50).Value =A.Id_ArchivoCotizacion;
                 Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit, 50).Value = A.IsPrincipal;
                 Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
-                Comm.Parameters.Add("@Id_ArchivoCotizacion", SqlDbType.VarChar, 50).Value = A.Id_ArchivoCotizacion;
                 Comm.Parameters.Add("@Grupo_archivo", SqlDbType.Int).Value = A.Grupo_Archivo;
                 A.Id_Archivo = (int)await Comm.ExecuteScalarAsync();
             }

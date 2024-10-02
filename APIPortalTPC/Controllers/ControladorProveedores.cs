@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioProveedores RP;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RP">Interface de RepositorioProveedores</param>
 
         public ControladorProveedores(IRepositorioProveedores RP)
         {
             this.RP = RP;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos de la tabla</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Proveedor: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna el Objeto Proveedor</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,7 +66,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="p">oObjeto del tipo Proveedores que se agregara a la base de datos</param>
+        /// <returns>Retorna el objeto Proveedores creado</returns>
         [HttpPost]
         public async Task<ActionResult<Proveedores>> Nuevo(Proveedores p)
         {
@@ -74,7 +88,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="P">Objeto Proveedores que se usará para reemplazar su homonimo</param>
+        /// <param name="id">Id que representa el objeto Proveedores que se quiere modificar</param>
+        /// <returns>Retorna el objeto Proveedores que se modifico</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Proveedores>> Modificar(Proveedores P, int id)
         {

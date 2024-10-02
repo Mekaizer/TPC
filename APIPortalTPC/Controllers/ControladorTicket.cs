@@ -18,13 +18,19 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioTicket RT;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RT">Interface de RepositorioTicket</param>
 
         public ControladorTicket(IRepositorioTicket RT)
         {
             this.RT = RT;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Retorna una lista con todos los objetos de la clase Ticket de la base de datos</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -38,7 +44,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Ticket: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna el objeto Ticket creado</returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -56,16 +66,20 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="T">Objeto del tipo Ticket que se quiere agregar a la base de datos</param>
+        /// <returns>Retorna el objeto Ticket que se agrego a la base de datos</returns>
         [HttpPost]
-        public async Task<ActionResult<Ticket>> Nuevo(Ticket A)
+        public async Task<ActionResult<Ticket>> Nuevo(Ticket T)
         {
             try
             {
-                if (A == null)
+                if (T == null)
                     return BadRequest();
 
-                Ticket nuevo = await RT.NewTicket(A);
+                Ticket nuevo = await RT.NewTicket(T);
                 return nuevo;
             }
             catch (Exception ex)
@@ -74,7 +88,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="T">Objeto del tipo Ticket que se quiere reemplazar por su homonimo</param>
+        /// <param name="id">Id del objeto Ticket a modificar</param>
+        /// <returns>Objeto Ticket modificado</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Ticket>> Modificar(Ticket T, int id)
         {

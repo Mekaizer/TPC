@@ -31,7 +31,7 @@ namespace APIPortalTPC.Repositorio
         /// Se crea  un nuevo objeto y se agrega a la base de datos
         /// </summary>
         /// <param name="id">Id del Objeto Usuario a buscar</param>
-        /// <returns></returns>
+        /// <returns>Retorna el objeto Usuario agregado a la base de datos</returns>
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> NuevoUsuario(Usuario U)
         {
@@ -78,7 +78,7 @@ namespace APIPortalTPC.Repositorio
         /// Metodo que permite conseguir un objeto usando su llave foranea
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Retorna el Usuario buscado por la Id dada</returns>
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> GetUsuario(int id)
         {

@@ -16,12 +16,18 @@ namespace APIPortalTPC.Controllers
     {
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioBienServicio RBS;
-        //Se inicializa la Interface Repositorio
+        /// <summary>
+        /// Se inicializa la Interface Repositorio
+        /// </summary>
+        /// <param name="RBS">Interface de RepositorioBienServicio</param>
         public ControladorBienServicio(IRepositorioBienServicio RBS)
         {
             this.RBS = RBS;
         }
-        //Metodo para obtener todos los objetos de la tabla
+        /// <summary>
+        /// Metodo asincrónico para obtener todos los objetos de la tabla
+        /// </summary>
+        /// <returns>Retorna lista con todo los objetos BienServicio</returns>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -35,7 +41,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el servicio: " + ex.Message);
             }
         }
-        //Metodo para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscart</param>
+        /// <returns>Retorna el objeto cuya id sea la pedida </returns>
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -53,7 +63,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para crear nuevo objeto
+        /// <summary>
+        /// Metodo asincrónico para crear nuevo objeto
+        /// </summary>
+        /// <param name="bs">Objeto del tipo BienServicio que se añadira a la base de datos</param>
+        /// <returns>Retorna el resultado de NuevoBienServicio</returns>
         [HttpPost]
         public async Task<ActionResult<BienServicio>> Nuevo(BienServicio bs)
         {
@@ -71,7 +85,12 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        //Metodo para modificar un objeto por ID
+        /// <summary>
+        /// Metodo asincrónico para modificar un objeto por ID
+        /// </summary>
+        /// <param name="bs"> Objeto del tipo BienServicio que se usará para modificar su homonimo en la base de datos</param>
+        /// <param >name="id">Id del objeto BienServicio a modificar</param>
+        /// <returns>Retorna el objeto Modificado</returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<BienServicio>> Modificar(BienServicio bs,int id)
         {
@@ -95,3 +114,4 @@ namespace APIPortalTPC.Controllers
     }
 }
 
+ 

@@ -136,7 +136,7 @@ namespace APIPortalTPC.Repositorio
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
         /// <param name="bs">Objeto Bien_Servicio Modificado</param>
-        /// <returns></returns>
+        /// <returns>Retorna el objeto BienServicio que se ha modificado</returns>
         /// <exception cref="Exception"></exception>
         public async Task<BienServicio> ModificarBien_Servicio(BienServicio bs)
         {
