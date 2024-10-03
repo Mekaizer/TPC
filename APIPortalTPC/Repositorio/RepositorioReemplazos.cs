@@ -49,7 +49,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.Id_Usuario_Reemplazante;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
-                R.ID_Reemplazos = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                R.ID_Reemplazos = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -100,7 +101,7 @@ namespace APIPortalTPC.Repositorio
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
                     R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
                     R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Rut_Reemplazante"]);
-                    R.Comentario = Convert.ToString(reader["Comentario"]);
+                    R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
                   
                 }
@@ -144,7 +145,7 @@ namespace APIPortalTPC.Repositorio
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
                     R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Rut_Vacaciones"]);
                     R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Rut_Reemplazante"]);
-                    R.Comentario = Convert.ToString(reader["Comentario"]);
+                    R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
 
                     lista.Add(R);

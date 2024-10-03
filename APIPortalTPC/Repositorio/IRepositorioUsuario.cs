@@ -10,5 +10,7 @@ namespace APIPortalTPC.Repositorio
         public Task<IEnumerable<Usuario>> GetAllUsuario();
         public Task<Usuario> ModificarUsuario(Usuario U);
         public Task<Usuario> ValidarCorreo(string correo,string pass);
+        public Task<string> Existe(int rut, string correo );
+
     }
 }

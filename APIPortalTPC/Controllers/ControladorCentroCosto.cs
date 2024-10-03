@@ -72,15 +72,32 @@ namespace APIPortalTPC.Controllers
         /// <param name="A">Objeto del tipo Centro_de_costo que va a ser agregado a la base de datos</param>
         /// <returns>Retorna el objeto que va a ser agregado</returns>
         [HttpPost]
-        public async Task<ActionResult<Centro_de_costo>> Nuevo(Centro_de_costo A)
+        public async Task<ActionResult<Centro_de_costo>> Nuevo(Centro_de_costo CeCo)
         {
             try
             {
-                if (A == null)
+                if (CeCo == null)
                     return BadRequest();
 
-                Centro_de_costo nuevo = await RC.Nuevo_CeCo(A);
-                return nuevo;
+                string res = await RC.Existe(CeCo.Codigo_Ceco);
+                if (res != null)
+                {
+                    if (res.Equals("ok"))
+                    {
+                        Centro_de_costo nuevoCeCo = await RC.Nuevo_CeCo(CeCo);
+                        return nuevoCeCo;
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, res);
+                    }
+
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status418ImATeapot, "Valor nulo!?");
+                }
+
             }
             catch (Exception ex)
             {

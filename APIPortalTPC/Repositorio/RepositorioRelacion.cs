@@ -48,7 +48,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
                 Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
-                R.Id_Relacion = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                R.Id_Relacion = (int)idDecimal;
             }
             catch (SqlException ex)
             {

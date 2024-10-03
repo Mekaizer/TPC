@@ -47,7 +47,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Nombre", SqlDbType.Int).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_Nave", SqlDbType.VarChar,50).Value = OE.Codigo_Nave;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
-                OE.Id_Orden_Estadistica  = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                OE.Id_Orden_Estadistica = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -95,8 +96,8 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    OE.Nombre = Convert.ToString(reader["Nombre"]);
-                    OE.Codigo_Nave = Convert.ToString(reader["Codigo_Nave"]);
+                    OE.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    OE.Codigo_Nave = (Convert.ToString(reader["Codigo_Nave"])).Trim();
                     OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                 }
@@ -137,8 +138,8 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Ordenes_Estadisticas OE = new();
-                    OE.Nombre = Convert.ToString(reader["Nombre"]);
-                    OE.Codigo_Nave = Convert.ToString(reader["Codigo_Nave"]);
+                    OE.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    OE.Codigo_Nave = (Convert.ToString(reader["Codigo_Nave"])).Trim();
                     OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     lista.Add(OE);

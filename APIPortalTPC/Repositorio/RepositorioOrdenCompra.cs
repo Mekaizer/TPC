@@ -50,7 +50,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
-                OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                OC.Id_Orden_Compra = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -102,7 +103,7 @@ namespace APIPortalTPC.Repositorio
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
                     oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
-                    oc.posicion = Convert.ToString(reader["Posicion"]);
+                    oc.posicion = (Convert.ToString(reader["Posicion"])).Trim();
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]); 
                 }
             }
@@ -144,7 +145,7 @@ namespace APIPortalTPC.Repositorio
                     Orden_de_compra oc = new();
                     oc.Solped = Convert.ToInt32(reader["Solped"]);
                     oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
-                    oc.posicion = Convert.ToString(reader["Posicion"]);
+                    oc.posicion = (Convert.ToString(reader["Posicion"])).Trim();
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     lista.Add(oc);
                 }

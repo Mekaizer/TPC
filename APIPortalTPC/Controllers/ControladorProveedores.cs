@@ -79,8 +79,19 @@ namespace APIPortalTPC.Controllers
                 if (p == null)
                     return BadRequest();
 
-                Proveedores nuevo = await RP.NuevoProveedor(p);
-                return nuevo;
+                int id = p.ID_Proveedores;
+                string rut = p.Rut_Proveedor;
+                string res = await RP.Existe(id,rut);
+                if (res == "ok")
+                {
+                    Proveedores nuevo = await RP.NuevoProveedor(p);
+                    return nuevo;
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, res);
+                }
+             
             }
             catch (Exception ex)
             {

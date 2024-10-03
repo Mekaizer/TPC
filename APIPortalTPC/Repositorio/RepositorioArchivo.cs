@@ -58,9 +58,19 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                 a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
-                a.Grupo_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-               
+                byte[] ArchivoDoc;
+                try
+                {
+                    a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                }
+                catch (InvalidCastException)
+                {
+
+                    a.ArchivoDoc = new byte[0];
+                }
+             
+
+
 
             }
             catch (SqlException ex)
@@ -100,8 +110,16 @@ namespace APIPortalTPC.Repositorio
                     Archivo a = new Archivo();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                     a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                    a.ArchivoDoc = (byte[])reader["ArchivoDoc"];
-                    a.Grupo_Archivo = Convert.ToInt32(reader["Grupo_Archivo"]);
+                    byte[] ArchivoDoc;
+                    try
+                    {
+                       a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        
+                        a.ArchivoDoc = new byte[0];
+                    }
                     lista.Add(a);
                 }
             }   
@@ -186,7 +204,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit, 50).Value = A.IsPrincipal;
                 Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
                 Comm.Parameters.Add("@Grupo_archivo", SqlDbType.Int).Value = A.Grupo_Archivo;
-                A.Id_Archivo = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                A.Id_Archivo = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -201,7 +220,7 @@ namespace APIPortalTPC.Repositorio
             return A;
         }
         
-        public async Task<Archivo> 
+      
     }
 
 }

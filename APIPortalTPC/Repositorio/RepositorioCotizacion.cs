@@ -63,7 +63,7 @@ namespace APIPortalTPC.Repositorio
                 cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
                 object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                 cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
-                cot.Estado = Convert.ToString(reader["Estado"]);
+                cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                 cot.Id_Proveedor = Convert.ToInt32(reader["Id_Proveedor"]);
                 cot.Solped = Convert.ToInt32(reader["Solped"]);
                 cot.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
@@ -109,7 +109,7 @@ namespace APIPortalTPC.Repositorio
                     cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
-                    cot.Estado = Convert.ToString(reader["Estado"]);
+                    cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Id_Proveedor = Convert.ToInt32(reader["Id_Proveedor"]);
                     cot.Solped = Convert.ToInt32(reader["Solped"]);
                     cot.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
@@ -211,7 +211,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = cotizacion.Id_Orden_Compra;
-                cotizacion.ID_Cotizacion = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                cotizacion.ID_Cotizacion = (int)idDecimal;
             }
             catch (SqlException ex)
             {

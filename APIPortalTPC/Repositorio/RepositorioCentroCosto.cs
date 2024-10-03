@@ -7,7 +7,7 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioCentroCosto : IRepositorioCentroCosto
     {
-       
+
         private string Conexion;
 
         /// <summary>
@@ -59,8 +59,9 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceo"]);
-                    cc.Nombre = Convert.ToString(reader["Nombre"]);
-                    cc.Codigo_Ceco= Convert.ToString(reader["Codigo_Ceco"]);
+                    cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
+
                 }
             }
             catch (SqlException ex)
@@ -100,8 +101,8 @@ namespace APIPortalTPC.Repositorio
                 {
                     Centro_de_costo cc = new Centro_de_costo();
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
-                    cc.Nombre = Convert.ToString(reader["Nombre"]);
-                    cc.Codigo_Ceco = Convert.ToString(reader["Codigo_Ceco"]);
+                    cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
                     lista.Add(cc);
                 }
             }
@@ -184,7 +185,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = Ceco.Codigo_Ceco;
-                Ceco.Id_Ceco = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                Ceco.Id_Ceco = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -197,6 +199,36 @@ namespace APIPortalTPC.Repositorio
                 sql.Dispose();
             }
             return Ceco;
+        }
+        /// <summary>
+        /// Metodo que se usa para asegura que no se repita el Centro de costo
+        /// </summary>
+        /// <param name="Ceco">Nombre a buscar</param>
+        /// <returns></returns>
+        public async Task<string> Existe(string Ceco)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Centro_de_costo WHERE Codigo_Ceco = @Codigo_Ceco";
+                    command.Parameters.AddWithValue("@Codigo_Ceco", Ceco);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El codigo CeCo ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
         }
     }
 }

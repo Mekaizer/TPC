@@ -19,6 +19,8 @@ namespace ClasesBaseDatosTPC
         public bool? Activado { get; set; }
         public bool? Admin {  get; set; }
 
+
+
         /* Mouseque herramienta misteriosa para mas adelante
         * Disponible = Convert.ToBoolean(reader["Disponible"] ?? false); 
         */
