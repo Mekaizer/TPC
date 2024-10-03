@@ -3,8 +3,15 @@
 
 namespace BaseDatosTPC
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class Proveedores
     {
+        /// <summary>
+        /// Identificador unico de la relacion
+        /// </summary>
         [Key]
         public int ID_Proveedores {  get; set; }
 

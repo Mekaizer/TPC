@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PortalAdquisicionTPC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9dcc683cd31d3175293c499c09388a4400b5998")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4050904dde97fda0bf01779e809c3a19be05630e")]
 [assembly: System.Reflection.AssemblyProductAttribute("PortalAdquisicionTPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PortalAdquisicionTPC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

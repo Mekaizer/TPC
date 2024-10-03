@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
 using ClasesBaseDatosTPC;
+using System.Reflection.PortableExecutable;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -248,5 +249,59 @@ namespace APIPortalTPC.Repositorio
             return Umod;
         }
 
+        public async Task<Usuario> ValidarCorreo(string correo, string pass)
+        {
+            Usuario U = new();
+            SqlConnection sql = conectar();
+            SqlCommand Comm = null;
+            SqlDataReader reader = null;
+
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "SELECT * FROM dbo.Usuario " +
+                                   "WHERE Contraseña_Usuario = @contraseña AND Correo_Usuario = @correo";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.AddWithValue("@contraseña", pass);
+                Comm.Parameters.AddWithValue("@correo", correo);
+
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        U.Nombre_Usuario = Convert.ToString(reader["Nombre_Usuario"]);
+                        U.Apellido_paterno = Convert.ToString(reader["Apellido_Paterno"]);
+                        U.Digito_Verificador = Convert.ToString(reader["Digito_Verificador"]);
+                        U.Apellido_materno = Convert.ToString(reader["Apellido_Materno"]);
+                        U.Correo_Usuario = Convert.ToString(reader["Correo_Usuario"]);
+                        U.Contraseña_Usuario = Convert.ToString(reader["Contraseña_Usuario"]);
+                        U.Departamento_Usuario = Convert.ToInt32(reader["Departamento_Usuario"]);
+                        U.Tipo_Liberador = Convert.ToString(reader["Tipo_Liberador"]);
+                        U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
+                        U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                        U.Activado = Convert.ToBoolean(reader["Activado"]);
+                        U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error creando los datos en tabla Archivo " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error inesperado " + ex.Message);
+            }
+            finally
+            {
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+
+            return U;
+        }
     }
 }

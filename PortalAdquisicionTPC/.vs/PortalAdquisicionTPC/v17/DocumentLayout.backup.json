@@ -3,10 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\ordenes_estadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorusuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\proveedores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\irepositoriousuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositoriousuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -16,7 +25,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -36,28 +45,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Proveedores.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Proveedores.cs",
-              "RelativeDocumentMoniker": "..\\BaseDatosTPC\\Proveedores.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Proveedores.cs",
-              "RelativeToolTip": "..\\BaseDatosTPC\\Proveedores.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Properties\\launchSettings.json",
+              "RelativeToolTip": "..\\APIPortalTPC\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-03T00:21:15.892Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RepositorioUsuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioUsuario.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioUsuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioUsuario.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioUsuario.cs",
+              "ViewState": "AgIAABcBAAAAAAAAAAAAADABAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-02T18:01:10.151Z",
+              "WhenOpened": "2024-10-03T00:12:46.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IRepositorioUsuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioUsuario.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\IRepositorioUsuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioUsuario.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\IRepositorioUsuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-03T00:10:31.248Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Ordenes_Estadisticas.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Ordenes_Estadisticas.cs",
-              "RelativeDocumentMoniker": "..\\BaseDatosTPC\\Ordenes_Estadisticas.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Ordenes_Estadisticas.cs",
-              "RelativeToolTip": "..\\BaseDatosTPC\\Ordenes_Estadisticas.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA6AAAAAAAAAA==",
+              "Title": "ControladorUsuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAqwHYAAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-02T18:00:13.967Z",
+              "WhenOpened": "2024-10-02T23:59:09.94Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Usuario.cs",
+              "RelativeDocumentMoniker": "..\\BaseDatosTPC\\Usuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Usuario.cs",
+              "RelativeToolTip": "..\\BaseDatosTPC\\Usuario.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowBMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-02T23:44:24.029Z",
               "EditorCaption": ""
             }
           ]
