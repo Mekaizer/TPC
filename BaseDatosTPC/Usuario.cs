@@ -17,6 +17,7 @@ namespace ClasesBaseDatosTPC
         public bool? En_Vacaciones {  get; set; }
         public string? Tipo_Liberador {  get; set; }
         public bool? Activado { get; set; }
+        public bool? Admin {  get; set; }
 
         /* Mouseque herramienta misteriosa para mas adelante
         * Disponible = Convert.ToBoolean(reader["Disponible"] ?? false); 

@@ -106,14 +106,32 @@ namespace APIPortalTPC.Controllers
                 var Modificar = await RU.GetUsuario(id);
 
                 if (Modificar == null)
-                    return NotFound($"Centro de Costo con = {id} no encontrado");
+                    return NotFound($"Usuario = {id} no encontrado");
 
                 return await RU.ModificarUsuario(U);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
+        /// <summary>
+        ///  solicitud JSON que contiene el correo electrónico y la contraseña.
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Usuario>> ValidarCorreo([FromBody] string correo, [FromBody] string pass)
+        {
+            Usuario User = await RU.ValidarCorreo(correo, pass);
+            if (User == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            return User;
+        }
+
     }
 }

@@ -200,6 +200,8 @@ namespace APIPortalTPC.Repositorio
             }
             return A;
         }
+        
+        public async Task<Archivo> 
     }
 
 }
