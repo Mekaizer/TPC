@@ -36,7 +36,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Orden_de_compra> NuevoOC(Orden_de_compra OC)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -79,7 +79,7 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
             try
@@ -130,7 +130,7 @@ namespace APIPortalTPC.Repositorio
         {
             List<Orden_de_compra> lista = new List<Orden_de_compra>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -174,7 +174,7 @@ namespace APIPortalTPC.Repositorio
         {
             Orden_de_compra ocmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {

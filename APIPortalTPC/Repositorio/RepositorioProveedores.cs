@@ -39,7 +39,7 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
             try
@@ -101,7 +101,7 @@ namespace APIPortalTPC.Repositorio
         {
             List<Proveedores> lista = new List<Proveedores>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -158,7 +158,7 @@ namespace APIPortalTPC.Repositorio
         {
             Proveedores Pmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -226,7 +226,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Proveedores> NuevoProveedor(Proveedores P)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -267,16 +267,15 @@ namespace APIPortalTPC.Repositorio
             }
             return P;
         }
-        
+
         /// <summary>
         /// Metodo que permite ver si existe el proveedor de un bien o servicio en especifico
         /// </summary>
         /// <param name="id_bs">Id del biservicio relacionado al proveedor</param>
         /// <param name="rut">Rut del proveedor</param>
         /// <returns></returns>
-        public async Task<string> Existe(int id_bs, string rut)
+        public async Task<string> Existe(int rut, string correo)
         {
-            string res = "ok";
             using (SqlConnection sqlConnection = conectar())
             {
                 sqlConnection.Open();
@@ -284,17 +283,26 @@ namespace APIPortalTPC.Repositorio
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut OR Id_Bien_Servicio = @id";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario_Sin_Digito = @rut";
                     command.Parameters.AddWithValue("@rut", rut);
-                    command.Parameters.AddWithValue("@id", id_bs);
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
                     {
-                        if (reader.HasRows) 
-                        {
-                             res="Ese proveedor ya existe con ese bien o servicio";
-                        }
-                        return res;
+                        return "El rut ya existe";
+                    }
+                    reader.Close();
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Correo_Usuario = @correo";
+                    command.Parameters.AddWithValue("@correo", correo);
+                    reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El correo ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
                     }
                 }
             }
