@@ -112,7 +112,7 @@ namespace APIPortalTPC.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
         /// <summary>
@@ -134,3 +134,4 @@ namespace APIPortalTPC.Controllers
         }
 
     }
+}
