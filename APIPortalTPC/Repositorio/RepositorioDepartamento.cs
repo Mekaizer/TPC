@@ -59,9 +59,10 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    dep.Descripcion = Convert.ToString(reader["Descripcion"]);
-                    dep.Encargado = Convert.ToString(reader["Encargado"]);
-                    dep.Nombre = Convert.ToString(reader["Nombre"]);
+                    dep.Descripcion = (Convert.ToString(reader["Descripcion"])).Trim();
+                    dep.Encargado = (Convert.ToString(reader["Encargado"])).Trim();
+                    dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                 }
             }
             catch (SqlException ex)
@@ -100,9 +101,10 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Departamento dep = new Departamento();
-                    dep.Descripcion = Convert.ToString(reader["Descripcion"]);
-                    dep.Encargado = Convert.ToString(reader["Encargado"]);
-                    dep.Nombre = Convert.ToString(reader["Nombre"]);
+                    dep.Descripcion = (Convert.ToString(reader["Descripcion"])).Trim();
+                    dep.Encargado = (Convert.ToString(reader["Encargado"])).Trim();
+                    dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                     lista.Add(dep);
                 }
             }
@@ -145,7 +147,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
                 Comm.Parameters.Add("@Encargado", SqlDbType.VarChar, 50).Value = D.Encargado;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = D.Nombre;
-                D.Id_Departamento = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                D.Id_Departamento = (int)idDecimal;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Dmod = await GetDepartamento(Convert.ToInt32(reader["Id_Departamento"]));
@@ -187,7 +190,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
                 Comm.Parameters.Add("@Encargado", SqlDbType.VarChar, 50).Value = D.Encargado;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = D.Nombre;
-                D.Id_Departamento = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                D.Id_Departamento = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -201,6 +205,35 @@ namespace APIPortalTPC.Repositorio
             }
             return D;
         }
+        /// <summary>
+        /// Metodo que se usa para asegura que no se repita el Departamento
+        /// </summary>
+        /// <param name="nombre">Nombre a buscar</param>
+        /// <returns></returns>
+        public async Task<string> Existe(string nombre)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
 
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Departamento WHERE Nombre = @nombre";
+                    command.Parameters.AddWithValue("@nombre", nombre);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El nombre ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
+        }
     }
 }

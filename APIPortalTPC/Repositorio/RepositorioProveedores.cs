@@ -59,22 +59,22 @@ namespace APIPortalTPC.Repositorio
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
 
-                P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
-                P.Razon_Social = Convert.ToString(reader["Razon_social"]);
-                P.Nombre_Fantasia = Convert.ToString(reader["Nombre_Fantasia"]);
+                P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
+                P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
+                P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
                 P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                P.Direccion = Convert.ToString(reader["Direccion"]);
-                P.Comuna = Convert.ToString(reader["Comuna"]);
-                P.Correo_Proveedor = Convert.ToString(reader["Correo_Proveedor"]);
+                P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
+                P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
+                P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
                 P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
-                P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]);
-                P.Nombre_Representante = Convert.ToString(reader["Nombre_Representante"]);
-                P.Email_Representante = Convert.ToString(reader["Email_Representante"]);
+                P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
+                P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
+                P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
                 P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                 P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
-                P.Banco = Convert.ToString(reader["Banco"]);
-                P.Swift1 = Convert.ToString(reader["Swift1"]);
-                P.Swift2 = Convert.ToString(reader["Swift2"]);
+                P.Banco = (Convert.ToString(reader["Banco"])).Trim();
+                P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
+                P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
                 P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
 
             }
@@ -107,29 +107,29 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Proveedor"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.Proveedores"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
                     Proveedores P = new();
-                    P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
-                    P.Razon_Social = Convert.ToString(reader["Razon_social"]);
-                    P.Nombre_Fantasia = Convert.ToString(reader["Nombre_Fantasia"]);
+                    P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
+                    P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
+                    P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
                     P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    P.Direccion = Convert.ToString(reader["Direccion"]);
-                    P.Comuna = Convert.ToString(reader["Comuna"]);
-                    P.Correo_Proveedor = Convert.ToString(reader["Correo_Proveedor"]);
+                    P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
+                    P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
+                    P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
                     P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
-                    P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]);
-                    P.Nombre_Representante = Convert.ToString(reader["Nombre_Representante"]);
-                    P.Email_Representante = Convert.ToString(reader["Email_Representante"]);
+                    P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
+                    P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
+                    P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
                     P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                     P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
-                    P.Banco = Convert.ToString(reader["Banco"]);
-                    P.Swift1 = Convert.ToString(reader["Swift1"]);
-                    P.Swift2 = Convert.ToString(reader["Swift2"]);
+                    P.Banco = (Convert.ToString(reader["Banco"])).Trim();
+                    P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
+                    P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                     lista.Add(P);
                 }
@@ -181,22 +181,23 @@ namespace APIPortalTPC.Repositorio
                     "Swift2 = @Swift2 " +
                     "WHERE ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
-                P.Rut_Proveedor = Convert.ToString(reader["Rut_Proveedor"]);
-                P.Razon_Social = Convert.ToString(reader["Razon_social"]);
-                P.Nombre_Fantasia = Convert.ToString(reader["Nombre_Fantasia"]);
+                P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
+                P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
+                P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
                 P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                P.Direccion = Convert.ToString(reader["Direccion"]);
-                P.Comuna = Convert.ToString(reader["Comuna"]);
-                P.Correo_Proveedor = Convert.ToString(reader["Correo_Proveedor"]);
+                P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
+                P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
+                P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
                 P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
-                P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]);
-                P.Nombre_Representante = Convert.ToString(reader["Nombre_Representante"]);
-                P.Email_Representante = Convert.ToString(reader["Email_Representante"]);
+                P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
+                P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
+                P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
                 P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                 P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
-                P.Banco = Convert.ToString(reader["Banco"]);
-                P.Swift1 = Convert.ToString(reader["Swift1"]);
-                P.Swift2 = Convert.ToString(reader["Swift2"]);
+                P.Banco = (Convert.ToString(reader["Banco"])).Trim();
+                P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
+                P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
+                P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Pmod = await GetProveedor(Convert.ToInt32(reader["ID_Proveedores"]));
@@ -232,7 +233,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Proveedores " +
                     "(Rut_Proveedor,Razon_Social,Nombre_Fantasia,ID_Bien_Servicio,Direccion,Comuna,Correo_Proveedor,Telefono_Proveedor,Nombre_Representante,Email_Representante,Bloqueado,N_Cuenta,Banco,Swift1,Swift2) " +
-                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante,@Email_Representante,@Bloqueado,@N_Cuenta,@Banco,@Swift1,@,Swift2); " +
+                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante,@Email_Representante,@Bloqueado,@N_Cuenta,@Banco,@Swift1,@Swift2); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 10).Value = P.Rut_Proveedor;
@@ -266,6 +267,40 @@ namespace APIPortalTPC.Repositorio
             }
             return P;
         }
+        
+        /// <summary>
+        /// Metodo que permite ver si existe el proveedor de un bien o servicio en especifico
+        /// </summary>
+        /// <param name="id_bs">Id del biservicio relacionado al proveedor</param>
+        /// <param name="rut">Rut del proveedor</param>
+        /// <returns></returns>
+        public async Task<string> Existe(int id_bs, string rut)
+        {
+            string res = "ok";
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut OR Id_Bien_Servicio = @id";
+                    command.Parameters.AddWithValue("@rut", rut);
+                    command.Parameters.AddWithValue("@id", id_bs);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows) 
+                        {
+                             res="Ese proveedor ya existe con ese bien o servicio";
+                        }
+                        return res;
+                    }
+                }
+            }
+            
+        }
+
 
     }
 }

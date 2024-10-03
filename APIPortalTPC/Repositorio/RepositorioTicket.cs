@@ -52,7 +52,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
                 Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
                 Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
-                T.ID_Ticket  = (int)await Comm.ExecuteScalarAsync();
+                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                T.ID_Ticket  = (int)idDecimal;
             }
             catch (SqlException ex)
             {
@@ -101,14 +102,14 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     T.Id_OC = Convert.ToInt32(reader["Id_OC"]);
-                    T.Estado = Convert.ToString(reader["Estado"]);
+                    T.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
                     T.Id_Usuario= Convert.ToInt32(reader["ID_Cotizacion"]);
                     T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
                     T.Fecha_Ingreso_OC = (DateTime)reader["Fecha_Ingreso_OC"];
                     T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
-                    T.Detalle = Convert.ToString(reader["Detalle"]);
+                    T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
                     T.ID_Ticket=Convert.ToInt32(reader["ID_Ticket"]);
                 }
             }
@@ -149,14 +150,14 @@ namespace APIPortalTPC.Repositorio
                 {
                     Ticket T = new();
                     T.Id_OC = Convert.ToInt32(reader["Id_OC"]);
-                    T.Estado = Convert.ToString(reader["Estado"]);
+                    T.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
                     T.Id_Usuario = Convert.ToInt32(reader["ID_Cotizacion"]);
                     T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
                     T.Fecha_Ingreso_OC = (DateTime)reader["Fecha_Ingreso_OC"];
                     T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
-                    T.Detalle = Convert.ToString(reader["Detalle"]);
+                    T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     lista.Add(T);
                 }

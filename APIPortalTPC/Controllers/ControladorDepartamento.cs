@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -74,18 +75,29 @@ namespace APIPortalTPC.Controllers
         [HttpPost]
         public async Task<ActionResult<Departamento>> Nuevo(Departamento D)
         {
-            try
-            {
-                if (D == null)
-                    return BadRequest();
 
-                Departamento nuevo = await RD.NuevoDepartamento(D);
-                return nuevo;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
-            }
+                try
+                {
+                    if (D == null)
+                        return BadRequest();
+
+                    string res = await RD.Existe(D.Nombre);
+                    if (res == "ok")
+                    {
+                        Departamento nuevo = await RD.NuevoDepartamento(D);
+                        return nuevo;
+                    }
+                    else { 
+                        return StatusCode(StatusCodes.Status400BadRequest, res); 
+                    }
+                        
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
+                }
+            
+      
         }
 
         /// <summary>
@@ -113,6 +125,8 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
             }
+
         }
+     
     }
 }

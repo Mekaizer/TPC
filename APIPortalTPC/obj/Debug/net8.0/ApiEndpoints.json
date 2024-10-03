@@ -184,7 +184,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "A",
+        "Name": "CeCo",
         "Type": "BaseDatosTPC.Centro_de_costo",
         "IsRequired": true
       }
@@ -433,7 +433,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "A",
+        "Name": "OC",
         "Type": "BaseDatosTPC.Orden_de_compra",
         "IsRequired": true
       }
@@ -475,7 +475,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "OE",
+        "Name": "OC",
         "Type": "BaseDatosTPC.Orden_de_compra",
         "IsRequired": true
       },
@@ -848,7 +848,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "A",
+        "Name": "T",
         "Type": "BaseDatosTPC.Ticket",
         "IsRequired": true
       }
@@ -934,6 +934,37 @@
         "Name": "U",
         "Type": "ClasesBaseDatosTPC.Usuario",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
+    "Method": "ValidarCorreo",
+    "RelativePath": "api/ControladorUsuario",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "correo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pass",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

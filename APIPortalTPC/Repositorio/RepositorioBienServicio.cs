@@ -58,15 +58,8 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-
-                    if (reader["Bien_Servicio"] == System.DBNull.Value)
-                    {
-                        bs.Bien_Servicio = " ";
-                    }
-                    else
-                    {
-                        bs.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]);
-                    }       
+                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); ;
+     
                 }
             }
             catch (SqlException ex)
@@ -106,15 +99,8 @@ namespace APIPortalTPC.Repositorio
                 {
                     BienServicio bs = new BienServicio();
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    
-                    if (reader["Bien_Servicio"] == System.DBNull.Value)
-                    {
-                        bs.Bien_Servicio = " ";
-                    }
-                    else
-                    {
-                        bs.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]);
-                    }
+                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); 
+
                     lista.Add(bs);
                 }
             }
@@ -203,6 +189,31 @@ namespace APIPortalTPC.Repositorio
                 sql.Dispose();
             }
             return bs;
+        }
+        public async Task<string> Existe(string BienServicio)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Bien_Servicio WHERE Bien_Servicio = @Bien_Servicio";
+                    command.Parameters.AddWithValue("@Bien_Servicio", BienServicio);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El bien o servicio ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
         }
     }    
 }

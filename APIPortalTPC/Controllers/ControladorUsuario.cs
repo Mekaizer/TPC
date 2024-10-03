@@ -42,7 +42,7 @@ namespace APIPortalTPC.Controllers
             catch (Exception ex)
             {
                 // Manejar excepciones generales
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Usuario: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener los Usuarios: " + ex.Message);
             }
         }
         /// <summary>
@@ -75,22 +75,40 @@ namespace APIPortalTPC.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> Nuevo(Usuario U)
         {
+
             try
             {
                 if (U == null)
                     return BadRequest();
 
-                Usuario nuevo = await RU.NuevoUsuario(U);
-                return nuevo;
+                int rut = 0;
+                if (U.Rut_Usuario_Sin_Digito.HasValue)
+                {
+                    rut = U.Rut_Usuario_Sin_Digito.Value;
+
+                }
+                string res = await RU.Existe(rut, U.Correo_Usuario);
+                if (res == "ok")
+                {
+                    Usuario nuevo = await RU.NuevoUsuario(U);
+                    return nuevo;
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, res);
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
-        }
+            }
+            
+
+        
 
         /// <summary>
-        /// Metodo asincrónico para modificar un objeto por ID
+        /// Metodo asincrónico para modificar un objeto por ID, contiene un metodo para asegurarse que no exista el objeto
         /// </summary>
         /// <param name="U">Objeto del tipo Usuario que se reemplazará por su homonimo</param>
         /// <param name="id">Id del objeto Usuario a modifcar</param>
@@ -115,14 +133,17 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
+        
+        
+        
         /// <summary>
-        ///  solicitud JSON que contiene el correo electrónico y la contraseña.
+        ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia
         /// </summary>
-        /// <param name="correo"></param>
-        /// <param name="pass"></param>
+        /// <param name="correo">Correo ingresado</param>
+        /// <param name="pass">Contraseña ingresada</param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult<Usuario>> ValidarCorreo([FromBody] string correo, [FromBody] string pass)
+
+        public async Task<ActionResult<Usuario>> ValidarCorreo( string correo,  string pass)
         {
             Usuario User = await RU.ValidarCorreo(correo, pass);
             if (User == null)

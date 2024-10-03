@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -54,7 +55,7 @@ namespace APIPortalTPC.Controllers
                 var resultado= await RBS.GetServicio(id);
                 if (resultado == null)
                     return NotFound();
-                
+
                 return Ok(resultado) ;
             }
             catch (Exception ex)
@@ -76,8 +77,25 @@ namespace APIPortalTPC.Controllers
                 if (bs == null)
                     return BadRequest();
 
-                BienServicio nuevoBS = await RBS.NuevoBienServicio(bs);
-                return nuevoBS;
+                string res = await RBS.Existe(bs.Bien_Servicio);
+                if (res != null)
+                {
+                    if (res.Equals("ok"))
+                    {
+                        BienServicio nuevoBS = await RBS.NuevoBienServicio(bs);
+                        return nuevoBS;
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, res);
+                    }
+
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status418ImATeapot, "Valor nulo!?");
+                }
+           
             }
             catch (Exception ex)
             {
