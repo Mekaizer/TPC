@@ -32,9 +32,10 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id">Id del Bien_Servicio a buscar</param>
         /// <returns>El servicio cuyo Id sea el mismo</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<BienServicio> GetServicio(int id) {
+        public async Task<BienServicio> GetServicio(int id)
+        {
             //Parametro para guardar el objeto a mostrar
-            BienServicio bs = new ();
+            BienServicio bs = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -59,7 +60,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
                     bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); ;
-     
+
                 }
             }
             catch (SqlException ex)
@@ -97,9 +98,9 @@ namespace APIPortalTPC.Repositorio
                 //acontinuacion se procede a pasar los datos a una clase y luego se guardan en una lista
                 while (reader.Read())
                 {
-                    BienServicio bs = new ();
+                    BienServicio bs = new();
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); 
+                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim();
 
                     lista.Add(bs);
                 }
@@ -212,5 +213,7 @@ namespace APIPortalTPC.Repositorio
                         return "ok";
                     }
                 }
-    }    
+            }
+        }
+    }
 }

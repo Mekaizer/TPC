@@ -35,7 +35,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Centro_de_costo> GetCeCo(int IdCECO)
         {
             //Parametro para guardar el objeto a mostrar
-            Centro_de_costo cc = new ();
+            Centro_de_costo cc = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -99,7 +99,7 @@ namespace APIPortalTPC.Repositorio
 
                 while (reader.Read())
                 {
-                    Centro_de_costo cc = new ();
+                    Centro_de_costo cc = new();
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
                     cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
@@ -227,6 +227,8 @@ namespace APIPortalTPC.Repositorio
                         return "ok";
                     }
                 }
+            }
+        }
     }
 }
 

@@ -950,37 +950,6 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
-    "Method": "ValidarCorreo",
-    "RelativePath": "api/ControladorUsuario",
-    "HttpMethod": "",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "correo",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "pass",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "ClasesBaseDatosTPC.Usuario",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
     "Method": "Get",
     "RelativePath": "api/ControladorUsuario/{id}",
     "HttpMethod": "GET",
@@ -1012,6 +981,37 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
+    "Method": "ValidarCorreo",
+    "RelativePath": "api/ControladorUsuario/validar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "correo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pass",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

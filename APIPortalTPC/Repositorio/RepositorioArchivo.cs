@@ -58,7 +58,6 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                 a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                byte[] ArchivoDoc;
                 try
                 {
                     a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);

@@ -133,19 +133,18 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
-        
-        
-        
+
+
+
         /// <summary>
         ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia
         /// </summary>
-        /// <param name="correo">Correo ingresado</param>
-        /// <param name="pass">Contraseña ingresada</param>
+        /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
         /// <returns></returns>
-
-        public async Task<ActionResult<Usuario>> ValidarCorreo( string correo,  string pass)
+        [HttpPost("validar")]
+        public async Task<ActionResult<Usuario>> ValidarCorreo( PostRq postrq)
         {
-            Usuario User = await RU.ValidarCorreo(correo, pass);
+            Usuario User = await RU.ValidarCorreo(postrq.correo, postrq.pass);
             if (User == null)
             {
                 return NotFound("Usuario no encontrado");

@@ -23,10 +23,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="RA">Interface de RepositorioArchivo</param>
 
-        public ControladorArchivo(IRepositorioArchivo RA)
-        {
-            this.RA = RA;
-        }
+        public ControladorArchivo(IRepositorioArchivo RA) => this.RA = RA;
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
         /// </summary>
