@@ -9,7 +9,7 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioUsuario : IRepositorioUsuario
     {
-       
+
         private string Conexion;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace APIPortalTPC.Repositorio
         {
             Conexion = CD.ConexionDatosSQL;
         }
-        
+
         /// <summary>
         /// Metodo que realiza la conexión a la base de datos
         /// </summary>
@@ -29,7 +29,7 @@ namespace APIPortalTPC.Repositorio
         {
             return new SqlConnection(Conexion);
         }
-        
+
         /// <summary>
         /// Se crea  un nuevo objeto y se agrega a la base de datos
         /// </summary>
@@ -39,7 +39,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Usuario> NuevoUsuario(Usuario U)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -71,7 +71,7 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                Comm.Dispose();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
@@ -91,9 +91,9 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
-            SqlDataReader reader = null;
+            SqlDataReader? reader = null;
             try
             {
                 //Se crea la instancia con la conexion SQL para interactuar con la base de datos
@@ -111,18 +111,18 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim() ;
+                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
                     U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
-                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim() ;
-                    U.Departamento_Usuario= Convert.ToInt32(reader["Departamento_Usuario"]);
+                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
+                    U.Departamento_Usuario = Convert.ToInt32(reader["Departamento_Usuario"]);
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
-                    U.En_Vacaciones= Convert.ToBoolean(reader["En_Vacaciones"]);
+                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
-                    U.Activado = Convert.ToBoolean(reader["Activado"]); 
+                    U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
 
                 }
@@ -134,14 +134,14 @@ namespace APIPortalTPC.Repositorio
             finally
             {
                 //Se cierran los objetos 
-                reader.Close();
-                Comm.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
             return U;
         }
-        
+
         /// <summary>
         /// Metodo que retorna una lista con los objeto
         /// </summary>
@@ -151,8 +151,8 @@ namespace APIPortalTPC.Repositorio
         {
             List<Usuario> lista = new List<Usuario>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sql.Open();
@@ -164,11 +164,11 @@ namespace APIPortalTPC.Repositorio
                 {
                     Usuario U = new();
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
-                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim(); 
-                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim(); 
-                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim(); 
-                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim(); 
-                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim(); 
+                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
+                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
+                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
+                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
+                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
                     U.Departamento_Usuario = Convert.ToInt32(reader["Departamento_Usuario"]);
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
@@ -185,14 +185,14 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                reader.Close();
-                Comm.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
             return lista;
         }
-        
+
         /// <summary>
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
@@ -201,10 +201,10 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> ModificarUsuario(Usuario U)
         {
-            Usuario Umod = null;
+            Usuario? Umod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sqlConexion.Open();
@@ -237,7 +237,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = U.Id_Usuario;
-            
+
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Umod = await GetUsuario(Convert.ToInt32(reader["Id_Usuario"]));
@@ -248,16 +248,15 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
 
-                Comm.Dispose();
+                Comm?.Dispose();
                 sqlConexion.Close();
                 sqlConexion.Dispose();
             }
             return Umod;
         }
-        
+
         /// <summary>
         /// Retorna el Usuario validado si su contraseña y contraseña coinciden
         /// </summary>
@@ -269,8 +268,8 @@ namespace APIPortalTPC.Repositorio
         {
             Usuario U = new();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
 
             try
             {
@@ -279,7 +278,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "SELECT * FROM dbo.Usuario " +
                                    "WHERE Contraseña_Usuario = @contraseña AND Correo_Usuario = @correo";
                 Comm.CommandType = CommandType.Text;
-      
+
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.HasRows)
@@ -312,14 +311,14 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                Comm.Dispose();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
 
             return U;
         }
-        
+
         /// <summary>
         /// Metodo para revisar si existe un Usuario Unico
         /// </summary>
@@ -360,4 +359,4 @@ namespace APIPortalTPC.Repositorio
             }
         }
     }
-}
+}    

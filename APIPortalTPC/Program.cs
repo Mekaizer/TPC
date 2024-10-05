@@ -31,7 +31,7 @@ builder.Services.AddSingleton(sqlConfig);
 //parametros para validar el token JWT
 //Clases para validar los tokens
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Audience = "https://localhost:5173/";
@@ -47,6 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         };
     });
+*/
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

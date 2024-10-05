@@ -7,7 +7,7 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioArchivo : IRepositorioArchivo
     {
         /// <value>Variable que guarda el string para la conexion con la base de datos </value>
-        private string Conexion;
+        private readonly string Conexion;
 
         /// <summary>
         /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
@@ -34,13 +34,13 @@ namespace APIPortalTPC.Repositorio
         public async Task<Archivo> GetArchivo(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Archivo a = new Archivo();
+            Archivo a = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
-            SqlDataReader reader = null;
+            SqlDataReader? reader = null;
             try
             {
                 //Se crea la instancia con la conexion SQL para interactuar con la base de datos
@@ -58,7 +58,6 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                 a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                byte[] ArchivoDoc;
                 try
                 {
                     a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
@@ -66,7 +65,7 @@ namespace APIPortalTPC.Repositorio
                 catch (InvalidCastException)
                 {
 
-                    a.ArchivoDoc = new byte[0];
+                    a.ArchivoDoc = [0];
                 }
              
 
@@ -80,8 +79,8 @@ namespace APIPortalTPC.Repositorio
             finally
             {
                 //Se cierran los objetos 
-                reader.Close();
-                Comm.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
@@ -96,8 +95,8 @@ namespace APIPortalTPC.Repositorio
         {
             List<Archivo> lista = new List<Archivo>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sql.Open();
@@ -107,10 +106,9 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    Archivo a = new Archivo();
+                    Archivo a = new ();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
                     a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
-                    byte[] ArchivoDoc;
                     try
                     {
                        a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
@@ -118,7 +116,7 @@ namespace APIPortalTPC.Repositorio
                     catch (InvalidCastException)
                     {
                         
-                        a.ArchivoDoc = new byte[0];
+                        a.ArchivoDoc = [0];
                     }
                     lista.Add(a);
                 }
@@ -129,8 +127,8 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                reader.Close();
-                Comm.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
@@ -144,10 +142,10 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Archivo> ModificarArchivo(Archivo A)
         {
-            Archivo Archmod = null;
+            Archivo? Archmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sqlConexion.Open();
@@ -173,10 +171,9 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
 
-                Comm.Dispose();
+                Comm?.Dispose();
                 sqlConexion.Close();
                 sqlConexion.Dispose();
             }
@@ -191,7 +188,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Archivo> NuevoArchivo(Archivo A)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -213,7 +210,7 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                Comm.Dispose();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }

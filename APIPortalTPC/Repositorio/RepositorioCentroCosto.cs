@@ -8,7 +8,7 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioCentroCosto : IRepositorioCentroCosto
     {
 
-        private string Conexion;
+        private readonly string Conexion;
 
         /// <summary>
         /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
@@ -35,11 +35,11 @@ namespace APIPortalTPC.Repositorio
         public async Task<Centro_de_costo> GetCeCo(int IdCECO)
         {
             //Parametro para guardar el objeto a mostrar
-            Centro_de_costo cc = new Centro_de_costo();
+            Centro_de_costo cc = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
             try
@@ -87,7 +87,7 @@ namespace APIPortalTPC.Repositorio
         {
             List<Centro_de_costo> lista = new List<Centro_de_costo>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -99,7 +99,7 @@ namespace APIPortalTPC.Repositorio
 
                 while (reader.Read())
                 {
-                    Centro_de_costo cc = new Centro_de_costo();
+                    Centro_de_costo cc = new();
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
                     cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
@@ -129,7 +129,7 @@ namespace APIPortalTPC.Repositorio
         {
             Centro_de_costo ccmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -156,8 +156,7 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
 
                 Comm.Dispose();
                 sqlConexion.Close();
@@ -174,7 +173,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Centro_de_costo> Nuevo_CeCo(Centro_de_costo Ceco)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();

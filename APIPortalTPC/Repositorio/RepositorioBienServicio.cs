@@ -7,7 +7,7 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioBienServicio : IRepositorioBienServicio
     {
         /// <value>variable para guardar la conexión a la base de datos</value>
-        private string Conexion;
+        private readonly string Conexion;
 
         /// <summary>
         /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
@@ -32,15 +32,16 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id">Id del Bien_Servicio a buscar</param>
         /// <returns>El servicio cuyo Id sea el mismo</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<BienServicio> GetServicio(int id) {
+        public async Task<BienServicio> GetServicio(int id)
+        {
             //Parametro para guardar el objeto a mostrar
-            BienServicio bs = new BienServicio();
+            BienServicio bs = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
-            SqlDataReader reader = null;
+            SqlDataReader? reader = null;
             try
             {
                 //Se crea la instancia con la conexion SQL para interactuar con la base de datos
@@ -59,7 +60,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
                     bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); ;
-     
+
                 }
             }
             catch (SqlException ex)
@@ -69,8 +70,8 @@ namespace APIPortalTPC.Repositorio
             finally
             {
                 //Se cierran los objetos 
-                reader.Close();
-                Comm.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
@@ -85,8 +86,8 @@ namespace APIPortalTPC.Repositorio
         {
             List<BienServicio> lista = new List<BienServicio>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sql.Open();
@@ -97,9 +98,9 @@ namespace APIPortalTPC.Repositorio
                 //acontinuacion se procede a pasar los datos a una clase y luego se guardan en una lista
                 while (reader.Read())
                 {
-                    BienServicio bs = new BienServicio();
+                    BienServicio bs = new();
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); 
+                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim();
 
                     lista.Add(bs);
                 }
@@ -110,10 +111,10 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                reader.Close();
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
+                reader?.Close();
+                Comm?.Dispose();
+                sql?.Close();
+                sql?.Dispose();
             }
             return lista;
         }
@@ -126,10 +127,10 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<BienServicio> ModificarBien_Servicio(BienServicio bs)
         {
-            BienServicio bsmodificado = null;
-            SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
-            SqlDataReader reader = null;
+            BienServicio? bsmodificado = null;
+            SqlConnection? sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
             try
             {
                 sqlConexion.Open();
@@ -148,12 +149,11 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
 
-                Comm.Dispose();
-                sqlConexion.Close();
-                sqlConexion.Dispose();
+                Comm?.Dispose();
+                sqlConexion?.Close();
+                sqlConexion?.Dispose();
             }
             return bsmodificado;
         }
@@ -165,8 +165,8 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<BienServicio> NuevoBienServicio(BienServicio bs)
         {
-            SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlConnection? sql = conectar();
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -184,7 +184,7 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-                Comm.Dispose();
+                Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
@@ -215,5 +215,5 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
-    }    
+    }
 }

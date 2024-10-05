@@ -35,7 +35,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Relacion> NuevaRelacion(Relacion R)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
@@ -77,7 +77,7 @@ namespace APIPortalTPC.Repositorio
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
             try
@@ -123,7 +123,7 @@ namespace APIPortalTPC.Repositorio
         {
             List<Relacion> lista = new List<Relacion>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -167,7 +167,7 @@ namespace APIPortalTPC.Repositorio
         {
             Relacion Rmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {

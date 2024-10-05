@@ -8,7 +8,7 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioCotizacion : IRepositorioCotizacion
     {
        
-        private string Conexion;
+        private readonly string Conexion;
 
         /// <summary>
         /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
@@ -37,11 +37,11 @@ namespace APIPortalTPC.Repositorio
         public async Task<Cotizacion> GetCotizacion(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Cotizacion cot = new Cotizacion();
+            Cotizacion cot = new ();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
             try
@@ -91,7 +91,7 @@ namespace APIPortalTPC.Repositorio
         {
             List<Cotizacion> lista = new List<Cotizacion>();
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -103,10 +103,12 @@ namespace APIPortalTPC.Repositorio
 
                 while (reader.Read())
                 {
-                    Cotizacion cot = new Cotizacion();
-                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
-                    cot.ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]);
-                    cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
+                    Cotizacion cot = new()
+                    {
+                        //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
+                        ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
+                        Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"])
+                    };
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
@@ -140,7 +142,7 @@ namespace APIPortalTPC.Repositorio
         {
             Cotizacion cotmod = null;
             SqlConnection sqlConexion = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             SqlDataReader reader = null;
             try
             {
@@ -194,7 +196,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Cotizacion> NuevaCotizacion(Cotizacion cotizacion)
         {
             SqlConnection sql = conectar();
-            SqlCommand Comm = null;
+            SqlCommand? Comm = null;
             try
             {
                 sql.Open();
