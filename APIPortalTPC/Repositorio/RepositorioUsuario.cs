@@ -276,9 +276,10 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "SELECT * FROM dbo.Usuario " +
-                                   "WHERE Contraseña_Usuario = @contraseña AND Correo_Usuario = @correo";
+                                   "WHERE Contraseña_Usuario = @pass AND Correo_Usuario = @correo";
                 Comm.CommandType = CommandType.Text;
-
+                Comm.Parameters.AddWithValue("@correo", correo);
+                Comm.Parameters.AddWithValue("@pass", pass);
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.HasRows)

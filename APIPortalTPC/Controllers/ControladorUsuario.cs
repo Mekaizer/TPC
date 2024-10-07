@@ -72,7 +72,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="U">Objeto del tipo Usuario que se quiere agregar a la base de datos</param>
         /// <returns>Retorna el objeto Usuario agregado</returns>
-        [HttpPost]
+        //[HttpPost]
         public async Task<ActionResult<Usuario>> Nuevo(Usuario U)
         {
 
@@ -141,7 +141,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
         /// <returns></returns>
-        [HttpPost("validar")]
+        [HttpPost]
         public async Task<ActionResult<Usuario>> ValidarCorreo( PostRq postrq)
         {
             Usuario User = await RU.ValidarCorreo(postrq.correo, postrq.pass);
