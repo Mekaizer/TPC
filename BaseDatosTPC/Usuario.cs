@@ -12,7 +12,7 @@ namespace ClasesBaseDatosTPC
         public string? Digito_Verificador { get; set; }
         public string? Apellido_materno { get; set; }
         public string? Correo_Usuario { get; set; }
-        public int? Departamento_Usuario { get; set; }
+        public string? Departamento_Usuario { get; set; }
         public string? Contraseña_Usuario { get; set; }
         public bool? En_Vacaciones {  get; set; }
         public string? Tipo_Liberador {  get; set; }

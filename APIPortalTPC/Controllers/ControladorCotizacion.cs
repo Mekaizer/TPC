@@ -54,7 +54,7 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                var resultado = await RC.GetCotizacion(id);
+                var resultado= await RC.GetCotizacion(id);
                 if (resultado == null)
                     return NotFound();
 
@@ -62,7 +62,7 @@ namespace APIPortalTPC.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener la cotizacion: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener la cotizacion: " + ex.Message+ id);
             }
         }
 
@@ -99,11 +99,7 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                if (id != c.ID_Cotizacion)
-                    return BadRequest("La Id no coincide");
-
                 var Modificar = await RC.GetCotizacion(id);
-
                 if (Modificar == null)
                     return NotFound($"Cotizacion con = {id} no encontrado");
 
@@ -111,7 +107,7 @@ namespace APIPortalTPC.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+id);
             }
         }
     }

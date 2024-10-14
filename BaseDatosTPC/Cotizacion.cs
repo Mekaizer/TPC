@@ -16,7 +16,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Id del usuario que ha solicitado la solicitud
         /// </summary>
-        public int? Id_Solicitante { get; set; }
+        public string? Id_Solicitante { get; set; }
         /// <summary>
         /// Guarda la fecha de creacion
         /// </summary>
@@ -28,7 +28,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Id del proveedor asociado
         /// </summary>
-        public int? Id_Proveedor { get; set; }
+        public string? Id_Proveedor { get; set; }
         /// <summary>
         /// descripcion de la cotizacion
         /// </summary>
@@ -37,11 +37,6 @@ namespace BaseDatosTPC
         /// Numero de solped
         /// </summary>
         public int? Solped {  get; set; }
-        /// <summary>
-        /// Id de la orden de compra asociada
-        /// </summary>
-        public int? Id_Orden_Compra { get;set; }
-
 
 
 

@@ -16,7 +16,6 @@ namespace APIPortalTPC.Controllers
 
     public class ControladorUsuario : ControllerBase
     {
-
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioUsuario RU;
         /// <summary>
@@ -72,7 +71,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="U">Objeto del tipo Usuario que se quiere agregar a la base de datos</param>
         /// <returns>Retorna el objeto Usuario agregado</returns>
-        //[HttpPost]
+        [HttpPost("nuevo")]
         public async Task<ActionResult<Usuario>> Nuevo(Usuario U)
         {
 
@@ -102,10 +101,8 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
-            }
-            
+        }
 
-        
 
         /// <summary>
         /// Metodo asincrónico para modificar un objeto por ID, contiene un metodo para asegurarse que no exista el objeto
@@ -116,11 +113,12 @@ namespace APIPortalTPC.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Usuario>> Modificar(Usuario U, int id)
         {
+            if (U.Id_Usuario != id)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Id no coincide");
+            }
             try
             {
-                if (id != U.Id_Usuario)
-                    return BadRequest("La Id no coincide");
-
                 var Modificar = await RU.GetUsuario(id);
 
                 if (Modificar == null)
@@ -133,15 +131,12 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
-
-
-
-        /// <summary>
-        ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia
-        /// </summary>
-        /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
-        /// <returns></returns>
-        [HttpPost]
+    /// <summary>
+    ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia
+    /// </summary>
+    /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
+    /// <returns></returns>
+    [HttpPost]
         public async Task<ActionResult<Usuario>> ValidarCorreo( PostRq postrq)
         {
             Usuario User = await RU.ValidarCorreo(postrq.correo, postrq.pass);

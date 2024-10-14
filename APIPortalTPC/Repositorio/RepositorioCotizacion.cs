@@ -37,13 +37,13 @@ namespace APIPortalTPC.Repositorio
         public async Task<Cotizacion> GetCotizacion(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Cotizacion cot = new ();
+            Cotizacion cot = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
             SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
-            SqlDataReader reader = null;
+            SqlDataReader? reader = null;
             try
             {
                 //Se crea la instancia con la conexion SQL para interactuar con la base de datos
@@ -52,21 +52,44 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Cotizacion where ID_Cotizacion = @ID_Cotizacion";
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, p.Nombre_Fantasia
+                FROM dbo.Cotizacion c
+                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario
+                INNER JOIN dbo.Proveedores p ON c.Id_Proveedor = p.ID_Proveedores
+                where C.ID_Cotizacion = @ID_Cotizacion";
+
+                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = id;
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = id;
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
                 //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
-                cot.ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]);
-                cot.Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"]);
-                object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
-                cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
-                cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
-                cot.Id_Proveedor = Convert.ToInt32(reader["Id_Proveedor"]);
-                cot.Solped = Convert.ToInt32(reader["Solped"]);
-                cot.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                if (reader.Read())
+                {
+
+                    cot = new()
+                    {
+                        //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
+                        ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
+                        Id_Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim(),
+                    };
+
+                    object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
+                    cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
+                    cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
+                    cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    cot.Id_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
+                    {
+                        cot.Solped = Convert.ToInt32(reader["Solped"]);
+                    }
+                    else
+                    {
+                        //Se asigna 0
+                        cot.Solped = 0;
+                    }
+
+                }
             }
             catch (SqlException ex)
             {
@@ -75,7 +98,7 @@ namespace APIPortalTPC.Repositorio
             finally
             {
                 //Se cierran los objetos 
-                reader.Close();
+                reader?.Close();
                 Comm.Dispose();
                 sql.Close();
                 sql.Dispose();
@@ -97,7 +120,11 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Cotizacion"; // leer base datos 
+                Comm.CommandText = @"
+                SELECT c.*, u.Nombre_Usuario, p.Nombre_Fantasia
+                FROM dbo.Cotizacion c
+                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario
+                INNER JOIN dbo.Proveedores p ON c.Id_Proveedor = p.ID_Proveedores";// leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -107,20 +134,30 @@ namespace APIPortalTPC.Repositorio
                     {
                         //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                         ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
-                        Id_Solicitante = Convert.ToInt32(reader["Id_Solicitante"])
+                        Id_Solicitante= Convert.ToString(reader["Nombre_Usuario"]).Trim(),
                     };
+
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
-                    cot.Id_Proveedor = Convert.ToInt32(reader["Id_Proveedor"]);
-                    cot.Solped = Convert.ToInt32(reader["Solped"]);
-                    cot.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    cot.Id_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
+                    {
+                        cot.Solped = Convert.ToInt32(reader["Solped"]);
+                    }
+                    else
+                    {
+                        //Se asigna 0
+                        cot.Solped = 0;
+                    }
+
                     lista.Add(cot);
                 }
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error cargando los datos tabla Cotización " + ex.Message);
+                throw new Exception("Error cargando los datos tabla Cotización " + lista + ex.Message);
             }
             finally
             {
@@ -131,6 +168,8 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
+        //OJO, quizas hay que mostrar mas si hay ID Orden Compra o Solped... no recuerdo que habia que mostrar
+
 
         /// <summary>
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
@@ -149,23 +188,20 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
-                    "Id_Solicitante = @Id_Solicitante " +
-                    "Fecha_Creacion_Cotizacion = @Fecha_Creacion_Cotizacion " +
-                    "Estado = @Estado " +
-                    "Id_Proveedor = @Id_Proveedor " +
-                    "Detalle = @Detalle " +
-                    "Solped = @Solped " +
-                    "Id_Orden_Compra = @Id_Orden_Compra " +
-                    "WHERE ID_Cotizacion = @ID_Cotizacion";
+                                   "Id_Solicitante = @Id_Solicitante, " +
+                                   "Estado = @Estado, " +
+                                   "Id_Proveedor = @Id_Proveedor, " +
+                                   "Detalle = @Detalle, " +
+                                   "Solped = @Solped " +
+                                   "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion.ID_Cotizacion;
+
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.VarChar, 50).Value = cotizacion.Id_Solicitante;
-                Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = cotizacion.Fecha_Creacion_Cotizacion;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = cotizacion.Id_Proveedor;
-                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
+                Comm.Parameters.Add("@Id_Proveedor", SqlDbType.VarChar,50).Value = cotizacion.Id_Proveedor;
+                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar,500).Value = cotizacion.Detalle;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
-                Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = cotizacion.Id_Orden_Compra;
+                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion.ID_Cotizacion;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -202,8 +238,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO " +
-                    "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,Id_Proveedor,Detalle,Solped,Id_Orden_Compra) " +
-                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@Id_Proveedor,@Detalle,@Solped,@Id_Orden_Compra); " +
+                    "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,Id_Proveedor,Detalle,Solped) " +
+                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@Id_Proveedor,@Detalle,@Solped); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
@@ -211,8 +247,14 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = cotizacion.Id_Proveedor;
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
-                Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = cotizacion.Id_Orden_Compra;
+                if (cotizacion.Solped != null)
+                {
+                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
+                }
+                else {
+                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = 0;
+                }
+
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 cotizacion.ID_Cotizacion = (int)idDecimal;
             }
