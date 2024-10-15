@@ -5,7 +5,7 @@ namespace BaseDatosTPC
 {/// <summary>
 /// Clase que guarda los datos de las ordenes estadisticas
 /// </summary>
-    public class Ordenes_Estadisticas
+    public class OrdenesEstadisticas
     {
         /// <summary>
         /// Identificador unico de la relacion

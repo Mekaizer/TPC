@@ -30,10 +30,10 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Se crea una en un nuevo objeto y se agrega a la base de datos
         /// </summary>
-        /// <param name="OC">Objeto Orden_de_compra a añadir a la base de datos</param>
-        /// <returns>El objeto Orden_de_compra a añadir</returns>
+        /// <param name="OC">Objeto OrdenCompra a añadir a la base de datos</param>
+        /// <returns>El objeto OrdenCompra a añadir</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Orden_de_compra> NuevoOC(Orden_de_compra OC)
+        public async Task<OrdenCompra> NuevoOC(OrdenCompra OC)
         {
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
@@ -41,15 +41,16 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Orden_de_compra " +
-                    "(Numero_OC,Solped,Id_OE,Posicion) " +
-                    "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion); " +
+                Comm.CommandText = "INSERT INTO OrdenCompra " +
+                    "(Numero_OC,Solped,Id_OE,Posicion,Id_Ticket) " +
+                    "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion,@Id_Ticket); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
+                Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = OC.Id_Ticket;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 OC.Id_Orden_Compra = (int)idDecimal;
             }
@@ -69,13 +70,13 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Metodo que permite conseguir un objeto usando su llave foranea
         /// </summary>
-        /// <param name="id">Id que pertenece al objeto Orden_de_compra a buscar</param>
+        /// <param name="id">Id que pertenece al objeto OrdenCompra a buscar</param>
         /// <returns>Retorna el objeto cuya Id coincide con el pedido</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Orden_de_compra> GetOC(int id)
+        public async Task<OrdenCompra> GetOC(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Orden_de_compra oc = new Orden_de_compra();
+            OrdenCompra oc = new OrdenCompra();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -90,7 +91,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Orden_de_compra " +
+                Comm.CommandText = "SELECT * FROM dbo.OrdenCompra " +
                     "where Id_Orden_Compra = @Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -101,15 +102,17 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
-                    oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
-                    oc.posicion = (Convert.ToString(reader["Posicion"])).Trim();
-                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]); 
+                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
+                    oc.Id_OE = reader["Id_OE"] is DBNull ? 0 : Convert.ToInt32(reader["Id_OE"]);
+                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
+                    oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                 }
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error cargando los datos tabla Orden_de_compra " + ex.Message);
+                throw new Exception("Error cargando los datos tabla OrdenCompra " + ex.Message);
             }
             finally
             {
@@ -124,11 +127,11 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Metodo que retorna una lista con los objeto
         /// </summary>
-        /// <returns>Retorna la lista con todos los objetos Orden_de_compra</returns>
+        /// <returns>Retorna la lista con todos los objetos OrdenCompra</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IEnumerable<Orden_de_compra>> GetAllOC()
+        public async Task<IEnumerable<OrdenCompra>> GetAllOC()
         {
-            List<Orden_de_compra> lista = new List<Orden_de_compra>();
+            List<OrdenCompra> lista = new List<OrdenCompra>();
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -136,17 +139,20 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Orden_de_compra"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.Orden_de_Compra"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
-                    Orden_de_compra oc = new();
-                    oc.Solped = Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = Convert.ToInt32(reader["Id_OE"]);
-                    oc.posicion = (Convert.ToString(reader["Posicion"])).Trim();
+                    OrdenCompra oc = new();
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
+                    oc.Id_OE = reader["Id_OE"] is DBNull ? 0 : Convert.ToInt32(reader["Id_OE"]);
+                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
+                    oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+
                     lista.Add(oc);
                 }
             }
@@ -167,12 +173,12 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
-        /// <param name="OC">Objetivo del tipo Orden_de_compra que va a modificarse en la base de datos</param>
-        /// <returns>Retorna el objeto Orden_de_compra modificado</returns>
+        /// <param name="OC">Objetivo del tipo OrdenCompra que va a modificarse en la base de datos</param>
+        /// <returns>Retorna el objeto OrdenCompra modificado</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Orden_de_compra> ModificarOC(Orden_de_compra OC)
+        public async Task<OrdenCompra> ModificarOC(OrdenCompra OC)
         {
-            Orden_de_compra ocmod = null;
+            OrdenCompra ocmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -180,7 +186,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Orden_de_compra SET " +
+                Comm.CommandText = "UPDATE dbo.OrdenCompra SET " +
                     "Numero_OC = @Numero_OC " +
                     "Solped = @Solped " +
                     "Id_OE = @Id_OE " +

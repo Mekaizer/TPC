@@ -72,14 +72,14 @@ namespace APIPortalTPC.Controllers
         /// <param name="OE">Objeto Ordenes_Estadistica que se añadirá a la base de datos</param>
         /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
-        public async Task<ActionResult<Ordenes_Estadisticas>> Nuevo(Ordenes_Estadisticas OE)
+        public async Task<ActionResult<OrdenesEstadisticas>> Nuevo(OrdenesEstadisticas OE)
         {
             try
             {
                 if (OE == null)
                     return BadRequest();
 
-                Ordenes_Estadisticas nuevo = await ROE.NuevoOE(OE);
+                OrdenesEstadisticas nuevo = await ROE.NuevoOE(OE);
                 return nuevo;
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace APIPortalTPC.Controllers
         /// <param name="id">Id del objeto Ordenes_Estadisticas que se quiere reemplazar</param>
         /// <returns>Retorna el objeto nuevo </returns>
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Ordenes_Estadisticas>> Modificar(Ordenes_Estadisticas OE, int id)
+        public async Task<ActionResult<OrdenesEstadisticas>> Modificar(OrdenesEstadisticas OE, int id)
         {
             try
             {

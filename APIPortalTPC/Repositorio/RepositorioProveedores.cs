@@ -50,33 +50,36 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Proveedores " +
-                    "where ID_Proveedores = @ID_Proveedores";
+                Comm.CommandText = "SELECT P.*, BS.Bien_Servicio " +
+                    "FROM dbo.Proveedores P " +
+                    "INNER JOIN dbo.Bien_Servicio BS ON BS.ID_Bien_Servicio = P.ID_Bien_Servicio " +
+                    "where P.ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@ID_Proveedores", SqlDbType.Int).Value = id;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-
-                P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
-                P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
-                P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
-                P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
-                P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
-                P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
-                P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
-                P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
-                P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
-                P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
-                P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
-                P.Banco = (Convert.ToString(reader["Banco"])).Trim();
-                P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
-                P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
-                P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
-
+                while (reader.Read())
+                {
+                    P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
+                    P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
+                    P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
+                    P.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
+                    P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
+                    P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
+                    P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
+                    P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
+                    P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
+                    P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
+                    P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
+                    P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
+                    P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
+                    P.Banco = (Convert.ToString(reader["Banco"])).Trim();
+                    P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
+                    P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
+                    P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
+                }
             }
             catch (SqlException ex)
             {
@@ -107,7 +110,9 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Proveedores"; // leer base datos 
+                Comm.CommandText = "SELECT P.*, BS.Bien_Servicio " +
+                    "FROM dbo.Proveedores P " +
+                    "INNER JOIN dbo.Bien_Servicio BS ON BS.ID_Bien_Servicio = P.ID_Bien_Servicio"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -117,7 +122,7 @@ namespace APIPortalTPC.Repositorio
                     P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
                     P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
                     P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
-                    P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+                    P.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
                     P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
                     P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
@@ -184,9 +189,9 @@ namespace APIPortalTPC.Repositorio
                 P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
                 P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
                 P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
-                P.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
-                P.Direccion = (Convert.ToString(reader["Direccion"])).Trim();
-                P.Comuna = (Convert.ToString(reader["Comuna"])).Trim();
+                P.ID_Bien_Servicio = Convert.ToString(reader["ID_Bien_Servicio"]);
+                P.Direccion = Convert.ToString(reader["Direccion"]).Trim();
+                P.Comuna = Convert.ToString(reader["Comuna"]).Trim();
                 P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
                 P.Telefono_Proveedor = Convert.ToInt32(reader["Telefono_Proveedor"]);
                 P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
@@ -253,7 +258,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Swift2", SqlDbType.VarChar).Value = P.Swift2;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
-                P.ID_Bien_Servicio = id;
+                P.ID_Proveedores = id;
             }
             catch (SqlException ex)
             {
@@ -274,30 +279,24 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id_bs">Id del biservicio relacionado al proveedor</param>
         /// <param name="rut">Rut del proveedor</param>
         /// <returns></returns>
-        public async Task<string> Existe(int rut, string correo)
+        public async Task<string> Existe(string rut,string bs)
         {
             using (SqlConnection sqlConnection = conectar())
             {
                 sqlConnection.Open();
-
+                
                 using (SqlCommand command = new SqlCommand())
                 {
+                    int valuebs = int.Parse(bs);
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario_Sin_Digito = @rut";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut and ID_Bien_Servicio = @bs";
+
+                    command.Parameters.AddWithValue("@bs", valuebs); 
                     command.Parameters.AddWithValue("@rut", rut);
                     SqlDataReader reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
-                        return "El rut ya existe";
-                    }
-                    reader.Close();
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Correo_Usuario = @correo";
-                    command.Parameters.AddWithValue("@correo", correo);
-                    reader = await command.ExecuteReaderAsync();
-                    if (reader.HasRows)
-                    {
-                        reader.Close();
-                        return "El correo ya existe";
+                        return "El rut proveedor con ese bien/servicio ya existe";
                     }
                     else
                     {

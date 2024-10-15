@@ -9,6 +9,6 @@ namespace APIPortalTPC.Repositorio
         public Task<Proveedores> GetProveedor(int id);
         public Task<IEnumerable<Proveedores>> GetAllProveedores();
         public Task<Proveedores> ModificarProveedor(Proveedores P);
-        public Task<string> Existe(int id_bs, string rut);
+        public Task<string> Existe(string rut, string bs);
     }
 }

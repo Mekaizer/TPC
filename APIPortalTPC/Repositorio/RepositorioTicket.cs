@@ -41,11 +41,10 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ticket " +
-                    "(Id_OC,Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor,Fecha_OC_Enviada,Fecha_OC_Liberada) " +
-                    "VALUES (@Id_OC,@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor,@Fecha_OC_Enviada,@Fecha_OC_Liberada); " +
+                    "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor,Fecha_OC_Enviada,Fecha_OC_Liberada) " +
+                    "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor,@Fecha_OC_Enviada,@Fecha_OC_Liberada); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Ticket";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_OC", SqlDbType.Int).Value = T.Id_OC;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
@@ -101,16 +100,17 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    T.Id_OC = Convert.ToInt32(reader["Id_OC"]);
+                  
                     T.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
-                    T.Id_Usuario= Convert.ToInt32(reader["ID_Cotizacion"]);
+                    T.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
                     T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
-                    T.Fecha_Ingreso_OC = (DateTime)reader["Fecha_Ingreso_OC"];
-                    T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
-                    T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
+                    T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
+                    T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
+                    T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
-                    T.ID_Ticket=Convert.ToInt32(reader["ID_Ticket"]);
+                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+
                 }
             }
             catch (SqlException ex)
@@ -149,14 +149,13 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Ticket T = new();
-                    T.Id_OC = Convert.ToInt32(reader["Id_OC"]);
                     T.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
-                    T.Id_Usuario = Convert.ToInt32(reader["ID_Cotizacion"]);
+                    T.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
                     T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
-                    T.Fecha_Ingreso_OC = (DateTime)reader["Fecha_Ingreso_OC"];
-                    T.Fecha_OC_Enviada = (DateTime)reader["Fecha_OC_Enviada"];
-                    T.Fecha_OC_Liberada = (DateTime)reader["Fecha_OC_Liberada"];
+                    T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
+                    T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
+                    T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     lista.Add(T);
@@ -198,15 +197,16 @@ namespace APIPortalTPC.Repositorio
                     "Fecha_Creacion_OC = @Fecha_Creacion_OC " +
                     "Id_Usuario = @Id_Usuario " +
                     "Id_Proveedor = @Id_Proveedor " +
+                    "Fecha_OC_Recepcionada=@Fecha_OC_Recepcionada" +
                     "Fecha_OC_Enviada = @Fecha_OC_Enviada " +
                     "Fecha_OC_Liberada = @Fecha_OC_Liberada " +
                     "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_OC", SqlDbType.Int).Value = T.Id_OC;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
+                Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
                 Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
                 Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;

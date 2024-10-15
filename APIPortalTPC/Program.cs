@@ -10,6 +10,7 @@ IConfiguration Configuration;
 builder.Services.AddControllers();
 //Todos los metodos clases deben ir aqui
 builder.Services.AddScoped<IRepositorioArchivo, RepositorioArchivo>();
+builder.Services.AddScoped<IRepositorioAutentizar, RepositorioAutentizar>();
 builder.Services.AddScoped<IRepositorioBienServicio, RepositorioBienServicio>();
 builder.Services.AddScoped<IRepositorioCentroCosto, RepositorioCentroCosto>();
 builder.Services.AddScoped<IRepositorioCotizacion, RepositorioCotizacion>();
@@ -55,7 +56,21 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+/*Metodo para dar acceso al front-end
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NuevaPolitica", app =>
+    {
+        app.AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin();
 
+    });
+});
+
+app.UseCors("NuevaPolitica");
+ 
+*/
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

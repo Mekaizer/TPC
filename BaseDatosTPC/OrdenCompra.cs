@@ -6,7 +6,7 @@ namespace BaseDatosTPC
     /// <summary>
     /// Clase que guarda los datos de las ordenes de compras
     /// </summary>
-    public class Orden_de_compra
+    public class OrdenCompra
     {
         /// <summary>
         /// Identificador unico de la relacion
@@ -16,7 +16,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Codigo de la orden de compra
         /// </summary>
-        public int Numero_OC {  get; set; }
+        public int? Numero_OC {  get; set; }
         /// <summary>
         /// numero de la solped
         /// </summary>
@@ -29,6 +29,7 @@ namespace BaseDatosTPC
         /// Orden de posicionamiento entre varias ordenes de compras relacionadas
         /// </summary>
         public string? posicion { get; set; }
+        public int? Id_Ticket { get; set; }
 
     }
 }

@@ -31,7 +31,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="OE">Objeto Ordenes_Estadisticas que se agregara a la base de datos</param>
         /// <returns>Retorna el objeto creado</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Ordenes_Estadisticas> NuevoOE(Ordenes_Estadisticas OE)
+        public async Task<OrdenesEstadisticas> NuevoOE(OrdenesEstadisticas OE)
         {
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
@@ -69,10 +69,10 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id">Id del objeto </param>
         /// <returns>Retorna el objeto Ordenes_Estadisticas con la Id pedida</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Ordenes_Estadisticas> GetOE(int id)
+        public async Task<OrdenesEstadisticas> GetOE(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Ordenes_Estadisticas OE = new();
+            OrdenesEstadisticas OE = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -121,9 +121,9 @@ namespace APIPortalTPC.Repositorio
         /// </summary>
         /// <returns>Retorna una lista con todos los objetos Ordenes_Estadisticas</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IEnumerable<Ordenes_Estadisticas>> GetAllOE()
+        public async Task<IEnumerable<OrdenesEstadisticas>> GetAllOE()
         {
-            List<Ordenes_Estadisticas> lista = new List<Ordenes_Estadisticas>();
+            List<OrdenesEstadisticas> lista = new List<OrdenesEstadisticas>();
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -137,7 +137,7 @@ namespace APIPortalTPC.Repositorio
 
                 while (reader.Read())
                 {
-                    Ordenes_Estadisticas OE = new();
+                    OrdenesEstadisticas OE = new();
                     OE.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     OE.Codigo_Nave = (Convert.ToString(reader["Codigo_Nave"])).Trim();
                     OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
@@ -165,9 +165,9 @@ namespace APIPortalTPC.Repositorio
         /// <param name="OE">Objeto Ordenes_Estadisticas que se va a modificar</param>
         /// <returns>Retorna el objeto a modificar</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Ordenes_Estadisticas> ModificarOE(Ordenes_Estadisticas OE)
+        public async Task<OrdenesEstadisticas> ModificarOE(OrdenesEstadisticas OE)
         {
-            Ordenes_Estadisticas OEmod = null;
+            OrdenesEstadisticas OEmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;

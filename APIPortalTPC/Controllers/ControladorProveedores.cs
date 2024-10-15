@@ -69,7 +69,7 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para crear nuevo objeto
         /// </summary>
-        /// <param name="p">oObjeto del tipo Proveedores que se agregara a la base de datos</param>
+        /// <param name="p">Objeto del tipo Proveedores que se agregara a la base de datos</param>
         /// <returns>Retorna el objeto Proveedores creado</returns>
         [HttpPost]
         public async Task<ActionResult<Proveedores>> Nuevo(Proveedores p)
@@ -79,9 +79,9 @@ namespace APIPortalTPC.Controllers
                 if (p == null)
                     return BadRequest();
 
-                int id = p.ID_Proveedores;
                 string rut = p.Rut_Proveedor;
-                string res = await RP.Existe(id,rut);
+                string bs = p.ID_Bien_Servicio;
+                string res = await RP.Existe(rut,bs);
                 if (res == "ok")
                 {
                     Proveedores nuevo = await RP.NuevoProveedor(p);

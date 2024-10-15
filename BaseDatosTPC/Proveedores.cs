@@ -21,7 +21,7 @@ namespace BaseDatosTPC
 
         public string? Nombre_Fantasia { get; set; }
 
-        public int ID_Bien_Servicio { get; set; }
+        public string? ID_Bien_Servicio { get; set; }
 
         public string? Direccion { get; set; }
         

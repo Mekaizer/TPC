@@ -83,6 +83,32 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
+    "Method": "ValidarCorreo",
+    "RelativePath": "api/ControladorAutentizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postrq",
+        "Type": "BaseDatosTPC.PostRq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
     "Method": "GetAll",
     "RelativePath": "api/ControladorBienServicio",
@@ -185,13 +211,13 @@
     "Parameters": [
       {
         "Name": "CeCo",
-        "Type": "BaseDatosTPC.Centro_de_costo",
+        "Type": "BaseDatosTPC.CentroCosto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Centro_de_costo",
+        "Type": "BaseDatosTPC.CentroCosto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -227,7 +253,7 @@
     "Parameters": [
       {
         "Name": "C",
-        "Type": "BaseDatosTPC.Centro_de_costo",
+        "Type": "BaseDatosTPC.CentroCosto",
         "IsRequired": true
       },
       {
@@ -238,7 +264,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Centro_de_costo",
+        "Type": "BaseDatosTPC.CentroCosto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -415,9 +441,9 @@
     ]
   },
   {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdeCompra",
+    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "GetAll",
-    "RelativePath": "api/ControladorOrdeCompra",
+    "RelativePath": "api/ControladorOrdenCompra",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -425,22 +451,22 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdeCompra",
+    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "Nuevo",
-    "RelativePath": "api/ControladorOrdeCompra",
+    "RelativePath": "api/ControladorOrdenCompra",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "OC",
-        "Type": "BaseDatosTPC.Orden_de_compra",
+        "Type": "BaseDatosTPC.OrdenCompra",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Orden_de_compra",
+        "Type": "BaseDatosTPC.OrdenCompra",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -451,9 +477,9 @@
     ]
   },
   {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdeCompra",
+    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "Get",
-    "RelativePath": "api/ControladorOrdeCompra/{id}",
+    "RelativePath": "api/ControladorOrdenCompra/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -467,16 +493,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdeCompra",
+    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "Modificar",
-    "RelativePath": "api/ControladorOrdeCompra/{id}",
+    "RelativePath": "api/ControladorOrdenCompra/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "OC",
-        "Type": "BaseDatosTPC.Orden_de_compra",
+        "Type": "BaseDatosTPC.OrdenCompra",
         "IsRequired": true
       },
       {
@@ -487,7 +513,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Orden_de_compra",
+        "Type": "BaseDatosTPC.OrdenCompra",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -517,13 +543,13 @@
     "Parameters": [
       {
         "Name": "OE",
-        "Type": "BaseDatosTPC.Ordenes_Estadisticas",
+        "Type": "BaseDatosTPC.OrdenesEstadisticas",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Ordenes_Estadisticas",
+        "Type": "BaseDatosTPC.OrdenesEstadisticas",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -559,7 +585,7 @@
     "Parameters": [
       {
         "Name": "OE",
-        "Type": "BaseDatosTPC.Ordenes_Estadisticas",
+        "Type": "BaseDatosTPC.OrdenesEstadisticas",
         "IsRequired": true
       },
       {
@@ -570,7 +596,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BaseDatosTPC.Ordenes_Estadisticas",
+        "Type": "BaseDatosTPC.OrdenesEstadisticas",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -924,15 +950,15 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
-    "Method": "ValidarCorreo",
+    "Method": "Nuevo",
     "RelativePath": "api/ControladorUsuario",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "postrq",
-        "Type": "BaseDatosTPC.PostRq",
+        "Name": "U",
+        "Type": "ClasesBaseDatosTPC.Usuario",
         "IsRequired": true
       }
     ],
@@ -980,32 +1006,6 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "ClasesBaseDatosTPC.Usuario",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
-    "Method": "Nuevo",
-    "RelativePath": "api/ControladorUsuario/nuevo",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "U",
-        "Type": "ClasesBaseDatosTPC.Usuario",
         "IsRequired": true
       }
     ],

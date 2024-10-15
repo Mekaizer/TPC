@@ -72,7 +72,7 @@ namespace APIPortalTPC.Controllers
         /// <param name="A">Objeto del tipo Centro_de_costo que va a ser agregado a la base de datos</param>
         /// <returns>Retorna el objeto que va a ser agregado</returns>
         [HttpPost]
-        public async Task<ActionResult<Centro_de_costo>> Nuevo(Centro_de_costo CeCo)
+        public async Task<ActionResult<CentroCosto>> Nuevo(CentroCosto CeCo)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace APIPortalTPC.Controllers
                 {
                     if (res.Equals("ok"))
                     {
-                        Centro_de_costo nuevoCeCo = await RC.Nuevo_CeCo(CeCo);
+                        CentroCosto nuevoCeCo = await RC.Nuevo_CeCo(CeCo);
                         return nuevoCeCo;
                     }
                     else
@@ -112,7 +112,7 @@ namespace APIPortalTPC.Controllers
         /// <param name="id">Id del objeto a buscar para cambiar</param>
         /// <returns>el objeto que va a ser reemplazado</returns>
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Centro_de_costo>> Modificar(Centro_de_costo C, int id)
+        public async Task<ActionResult<CentroCosto>> Modificar(CentroCosto C, int id)
         {
             try
             {

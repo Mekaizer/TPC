@@ -6,7 +6,7 @@ namespace BaseDatosTPC
     /// <summary>
     /// Guarda los centros de costos
     /// </summary>
-    public class Centro_de_costo
+    public class CentroCosto
     {
         /// <summary>
         /// Identificador unico de la relacion

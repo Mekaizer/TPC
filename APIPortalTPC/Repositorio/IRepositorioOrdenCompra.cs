@@ -4,9 +4,9 @@ namespace APIPortalTPC.Repositorio
 {
     public interface IRepositorioOrdenCompra
     {
-        public Task<Orden_de_compra> NuevoOC(Orden_de_compra OC);
-        public Task<Orden_de_compra> GetOC(int id);
-        public Task<IEnumerable<Orden_de_compra>> GetAllOC();
-        public Task<Orden_de_compra> ModificarOC(Orden_de_compra OC);
+        public Task<OrdenCompra> NuevoOC(OrdenCompra OC);
+        public Task<OrdenCompra> GetOC(int id);
+        public Task<IEnumerable<OrdenCompra>> GetAllOC();
+        public Task<OrdenCompra> ModificarOC(OrdenCompra OC);
     }
 }

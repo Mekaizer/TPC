@@ -1,8 +1,5 @@
 ﻿using APIPortalTPC.Repositorio;
-using BaseDatosTPC;
 using ClasesBaseDatosTPC;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
@@ -71,7 +68,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="U">Objeto del tipo Usuario que se quiere agregar a la base de datos</param>
         /// <returns>Retorna el objeto Usuario agregado</returns>
-        [HttpPost("nuevo")]
+        [HttpPost]
         public async Task<ActionResult<Usuario>> Nuevo(Usuario U)
         {
 
@@ -131,22 +128,7 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
-    /// <summary>
-    ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia
-    /// </summary>
-    /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
-    /// <returns></returns>
-    [HttpPost]
-        public async Task<ActionResult<Usuario>> ValidarCorreo( PostRq postrq)
-        {
-            Usuario User = await RU.ValidarCorreo(postrq.correo, postrq.pass);
-            if (User == null)
-            {
-                return NotFound("Usuario no encontrado");
-            }
-
-            return User;
-        }
+  
 
     }
 }

@@ -13,7 +13,7 @@ namespace APIPortalTPC.Controllers
     [ApiController]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
-    public class ControladorOrdeCompra : ControllerBase
+    public class ControladorOrdenCompra : ControllerBase
     {
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
@@ -23,7 +23,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="ROC">Interface de RepositorioOrdenCompra</param>
 
-        public ControladorOrdeCompra(IRepositorioOrdenCompra ROC)
+        public ControladorOrdenCompra(IRepositorioOrdenCompra ROC)
         {
             this.ROC = ROC;
         }
@@ -69,17 +69,17 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para crear nuevo objeto
         /// </summary>
-        /// <param name="OC">Objeto Orden_de_compra que se agregará a la base</param>
+        /// <param name="OC">Objeto OrdenCompra que se agregará a la base</param>
         /// <returns>El obejeto creado</returns>
         [HttpPost]
-        public async Task<ActionResult<Orden_de_compra>> Nuevo(Orden_de_compra OC)
+        public async Task<ActionResult<OrdenCompra>> Nuevo(OrdenCompra OC)
         {
             try
             {
                 if (OC == null)
                     return BadRequest();
 
-                Orden_de_compra nuevo = await ROC.NuevoOC(OC);
+                OrdenCompra nuevo = await ROC.NuevoOC(OC);
                 return nuevo;
             }
             catch (Exception ex)
@@ -91,11 +91,11 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para modificar un objeto por ID
         /// </summary>
-        /// <param name="OC">Objeto Orden_de_compra que se usará para reemplazar a su homonimo </param>
+        /// <param name="OC">Objeto OrdenCompra que se usará para reemplazar a su homonimo </param>
         /// <param name="id">Id del objeto a reemplazar</param>
         /// <returns>Retorna el objeto modificado</returns>
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Orden_de_compra>> Modificar(Orden_de_compra OC, int id)
+        public async Task<ActionResult<OrdenCompra>> Modificar(OrdenCompra OC, int id)
         {
             try
             {

@@ -32,10 +32,10 @@ namespace APIPortalTPC.Repositorio
         /// <param name="IdCECO">Id a buscar para el Centro Costo</param>
         /// <returns>Retorna el objeto Centro_de_costo cuyo Id sea el dado</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Centro_de_costo> GetCeCo(int IdCECO)
+        public async Task<CentroCosto> GetCeCo(int IdCECO)
         {
             //Parametro para guardar el objeto a mostrar
-            Centro_de_costo cc = new();
+            CentroCosto cc = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -83,9 +83,9 @@ namespace APIPortalTPC.Repositorio
         /// </summary>
         /// <returns>Retorna una lista con todos los Centro de Costo</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IEnumerable<Centro_de_costo>> GetAllCeCo()
+        public async Task<IEnumerable<CentroCosto>> GetAllCeCo()
         {
-            List<Centro_de_costo> lista = new List<Centro_de_costo>();
+            List<CentroCosto> lista = new List<CentroCosto>();
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -99,7 +99,7 @@ namespace APIPortalTPC.Repositorio
 
                 while (reader.Read())
                 {
-                    Centro_de_costo cc = new();
+                    CentroCosto cc = new();
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
                     cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
@@ -125,9 +125,9 @@ namespace APIPortalTPC.Repositorio
         /// <param name="CeCo">Objeto del tipo Centro_de_Costo que se usará para reemplazar el Centro_de_costo antiguo</param>
         /// <returns>Regresa el centro_de_costo que va a reemplazar</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Centro_de_costo> ModificarCeCo(Centro_de_costo CeCo)
+        public async Task<CentroCosto> ModificarCeCo(CentroCosto CeCo)
         {
-            Centro_de_costo ccmod = null;
+            CentroCosto ccmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -170,7 +170,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="Ceco">Objeto del tipo Centro_de_costo que se va a añadir a la base de datos</param>
         /// <returns>Regresa el objeto a añadirse</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Centro_de_costo> Nuevo_CeCo(Centro_de_costo Ceco)
+        public async Task<CentroCosto> Nuevo_CeCo(CentroCosto Ceco)
         {
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
