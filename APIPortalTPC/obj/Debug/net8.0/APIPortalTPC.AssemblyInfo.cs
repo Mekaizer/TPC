@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APIPortalTPC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8608bd93672133537aba3841e2f4fab3bdd1cfd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d23fa9b825b119a04a3a93d92dbdc2a87db38226")]
 [assembly: System.Reflection.AssemblyProductAttribute("APIPortalTPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APIPortalTPC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

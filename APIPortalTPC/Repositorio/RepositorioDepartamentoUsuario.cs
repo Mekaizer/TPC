@@ -1,20 +1,21 @@
 ﻿using APIPortalTPC.Datos;
 using BaseDatosTPC;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
+using System.Runtime.Intrinsics.Arm;
 
 namespace APIPortalTPC.Repositorio
 {
-    public class RepositorioRelacion : IRepositorioRelacion
+    public class RepositorioDepartamentoUsuario : IRepositorioDepartamentoUsuario
     {
-       
+
         private string Conexion;
 
         /// <summary>
         /// Metodo que permite interactuar con la base de datos, aqui se guarda la dirección de la base de datos
         /// </summary>
         /// <param name="CD">Variable para guardar la conexion a la base de datos</param>
-        public RepositorioRelacion(AccesoDatos CD)
+        public RepositorioDepartamentoUsuario(AccesoDatos CD)
         {
             Conexion = CD.ConexionDatosSQL;
         }
@@ -27,12 +28,12 @@ namespace APIPortalTPC.Repositorio
             return new SqlConnection(Conexion);
         }
         /// <summary>
-        /// Se crea una en un nuevo objeto y se agrega a la base de datos
+        /// Creacion de un
         /// </summary>
-        /// <param name="R">Objeto Relacion que se va a añadir a la base de datos</param>
-        /// <returns>Retorna el objeto Relacion que fue añadida</returns>
+        /// <param name="DP"></param>
+        /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Relacion> NuevaRelacion(Relacion R)
+        public async Task<DepartamentoUsuario> Nuevo(DepartamentoUsuario DP)
         {
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
@@ -41,19 +42,18 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_Archivo,Id_Responsable1,Id_Responsable2) " +
-                    "VALUES (@Id_Archivo,@Id_Responsable,@Id_Responsable2); " +
+                    "(Id_DepartamentoUsuarios,Id_Usuario,Id_Departamento) " +
+                    "VALUES (@Id_DepartamentoUsuarios,@Id_Usuario,@Id_Departamento); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Relacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
-                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Departamento;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Usuario;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                R.Id_Relacion = (int)idDecimal;
+                DP.Id_DepartamentoUsuarios = (int)idDecimal;
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error creando los datos en tabla de relaciones " + ex.Message);
+                throw new Exception("Error creando los datos en tabla de Departamento Usuario " + ex.Message);
             }
             finally
             {
@@ -61,19 +61,19 @@ namespace APIPortalTPC.Repositorio
                 sql.Close();
                 sql.Dispose();
             }
-            return R;
+            return DP;
         }
-       
+
         /// <summary>
         /// Metodo que permite conseguir un objeto usando su llave foranea
         /// </summary>
-        /// <param name="id">Id del objeto Relacion a buscar</param>
+        /// <param name="id">Id del objeto DepartamentoUsuario a buscar</param>
         /// <returns>Retorna el objeto Relacion cuya Id se pide</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Relacion> GetRelacion(int id)
+        public async Task<DepartamentoUsuario> Get(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Relacion R=new();
+            DepartamentoUsuario DP = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -88,19 +88,18 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Relacion " +
-                    "where Id_Relacion = @Id_Relacion";
+                Comm.CommandText = "SELECT * FROM dbo.DepartamentoUsuario " +
+                    "where Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@Id_DepartamentoUsuarios", SqlDbType.Int).Value = id;
 
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Responsable1 = reader["Id_Responsable1"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable1"]);
-                    R.Id_Responsable2 = reader["Id_Responsable2"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable2"]);
-                    R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
+                    DP.Id_Usuario = Convert.ToString(reader["Id_Usuario"]);
+                    DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["DepartamentoUsuario"]);
+                    DP.Id_Departamento = Convert.ToString(reader["Id_Departamento"]);
                 }
             }
             catch (SqlException ex)
@@ -115,16 +114,16 @@ namespace APIPortalTPC.Repositorio
                 sql.Close();
                 sql.Dispose();
             }
-            return R;
+            return DP;
         }
         /// <summary>
         /// Metodo que retorna una lista con los objeto
         /// </summary>
         /// <returns>Retorna una lista con todos los objetos Relacion de la lsita</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IEnumerable<Relacion>> GetAllRelacion()
+        public async Task<IEnumerable<DepartamentoUsuario>> GetAll()
         {
-            List<Relacion> lista = new List<Relacion>();
+            List<DepartamentoUsuario> lista = new List<DepartamentoUsuario>();
             SqlConnection sql = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -132,18 +131,17 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Relacion"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.DepartamentoUsuario"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
-                    Relacion R = new();
-                    R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Responsable1 = reader["Id_Responsable1"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable1"]);
-                    R.Id_Responsable2 = reader["Id_Responsable2"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable2"]);
-                    R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
-                    lista.Add(R);
+                    DepartamentoUsuario DP = new();
+                    DP.Id_Usuario = Convert.ToString(reader["Id_Usuario"]);
+                    DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["Id_DepartamentoUsuarios"]);
+                    DP.Id_Departamento = Convert.ToString(reader["Id_Departamento"]);
+                    lista.Add(DP);
                 }
             }
             catch (SqlException ex)
@@ -166,9 +164,12 @@ namespace APIPortalTPC.Repositorio
         /// <param name="R">Objeto del tipo Relacion que se usará para modificar su homonimo por Id</param>
         /// <returns>Retorna el objeto Modificado</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Relacion> ModificarRelacion(Relacion R)
+        public async Task<DepartamentoUsuario> Modificar(DepartamentoUsuario DP)
         {
-            Relacion Rmod = null;
+            //int Id_DepartamentoUsuarios 
+            //string Id_Usuario 
+            //string Id_Departamento
+            DepartamentoUsuario Rmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
@@ -177,24 +178,22 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_Archivo = @Id_Archivo " +
-                    "Id_Responsable1 = @Id_Responsable1 " +
-                    "Id_Responsable2 = @Id_Responsable2 " +
-                    "WHERE ID_Relacion = @ID_Relacion";
+                    "Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios " +
+                    "Id_Usuario = @Id_Usuario " +
+                    "Id_Departamento = @Id_Departamento " +
+                    "WHERE Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
-                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
-                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
-
+                Comm.Parameters.Add("@Id_DepartamentoUsuarios", SqlDbType.Int).Value = DP.Id_DepartamentoUsuarios;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Departamento;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Usuario;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
-                    Rmod = await GetRelacion(Convert.ToInt32(reader["ID_Relacion"]));
+                    Rmod = await Get(Convert.ToInt32(reader["Id_DepartamentoUsuarios"]));
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error modificando la cotización " + ex.Message);
+                throw new Exception("Error modificando el departamento Usuario " + ex.Message);
             }
             finally
             {
@@ -207,6 +206,5 @@ namespace APIPortalTPC.Repositorio
             }
             return Rmod;
         }
-
     }
 }

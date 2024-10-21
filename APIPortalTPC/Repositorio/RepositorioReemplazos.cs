@@ -100,7 +100,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
                     R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
-                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Rut_Reemplazante"]);
+                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
                     R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
                   
@@ -143,8 +143,8 @@ namespace APIPortalTPC.Repositorio
                 {
                     Reemplazos R = new();
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
-                    R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Rut_Vacaciones"]);
-                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Rut_Reemplazante"]);
+                    R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
+                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
                     R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
 

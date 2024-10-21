@@ -41,16 +41,14 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ticket " +
-                    "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor,Fecha_OC_Enviada,Fecha_OC_Liberada) " +
-                    "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor,@Fecha_OC_Enviada,@Fecha_OC_Liberada); " +
+                    "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor) " +
+                    "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
-                Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
-                Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 T.ID_Ticket  = (int)idDecimal;
             }
@@ -91,7 +89,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Ticket where ID_Ticket = @ID_Ticket";
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia " +
+                    "FROM dbo.Ticket T " +
+                    "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = id;
@@ -100,15 +102,15 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                  
-                    T.Estado = (Convert.ToString(reader["Estado"])).Trim();
+
+                    T.Estado = Convert.ToString(reader["Estado"]).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
-                    T.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
+                    T.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    T.ID_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
-                    T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
+                    T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
 
                 }
@@ -142,21 +144,24 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Ticket"; // leer base datos 
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia " +
+                    "FROM dbo.Ticket T " +
+                    "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
                     Ticket T = new();
-                    T.Estado = (Convert.ToString(reader["Estado"])).Trim();
+                    T.Estado = Convert.ToString(reader["Estado"]).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
-                    T.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    T.ID_Proveedor = Convert.ToInt32(reader["ID_Proveedor"]);
+                    T.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    T.ID_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
-                    T.Detalle = (Convert.ToString(reader["Detalle"])).Trim();
+                    T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     lista.Add(T);
                 }

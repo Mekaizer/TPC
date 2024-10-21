@@ -24,12 +24,14 @@ namespace BaseDatosTPC
         /// <summary>
         /// Id de la orden estadistica asociada
         /// </summary>
-        public int? Id_OE { get; set; }
+        public string? Id_OE { get; set; }
         /// <summary>
         /// Orden de posicionamiento entre varias ordenes de compras relacionadas
         /// </summary>
         public string? posicion { get; set; }
         public int? Id_Ticket { get; set; }
+        public DateTime? Fecha_Recepcion { get; set; }
+        public string? UsuarioRecepcionador { get; set; }
 
     }
 }

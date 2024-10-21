@@ -41,7 +41,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO OrdenCompra " +
+                Comm.CommandText = "INSERT INTO Orden_de_Compra " +
                     "(Numero_OC,Solped,Id_OE,Posicion,Id_Ticket) " +
                     "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion,@Id_Ticket); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
@@ -51,6 +51,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = OC.Id_Ticket;
+
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 OC.Id_Orden_Compra = (int)idDecimal;
             }
@@ -91,8 +92,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.OrdenCompra " +
-                    "where Id_Orden_Compra = @Id_Orden_Compra";
+                Comm.CommandText = "SELECT OC.*, OE.Nombre " +
+                    "FROM dbo.Orden_de_Compra OC " +
+                    " LEFT OUTER JOIN  dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE " +
+                    "where OC.Id_Orden_Compra = @Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = id;
@@ -105,9 +108,11 @@ namespace APIPortalTPC.Repositorio
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = reader["Id_OE"] is DBNull ? 0 : Convert.ToInt32(reader["Id_OE"]);
+                    oc.Id_OE = reader["Nombre"] is DBNull ? " " : Convert.ToString(reader["Nombre"]).Trim();
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+                    oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["UsuarioRecepcionador"]).Trim();
                 }
             }
             catch (SqlException ex)
@@ -139,7 +144,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Orden_de_Compra"; // leer base datos 
+                Comm.CommandText = @"SELECT OC.*, OE.Nombre 
+                FROM dbo.Orden_de_Compra OC
+                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE; "
+                  ; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -149,9 +157,11 @@ namespace APIPortalTPC.Repositorio
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = reader["Id_OE"] is DBNull ? 0 : Convert.ToInt32(reader["Id_OE"]);
+                    oc.Id_OE = reader["Nombre"] is DBNull ? " " : Convert.ToString(reader["Nombre"]).Trim();
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+                    oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["UsuarioRecepcionador"]).Trim();
 
                     lista.Add(oc);
                 }
@@ -186,26 +196,31 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.OrdenCompra SET " +
-                    "Numero_OC = @Numero_OC " +
-                    "Solped = @Solped " +
-                    "Id_OE = @Id_OE " +
-                    "Posicion = @Posicion " +
-                    "WHERE Id_Orden_compra = @Id_Orden_compra";
+                Comm.CommandText = "UPDATE dbo.Orden_de_Compra SET " +
+                                   "Numero_OC = @Numero_OC, " +  // Add comma after Solped
+                                   "Solped = @Solped, " +
+                                   "Id_OE = @Id_OE, " +
+                                   "Posicion = @Posicion, " +
+                                   "Fecha_Recepcion = @Fecha_Recepcion, " +
+                                   "UsuarioRecepcionador = @UsuarioRecepcionador " +
+                                   "WHERE Id_OE = @Id_OE";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
-                OC.Id_Orden_Compra = (int)await Comm.ExecuteScalarAsync();
+                Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = OC.Fecha_Recepcion;
+                Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.Int).Value = OC.UsuarioRecepcionador;
+   
+
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
-                    ocmod = await GetOC(Convert.ToInt32(reader["Id"]));
+                    ocmod = await GetOC(Convert.ToInt32(reader["Id_OE"]));
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error modificando la cotización " + ex.Message);
+                throw new Exception("Error modificando la orden de compra " + ex.Message);
             }
             finally
             {

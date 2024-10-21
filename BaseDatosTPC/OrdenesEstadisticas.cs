@@ -23,7 +23,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Id del centro de costo asociado
         /// </summary>
-        public int? Id_Centro_de_Costo { get; set; }
+        public string? Id_Centro_de_Costo { get; set; }
 
     }
 }

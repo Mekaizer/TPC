@@ -45,8 +45,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Usuario" +
-                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Departamento_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Activado,Admin) " +
-                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Departamento_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones, @Activado,@Admin);" +
+                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Activado,Admin) " +
+                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones, @Activado,@Admin);" +
                     "SELECT SCOPE_IDENTITY() AS Id_Usuario";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
@@ -55,7 +55,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Departamento_Usuario", SqlDbType.Int).Value = U.Departamento_Usuario;
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
@@ -102,10 +101,9 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT U.*, d.Nombre " +
-                   "FROM dbo.Usuario U " +
-                   "INNER JOIN dbo.Departamento d ON U.Departamento_Usuario = d.Id_Departamento " +
-                   "WHERE U.Id_Usuario = @Id_Usuario";
+                Comm.CommandText = "SELECT * " +
+                   "FROM dbo.Usuario  " +
+                   "WHERE Id_Usuario = @Id_Usuario";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = id;
@@ -120,7 +118,6 @@ namespace APIPortalTPC.Repositorio
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Departamento_Usuario = Convert.ToString(reader["Nombre"]).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
@@ -160,7 +157,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT U.*, d.Nombre FROM dbo.Usuario U INNER JOIN dbo.Departamento d ON U.Departamento_Usuario = d.Id_Departamento;"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.Usuario"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
@@ -172,7 +169,6 @@ namespace APIPortalTPC.Repositorio
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Departamento_Usuario = Convert.ToString(reader["Nombre"]).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
@@ -219,7 +215,6 @@ namespace APIPortalTPC.Repositorio
                                     "Digito_Verificador = @Digito_Verificador, " +
                                     "Apellido_Materno = @Apellido_Materno, " +
                                     "Correo_Usuario = @Correo_Usuario, " +
-                                    "Departamento_Usuario = @Departamento_Usuario, " +
                                     "Contraseña_Usuario = @Contraseña_Usuario, " +
                                     "Tipo_Liberador = @Tipo_Liberador, " +
                                     "En_Vacaciones = @En_Vacaciones, " +
@@ -233,7 +228,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Departamento_Usuario", SqlDbType.VarChar, 50).Value = U.Departamento_Usuario;
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
                 Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;

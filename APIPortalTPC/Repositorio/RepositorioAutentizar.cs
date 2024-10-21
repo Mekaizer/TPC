@@ -62,8 +62,7 @@ namespace APIPortalTPC.Repositorio
                         U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                         U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                         U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
-                        U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                        U.Departamento_Usuario = Convert.ToString(reader["Departamento_Usuario"]);
+                        U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim(); 
                         U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                         U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                         U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);

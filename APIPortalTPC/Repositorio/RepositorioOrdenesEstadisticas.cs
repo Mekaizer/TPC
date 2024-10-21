@@ -87,7 +87,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Ordenes_estadisticas where Id_Orden_Estadistica = @Id_Orden_Estadistica";
+                Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo " +
+                    "FROM dbo.Ordenes_estadisticas OE " +
+                    "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco " +
+                  
+                    "where OE.Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = id;
@@ -98,7 +102,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     OE.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     OE.Codigo_Nave = (Convert.ToString(reader["Codigo_Nave"])).Trim();
-                    OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
+                    OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                 }
             }
@@ -131,7 +135,9 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Ordenes_Estadisticas"; // leer base datos 
+                Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo " +
+                    "FROM dbo.Ordenes_estadisticas OE " +
+                    "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco "; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -140,7 +146,7 @@ namespace APIPortalTPC.Repositorio
                     OrdenesEstadisticas OE = new();
                     OE.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     OE.Codigo_Nave = (Convert.ToString(reader["Codigo_Nave"])).Trim();
-                    OE.Id_Centro_de_Costo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
+                    OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     lista.Add(OE);
                 }

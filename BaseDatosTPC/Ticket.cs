@@ -12,9 +12,9 @@ namespace BaseDatosTPC
 
         public DateTime Fecha_Creacion_OC { get; set; }
 
-        public int? Id_Usuario { get; set; }
+        public string? Id_Usuario { get; set; }
 
-        public int? ID_Proveedor { get; set; }
+        public string? ID_Proveedor { get; set; }
 
         public DateTime? Fecha_OC_Recepcionada { get; set; }
 

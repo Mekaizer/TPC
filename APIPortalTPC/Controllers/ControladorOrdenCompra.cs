@@ -105,13 +105,13 @@ namespace APIPortalTPC.Controllers
                 var Modificar = await ROC.GetOC(id);
 
                 if (Modificar == null)
-                    return NotFound($"Centro de Costo con = {id} no encontrado");
+                    return NotFound($"Orden de compra con = {id} no encontrado");
 
                 return await ROC.ModificarOC(OC);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
     }
