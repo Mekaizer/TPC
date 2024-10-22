@@ -177,16 +177,22 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_Archivo = @Id_Archivo " +
-                    "Id_Responsable1 = @Id_Responsable1 " +
+                    "Id_Archivo = @Id_Archivo, " +
+                    "Id_Responsable1 = @Id_Responsable1, " +
                     "Id_Responsable2 = @Id_Responsable2 " +
                     "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
-                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
+                if (R.Id_Responsable1.HasValue)
+                    Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
+                else
+                    Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = DBNull.Value;
 
+                if (R.Id_Responsable2.HasValue)
+                    Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
+                else
+                    Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = DBNull.Value;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -194,7 +200,7 @@ namespace APIPortalTPC.Repositorio
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error modificando la cotización " + ex.Message);
+                throw new Exception("Error modificando la relacion " + ex.Message);
             }
             finally
             {

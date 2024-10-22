@@ -441,6 +441,89 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorDepartamentoUsuario",
+    "Method": "GetAll",
+    "RelativePath": "api/ControladorDepartamentoUsuario",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorDepartamentoUsuario",
+    "Method": "Nuevo",
+    "RelativePath": "api/ControladorDepartamentoUsuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "A",
+        "Type": "BaseDatosTPC.DepartamentoUsuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.DepartamentoUsuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorDepartamentoUsuario",
+    "Method": "Get",
+    "RelativePath": "api/ControladorDepartamentoUsuario/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorDepartamentoUsuario",
+    "Method": "Modificar",
+    "RelativePath": "api/ControladorDepartamentoUsuario/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "A",
+        "Type": "BaseDatosTPC.DepartamentoUsuario",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.DepartamentoUsuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "GetAll",
     "RelativePath": "api/ControladorOrdenCompra",

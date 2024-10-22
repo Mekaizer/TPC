@@ -17,11 +17,6 @@ namespace ClasesBaseDatosTPC
         public string? Tipo_Liberador {  get; set; }
         public bool? Activado { get; set; }
         public bool? Admin {  get; set; }
-
-
-
-        /* Mouseque herramienta misteriosa para mas adelante
-        * Disponible = Convert.ToBoolean(reader["Disponible"] ?? false); 
-        */
+        public List<String>? ListaDepartamento { get; set; }
     }
 }

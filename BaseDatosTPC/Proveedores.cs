@@ -43,9 +43,7 @@ namespace BaseDatosTPC
 
         public string? Banco { get; set; }
 
-        public string? Swift1 { get; set; }
-
-        public string? Swift2 { get; set; }
+        public string? Swift { get; set; }
 
     }
 }

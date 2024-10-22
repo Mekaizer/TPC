@@ -109,9 +109,9 @@ namespace APIPortalTPC.Controllers
 
                 return await RT.ModificarTicket(T);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
     }

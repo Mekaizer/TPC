@@ -41,23 +41,31 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ticket " +
-                    "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor) " +
-                    "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor); " +
-                    "SELECT SCOPE_IDENTITY() AS ID_Ticket";
+                                         "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor) " +
+                                         "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor); " +
+                                         "SELECT SCOPE_IDENTITY() AS ID_Ticket;";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
+
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                T.ID_Ticket  = (int)idDecimal;
+                T.ID_Ticket = (int)idDecimal;
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error creando los datos en tabla Ticket " + ex.Message);
+                if (ex.Message.Contains("FK_Ticket_OC_Proveedores")) // Check if the error is related to the foreign key
+                {
+                    throw new Exception("Error: The specified supplier (ID_Proveedor) does not exist. Please verify the supplier ID.");
+                }
+                else
+                {
+                    throw new Exception("Error creando los datos en tabla Ticket " + ex.Message);
+                }
             }
             finally
-            { 
+            {
                 Comm.Dispose();
                 sql.Close();
                 sql.Dispose();
@@ -197,23 +205,32 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Ticket SET " +
-                    "Id_OC = @Id_OC " +
-                    "Estado = @Estado " +
-                    "Fecha_Creacion_OC = @Fecha_Creacion_OC " +
-                    "Id_Usuario = @Id_Usuario " +
-                    "Id_Proveedor = @Id_Proveedor " +
-                    "Fecha_OC_Recepcionada=@Fecha_OC_Recepcionada" +
-                    "Fecha_OC_Enviada = @Fecha_OC_Enviada " +
-                    "Fecha_OC_Liberada = @Fecha_OC_Liberada " +
+                    "Estado = ISNULL(@Estado, Estado)," +
+                    "Id_Usuario = ISNULL(@Id_Usuario, Id_Usuario), " +
+                    "Id_Proveedor = ISNULL(@Id_Proveedor, Id_Proveedor), " +
+                    "Fecha_OC_Recepcionada = ISNULL(@Fecha_OC_Recepcionada, Fecha_OC_Recepcionada),  " +
+                    "Fecha_OC_Enviada = ISNULL(@Fecha_OC_Enviada, Fecha_OC_Enviada)," +
+                    "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada) " +
                     "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
-                Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
-                Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
-                Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
-                Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
+                if (T.Fecha_OC_Recepcionada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada.Value;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = DBNull.Value;
+
+                if (T.Fecha_OC_Enviada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = DBNull.Value;
+                
+                if (T.Fecha_OC_Liberada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = DBNull.Value;
+              
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
                 reader = await Comm.ExecuteReaderAsync();

@@ -44,7 +44,7 @@ namespace APIPortalTPC.Repositorio
                     "VALUES (@Nombre,@Codigo_Nave,@Id_Centro_de_Costo); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_estadistica";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Nombre", SqlDbType.Int).Value = OE.Nombre;
+                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar,50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_Nave", SqlDbType.VarChar,50).Value = OE.Codigo_Nave;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
@@ -181,16 +181,17 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET" +
-                    "Nombre = @Nombre " +
-                    "Codigo_Nave = @Codigo_Nave " +
+                Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET " +
+                    "Nombre = @Nombre, " +
+                    "Codigo_Nave = @Codigo_Nave, " +
                     "Id_Centro_de_Costo = @Id_Centro_de_Costo " +
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Nombre", SqlDbType.Int).Value = OE.Nombre;
+                Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE.Id_Orden_Estadistica;
+                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar,50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_Nave", SqlDbType.VarChar, 50).Value = OE.Codigo_Nave;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
-                OE.Id_Orden_Estadistica = (int)await Comm.ExecuteScalarAsync();
+
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     OEmod = await GetOE(Convert.ToInt32(reader["Id_Orden_Estadistica"]));

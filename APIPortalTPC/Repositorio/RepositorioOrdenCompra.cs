@@ -92,9 +92,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT OC.*, OE.Nombre " +
+                Comm.CommandText = "SELECT OC.*, OE.Nombre,U.Nombre_Usuario " +
                     "FROM dbo.Orden_de_Compra OC " +
                     " LEFT OUTER JOIN  dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE " +
+                    "LEFT OUTER JOIN dbo.Usuario U ON OC.UsuarioRecepcionador = U.Id_Usuario" +
                     "where OC.Id_Orden_Compra = @Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -112,7 +113,7 @@ namespace APIPortalTPC.Repositorio
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["UsuarioRecepcionador"]).Trim();
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["Nombre_Usuario"]).Trim();
                 }
             }
             catch (SqlException ex)
@@ -144,9 +145,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT OC.*, OE.Nombre 
-                FROM dbo.Orden_de_Compra OC
-                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE; "
+                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U.Nombre_Usuario 
+                FROM dbo.Orden_de_Compra OC 
+                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE 
+                LEFT OUTER JOIN dbo.Usuario U ON OC.UsuarioRecepcionador = U.Id_Usuario"
                   ; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
@@ -161,7 +163,7 @@ namespace APIPortalTPC.Repositorio
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["UsuarioRecepcionador"]).Trim();
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["Nombre_Usuario"]).Trim();
 
                     lista.Add(oc);
                 }
@@ -207,12 +209,16 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
-                Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
-                Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = OC.Fecha_Recepcion;
-                Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.Int).Value = OC.UsuarioRecepcionador;
-   
-
+                Comm.Parameters.Add("@Id_OE", SqlDbType.VarChar).Value = OC.Id_OE;
+                Comm.Parameters.Add("@Posicion", SqlDbType.VarChar).Value = OC.posicion;
+                if (OC.Fecha_Recepcion.HasValue)
+                    Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = OC.Fecha_Recepcion;
+                else
+                    Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = DBNull.Value;
+                if (OC.UsuarioRecepcionador != null)
+                    Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.VarChar).Value = OC.UsuarioRecepcionador;
+                else
+                    Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.VarChar).Value = DBNull.Value;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

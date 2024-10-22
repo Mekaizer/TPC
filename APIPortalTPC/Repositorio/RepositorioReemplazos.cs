@@ -41,14 +41,15 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Reemplazos " +
-                    "(Id_Usuario_Vacaciones,Id_Usuario_Reemplazante,Comentario,Fecha_Retorno) " +
-                    "VALUES (@Id_Usuario_Vacaciones,@Id_Usuario_Reemplazante,@Comentario,@Fecha_Retorno); " +
+                    "(Id_Usuario_Vacaciones,Id_Usuario_Reemplazante,Comentario,Fecha_Retorno,Valido) " +
+                    "VALUES (@Id_Usuario_Vacaciones,@Id_Usuario_Reemplazante,@Comentario,@Fecha_Retorno,@Valido); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Usuario_Vacaciones", SqlDbType.Int).Value = R.Id_Usuario_Vacaciones;
                 Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.Id_Usuario_Reemplazante;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
+                Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 R.ID_Reemplazos = (int)idDecimal;
             }
@@ -103,6 +104,7 @@ namespace APIPortalTPC.Repositorio
                     R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
                     R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
+                    R.Valido = Convert.ToBoolean(reader["Valido"]);
                   
                 }
             }
@@ -147,6 +149,7 @@ namespace APIPortalTPC.Repositorio
                     R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
                     R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
+                    R.Valido = Convert.ToBoolean(reader["Valido"]);
 
                     lista.Add(R);
                 }
@@ -182,11 +185,11 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Reemplazos SET " +
-                    "ID_Reemplazos = @ID_Reemplazos " +
-                    "Id_Usuario_Vacaciones = @Id_Usuario_Vacaciones " +
-                    "Id_Usuario_Reemplazante = @Id_Usuario_Reemplazante " +
-                    "Comentario = @Comentario " +
-                    "Fecha_Retorno = @Fecha_Retorno " +
+                    "Id_Usuario_Vacaciones = @Id_Usuario_Vacaciones, " +
+                    "Id_Usuario_Reemplazante = @Id_Usuario_Reemplazante, " +
+                    "Comentario = @Comentario, " +
+                    "Fecha_Retorno = @Fecha_Retorno," +
+                    "Valido = @Valido " +
                     "WHERE ID_Reemplazos = @ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = R.ID_Reemplazos;
@@ -194,6 +197,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.Id_Usuario_Reemplazante;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
+                Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

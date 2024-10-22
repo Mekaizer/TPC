@@ -76,8 +76,7 @@ namespace APIPortalTPC.Repositorio
                     P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                     P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
-                    P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
-                    P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
+                    P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                 }
             }
@@ -133,8 +132,7 @@ namespace APIPortalTPC.Repositorio
                     P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                     P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
-                    P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
-                    P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
+                    P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                     lista.Add(P);
                 }
@@ -182,8 +180,7 @@ namespace APIPortalTPC.Repositorio
                     "Bloqueado = @Bloqueado " +
                     "N_Cuenta = @N_Cuenta " +
                     "Banco = @Banco " +
-                    "Swift1 = @Swift1 " +
-                    "Swift2 = @Swift2 " +
+                    "Swift = @Swift " +
                     "WHERE ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
@@ -200,8 +197,7 @@ namespace APIPortalTPC.Repositorio
                 P.Bloqueado = Convert.ToBoolean(reader["Bloqueado"]);
                 P.N_Cuenta = Convert.ToInt32(reader["N_Cuenta"]);
                 P.Banco = (Convert.ToString(reader["Banco"])).Trim();
-                P.Swift1 = (Convert.ToString(reader["Swift1"])).Trim();
-                P.Swift2 = (Convert.ToString(reader["Swift2"])).Trim();
+                P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                 P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -237,8 +233,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Proveedores " +
-                    "(Rut_Proveedor,Razon_Social,Nombre_Fantasia,ID_Bien_Servicio,Direccion,Comuna,Correo_Proveedor,Telefono_Proveedor,Nombre_Representante,Email_Representante,Bloqueado,N_Cuenta,Banco,Swift1,Swift2) " +
-                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante,@Email_Representante,@Bloqueado,@N_Cuenta,@Banco,@Swift1,@Swift2); " +
+                    "(Rut_Proveedor,Razon_Social,Nombre_Fantasia,ID_Bien_Servicio,Direccion,Comuna,Correo_Proveedor,Telefono_Proveedor,Nombre_Representante,Email_Representante,Bloqueado,N_Cuenta,Banco,Swift) " +
+                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante,@Email_Representante,@Bloqueado,@N_Cuenta,@Banco,@Swift); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 10).Value = P.Rut_Proveedor;
@@ -254,8 +250,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Bloqueado", SqlDbType.Bit).Value = P.Bloqueado;
                 Comm.Parameters.Add("@N_Cuenta", SqlDbType.Int).Value = P.N_Cuenta;
                 Comm.Parameters.Add("@Banco", SqlDbType.VarChar).Value = P.Banco;
-                Comm.Parameters.Add("@Swift1", SqlDbType.VarChar).Value = P.Swift1;
-                Comm.Parameters.Add("@Swift2", SqlDbType.VarChar).Value = P.Swift2;
+                Comm.Parameters.Add("@Swift", SqlDbType.VarChar).Value = P.Swift;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
                 P.ID_Proveedores = id;

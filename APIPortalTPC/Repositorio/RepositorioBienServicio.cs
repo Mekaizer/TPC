@@ -171,7 +171,8 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Bien_Servicio (Bien_Servicio) VALUES (@Bien_Servicio); SELECT SCOPE_IDENTITY() AS ID_Bien_Servicio";
+                Comm.CommandText = "INSERT INTO Bien_Servicio (Bien_Servicio) " +
+                    "VALUES (@Bien_Servicio); SELECT SCOPE_IDENTITY() AS ID_Bien_Servicio";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = bs.Bien_Servicio;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();

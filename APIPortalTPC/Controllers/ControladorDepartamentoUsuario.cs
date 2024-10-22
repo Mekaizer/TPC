@@ -65,15 +65,25 @@ namespace APIPortalTPC.Controllers
         /// <param name="A">Objeto del tipo de Archivo</param>
         /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
-        public async Task<ActionResult<Archivo>> Nuevo(DepartamentoUsuario A)
+        [HttpPost]
+        public async Task<ActionResult<DepartamentoUsuario>> Nuevo(DepartamentoUsuario A)
         {
             try
             {
                 if (A == null)
                     return BadRequest();
 
-                Archivo nuevo = await RDU.Nuevo(A);
-                return nuevo;
+                string res = await RDU.Existe(A.Id_Usuario, A.Id_Departamento);
+                if (res == "ok")
+                {
+                    DepartamentoUsuario nuevo = await RDU.Nuevo(A);
+                    return nuevo;
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, res);
+                }
+
             }
             catch (Exception ex)
             {
@@ -88,23 +98,28 @@ namespace APIPortalTPC.Controllers
         /// <param name="id">Id del objeto que se quiere buscar</param>
         /// <returns>Regresa el Objeto modificado</returns>
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Archivo>> Modificar(DepartamentoUsuario A, int id)
+        public async Task<ActionResult<DepartamentoUsuario>> Modificar(DepartamentoUsuario A, int id)
         {
             try
             {
                 if (id != A.Id_DepartamentoUsuarios)
                     return BadRequest("La Id no coincide");
 
-                var Modificar = await RDU.Get(id);
 
-                if (Modificar == null)
-                    return NotFound($"Relacion con = {id} no encontrado");
-
-                return await RDU.Modificar(A);
+                string res = await RDU.Existe(A.Id_Usuario, A.Id_Departamento);
+                if (res == "ok")
+                {
+                    return await RDU.Modificar(A);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, res);
+                }
+             
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos " + ex);
             }
         }
     }

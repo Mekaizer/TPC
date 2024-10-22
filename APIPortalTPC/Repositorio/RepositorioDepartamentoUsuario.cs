@@ -41,13 +41,13 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_DepartamentoUsuarios,Id_Usuario,Id_Departamento) " +
-                    "VALUES (@Id_DepartamentoUsuarios,@Id_Usuario,@Id_Departamento); " +
-                    "SELECT SCOPE_IDENTITY() AS ID_Relacion";
+                Comm.CommandText = "INSERT INTO DepartamentoUsuario " +
+                                    "(Id_Usuario,Id_Departamento) " +
+                                    "VALUES (@Id_Usuario,@Id_Departamento); " +
+                                    "SELECT SCOPE_IDENTITY() AS Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Departamento;
-                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Usuario;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Usuario;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Departamento;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 DP.Id_DepartamentoUsuarios = (int)idDecimal;
             }
@@ -88,7 +88,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.DepartamentoUsuario " +
+                Comm.CommandText = "SELECT ud.Id_DepartamentoUsuarios,u.Nombre_Usuario, d.Nombre " +
+                    "FROM dbo.DepartamentoUsuario ud " +
+                    "INNER JOIN dbo.Usuario u ON u.id_usuario = ud.id_usuario " +
+                    "INNER JOIN dbo.departamento d ON ud.id_departamento = d.id_departamento " +
                     "where Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -97,14 +100,15 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    DP.Id_Usuario = Convert.ToString(reader["Id_Usuario"]);
-                    DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["DepartamentoUsuario"]);
-                    DP.Id_Departamento = Convert.ToString(reader["Id_Departamento"]);
+
+                    DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["Id_DepartamentoUsuarios"]);
+                    DP.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    DP.Id_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                 }
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error cargando los datos tabla de Relacion " + ex.Message);
+                throw new Exception("Error cargando los datos tabla de Departamento Usuario " + ex.Message);
             }
             finally
             {
@@ -131,16 +135,19 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.DepartamentoUsuario"; // leer base datos 
+                Comm.CommandText = "SELECT ud.Id_DepartamentoUsuarios, u.Nombre_Usuario, d.Nombre " +
+    "FROM dbo.DepartamentoUsuario ud " +
+    "INNER JOIN dbo.Usuario u ON u.id_usuario = ud.id_usuario " +
+    "INNER JOIN dbo.departamento d ON ud.id_departamento = d.id_departamento ";  // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
                     DepartamentoUsuario DP = new();
-                    DP.Id_Usuario = Convert.ToString(reader["Id_Usuario"]);
+                    DP.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
                     DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["Id_DepartamentoUsuarios"]);
-                    DP.Id_Departamento = Convert.ToString(reader["Id_Departamento"]);
+                    DP.Id_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                     lista.Add(DP);
                 }
             }
@@ -166,9 +173,7 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<DepartamentoUsuario> Modificar(DepartamentoUsuario DP)
         {
-            //int Id_DepartamentoUsuarios 
-            //string Id_Usuario 
-            //string Id_Departamento
+ 
             DepartamentoUsuario Rmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
@@ -177,15 +182,14 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Relacion SET " +
-                    "Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios " +
-                    "Id_Usuario = @Id_Usuario " +
+                Comm.CommandText = "UPDATE dbo.DepartamentoUsuario SET " +
+                    "Id_Usuario = @Id_Usuario," +
                     "Id_Departamento = @Id_Departamento " +
                     "WHERE Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_DepartamentoUsuarios", SqlDbType.Int).Value = DP.Id_DepartamentoUsuarios;
-                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Departamento;
-                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Usuario;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = DP.Id_Usuario;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = DP.Id_Departamento;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -205,6 +209,32 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Rmod;
+        }
+        public async Task<string> Existe(string Usuario, string dep)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT Top 1 1 FROM dbo.DepartamentoUsuario WHERE Id_Usuario = @Id_Usuario and Id_Departamento = @Id_Departamento";
+                    command.Parameters.AddWithValue("@Id_Usuario", Usuario);
+                    command.Parameters.AddWithValue("@Id_Departamento", dep);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El DepartamentoUsuario ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
         }
     }
 }

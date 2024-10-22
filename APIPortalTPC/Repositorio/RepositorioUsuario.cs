@@ -87,6 +87,7 @@ namespace APIPortalTPC.Repositorio
         {
             //Parametro para guardar el objeto a mostrar
             Usuario U = new();
+            List<string> listaDep = new List<string>();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -124,8 +125,19 @@ namespace APIPortalTPC.Repositorio
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-
                 }
+                reader?.Close();
+                Comm?.Dispose();
+                Comm.CommandText = "SELECT d.nombre " +
+                    "FROM Departamento d JOIN DepartamentoUsuario du ON d.Id_Departamento = du.id_departamento " +
+                    "WHERE du.id_usuario = @Id_Usuario";
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    listaDep.Add((Convert.ToString(reader["nombre"])).Trim());
+                }
+                U.ListaDepartamento = listaDep;
+
             }
             catch (SqlException ex)
             {

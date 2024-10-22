@@ -21,34 +21,14 @@ builder.Services.AddScoped<IRepositorioProveedores,RepositorioProveedores>();
 builder.Services.AddScoped<IRepositorioReemplazos,RepositorioReemplazos>();
 builder.Services.AddScoped<IRepositorioRelacion,RepositorioRelacion>();
 builder.Services.AddScoped<IRepositorioTicket,RepositorioTicket>();
-builder.Services.AddScoped<IRepositorioUsuario,RepositorioUsuario>();
+builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
+builder.Services.AddScoped<IRepositorioDepartamentoUsuario, RepositorioDepartamentoUsuario>();
 
 
 var config = builder.Configuration;
 var sqlConfig = new AccesoDatos(config.GetConnectionString("SQL"));
 builder.Services.AddSingleton(sqlConfig);
-//autorizaciones para que otros servicios puedan acceder
-//se agrega la autentificacion para usar los tokes
-//parametros para validar el token JWT
-//Clases para validar los tokens
 
-/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Audience = "https://localhost:5173/";
-        options.Authority = "https://localhost:5173/";
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("your_secret_key_here")
-            )
-        };
-    });
-*/
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

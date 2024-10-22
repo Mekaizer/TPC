@@ -15,6 +15,8 @@ namespace BaseDatosTPC
         public string? Comentario { get; set; }
 
         public DateTime Fecha_Retorno { get; set; }
+        public Boolean Valido { get; set; }
+
 
     }
 }

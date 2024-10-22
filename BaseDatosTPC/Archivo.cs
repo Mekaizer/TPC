@@ -22,6 +22,7 @@ namespace BaseDatosTPC
         /// Permite ver quienes estan relacionados
         /// </summary>
         public int? Grupo_Archivo { get; set; }
+        public int? Posicion { get; set; }
  
     }
 }
