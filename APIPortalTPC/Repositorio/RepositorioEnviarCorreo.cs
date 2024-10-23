@@ -8,23 +8,23 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioEnviarCorreo : InterfaceEnviarCorreo
     {
 
-        public async Task<string> CorreoCotizacion(string productos,string toEmail)
+        public async Task<string> CorreoCotizacion(string productos, Proveedores P, string subject)
         {
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
             string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-  
+            string archivo = @"C:\Users\drako\Desktop\PRO4.xlsx"; //Direccion del archivo a enviar
             // Pedir al usuario que ingrese el asunto del correo
-        
-            string subject = "Mensaje de texto";
+            string toEmail = P.Correo_Proveedor;
+
 
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
             string htmlBody = $@"
             <html>
             <head></head>
             <body>
-                <p>Estimado,</p>
+                <p>Estimado/a {P.Nombre_Representante},</p>
                 <p>Junto con saludar, nos dirigimos a usted para realizar cotización por el siguiente bien o servicio:</p>
                 <ul>
                     <li>{productos}</li> 
@@ -48,7 +48,11 @@ namespace APIPortalTPC.Repositorio
                     mail.Subject = subject;
                     mail.Body = htmlBody;
                     mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
+                    if (!File.Exists(archivo))
+                    {
+                        mail.Attachments.Add(new Attachment(archivo));
 
+                    }
                     // Configurar el cliente SMTP
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {

@@ -25,6 +25,7 @@ namespace APIPortalTPC.Controllers
 
             {   
                 var lista = IRP.GetAllProveedoresBienServicio(id);
+                string mensaje = "Mensaje de prueba con archivo";
                 //   return Ok(await lista);
                 foreach (var P in await lista)
                 {
@@ -32,7 +33,7 @@ namespace APIPortalTPC.Controllers
 
                     if (P.ID_Bien_Servicio.ToString() != null)
                     {
-                        await IEC.CorreoCotizacion(productos, P.Correo_Proveedor.Trim());
+                        await IEC.CorreoCotizacion(productos,P,mensaje);
                     }
                     else
                     {
