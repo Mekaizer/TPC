@@ -210,6 +210,13 @@ namespace APIPortalTPC.Repositorio
             }
             return Rmod;
         }
+        /// <summary>
+        /// Metodo que confirma si existe un objeto duplicado, un objeto duplicado es aquel que tiene sus datos unicos 
+        /// o datos que lo diferencian repetidos en la base de datos
+        /// </summary>
+        /// <param name="Usuario"></param>
+        /// <param name="dep"></param>
+        /// <returns></returns>
         public async Task<string> Existe(string Usuario, string dep)
         {
             using (SqlConnection sqlConnection = conectar())

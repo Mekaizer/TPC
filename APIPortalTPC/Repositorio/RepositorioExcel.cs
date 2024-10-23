@@ -12,7 +12,6 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioExcel : InterfaceExcel
 
     {
-        private string Conexion;
        
         public async Task<Proveedores> LeerExcelProveedor(string filePath)
         {
@@ -62,7 +61,15 @@ namespace APIPortalTPC.Repositorio
  
         }
 
-    
+        public async Task<Proveedores> LeerExcel1()
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<Proveedores> LeerExcel2()
+        {
+            throw new NotImplementedException();
+        }
+
 
     }
 }

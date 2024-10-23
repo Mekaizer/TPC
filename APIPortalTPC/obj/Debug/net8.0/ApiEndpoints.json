@@ -526,11 +526,17 @@
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
     "Method": "EnviarCorreo",
-    "RelativePath": "api/ControladorEnviarCorreo/Cotizacion",
+    "RelativePath": "api/ControladorEnviarCorreo/Cotizacion{id}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

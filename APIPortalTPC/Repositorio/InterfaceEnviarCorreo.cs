@@ -5,6 +5,6 @@
     /// </summary>
     public interface InterfaceEnviarCorreo
     {
-        public Task<string> CorreoCotizacion();
+        public Task<string> CorreoCotizacion(string producto,string correo);
     }
 }

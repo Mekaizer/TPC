@@ -1,4 +1,5 @@
 ﻿using APIPortalTPC.Repositorio;
+using BaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIPortalTPC.Controllers
@@ -9,18 +10,41 @@ namespace APIPortalTPC.Controllers
     {
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly InterfaceEnviarCorreo IEC;
-        public ControladorEnviarCorreo(InterfaceEnviarCorreo IEC)
+        private readonly IRepositorioProveedores IRP;
+        public ControladorEnviarCorreo(InterfaceEnviarCorreo IEC, IRepositorioProveedores iRP)
         {
             this.IEC = IEC;
+            IRP = iRP;
         }
+
+
         [HttpPost("Cotizacion{id:int}")]
         public async Task<ActionResult> EnviarCorreo(int id)
         {
             try
-            {
+
+            {   
+                var lista = IRP.GetAllProveedoresBienServicio(id);
+                //   return Ok(await lista);
+                foreach (var P in await lista)
+                {
+                    string? productos = P.ID_Bien_Servicio;
+
+                    if (P.ID_Bien_Servicio.ToString() != null)
+                    {
+                        await IEC.CorreoCotizacion(productos, P.Correo_Proveedor.Trim());
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
+                    }
 
 
-                await IEC.CorreoCotizacion();
+                }
+                if ( lista == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, "no existen proveedores con el bien servicio ");
+                }
 
                 return Ok("Correos enviados con exito");
             }

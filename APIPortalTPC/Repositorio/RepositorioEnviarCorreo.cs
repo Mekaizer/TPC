@@ -8,26 +8,20 @@ namespace APIPortalTPC.Repositorio
     public class RepositorioEnviarCorreo : InterfaceEnviarCorreo
     {
 
-        public async Task<string> CorreoCotizacion()
+        public async Task<string> CorreoCotizacion(string productos,string toEmail)
         {
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
             string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            string toEmail = "paolocapdeville@gmail.com";
-            string toEmail1 = "paolo.capdeville@alumnos.ucn.cl";
-
+  
             // Pedir al usuario que ingrese el asunto del correo
         
             string subject = "Mensaje de texto";
 
-            // Pedir al usuario que ingrese los productos o servicios
-            
-            string productos = "Bien/Servicio";
-
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
             string htmlBody = $@"
-        <html>
+            <html>
             <head></head>
             <body>
                 <p>Estimado,</p>
@@ -50,7 +44,6 @@ namespace APIPortalTPC.Repositorio
                 {
                     mail.From = new MailAddress(fromEmail);
                     mail.To.Add(toEmail);
-                    mail.To.Add(toEmail1);
 
                     mail.Subject = subject;
                     mail.Body = htmlBody;
@@ -73,6 +66,14 @@ namespace APIPortalTPC.Repositorio
             {
                 throw new Exception($"Error al enviar el correo: {ex.Message}");
             }
+        }
+
+        public async Task<string> Correo1() {
+            throw new NotImplementedException();
+        }
+        public async Task<string> Correo2()
+        {
+            throw new NotImplementedException();
         }
     }
 }
