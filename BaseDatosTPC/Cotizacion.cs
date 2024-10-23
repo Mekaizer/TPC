@@ -28,7 +28,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Id del proveedor asociado
         /// </summary>
-        public string? Id_Proveedor { get; set; }
+        public string? ID_Bien_Servicio { get; set; }
         /// <summary>
         /// descripcion de la cotizacion
         /// </summary>

@@ -60,7 +60,7 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
+                   
                     try
                     {
                         a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
@@ -70,8 +70,7 @@ namespace APIPortalTPC.Repositorio
 
                         a.ArchivoDoc = [0];
                     }
-                    a.Grupo_Archivo = Convert.ToInt32(reader["Grupo_archivo"]);
-                    a.Posicion = Convert.ToInt32(reader["Posicion"]);
+
                 } 
 
 
@@ -112,7 +111,6 @@ namespace APIPortalTPC.Repositorio
                 {
                     Archivo a = new ();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    a.IsPrincipal = Convert.ToBoolean(reader["IsPrincipal"]);
                     try
                     {
                        a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
@@ -122,8 +120,7 @@ namespace APIPortalTPC.Repositorio
                         
                         a.ArchivoDoc = [0];
                     }
-                    a.Grupo_Archivo = Convert.ToInt32(reader["Grupo_archivo"]);
-                    a.Posicion = Convert.ToInt32(reader["Posicion"]);
+
                     lista.Add(a);
                 }
             }   
@@ -157,21 +154,15 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Archivo SET " +
-                    "IsPrincipal = @IsPrincipal, " +
                     "ArchivoDoc = @ArchivoDoc, " +
-                    "Grupo_archivo = @Grupo_archivo, " +
-                    "Posicion = @Posicion " +
                     "WHERE Id_Archivo = @Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
-                Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit).Value = A.IsPrincipal;
                 if (A.ArchivoDoc != null)
                     Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
                 else
                     Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value  = DBNull.Value;
 
-                Comm.Parameters.Add("@Grupo_archivo", SqlDbType.Int).Value = A.Grupo_Archivo;
-                Comm.Parameters.Add("@Posicion", SqlDbType.Int).Value = A.Posicion;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Archmod = await GetArchivo(Convert.ToInt32(reader["Id_Archivo"]));
@@ -205,14 +196,11 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Archivo " +
-                    "(IsPrincipal,ArchivoDoc,Grupo_archivo,Posicion) " +
-                    "VALUES (@IsPrincipal,@ArchivoDoc,@Grupo_archivo,@Posicion); " +
+                    "(ArchivoDoc) " +
+                    "VALUES (@ArchivoDoc); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Archivo";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@IsPrincipal", SqlDbType.Bit, 50).Value = A.IsPrincipal;
                 Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
-                Comm.Parameters.Add("@Grupo_archivo", SqlDbType.Int).Value = A.Grupo_Archivo;
-                Comm.Parameters.Add("@Posicion", SqlDbType.Int).Value = A.Posicion;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 A.Id_Archivo = (int)idDecimal;
             }

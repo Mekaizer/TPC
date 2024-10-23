@@ -29,7 +29,7 @@ namespace BaseDatosTPC
         
         public string? Correo_Proveedor { get; set; }
 
-        public int? Telefono_Proveedor { get; set; }
+        public string? Telefono_Proveedor { get; set; }
 
         public string? Cargo_Representante { get; set; }    
 
@@ -39,7 +39,7 @@ namespace BaseDatosTPC
 
         public bool Bloqueado { get; set; }
 
-        public int N_Cuenta { get; set; }
+        public string? N_Cuenta { get; set; }
 
         public string? Banco { get; set; }
 

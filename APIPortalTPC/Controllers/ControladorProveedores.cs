@@ -125,5 +125,25 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
             }
         }
+        /// <summary>
+        /// Metodo asincrónico para obtener UN objeto en especifico, se debe ingresar el ID del objeto
+        /// </summary>
+        /// <param name="id">Id del objeto a buscar</param>
+        /// <returns>Retorna el Objeto Proveedor</returns>
+        [HttpGet("BienServicio{id:int}")]
+        public async Task<ActionResult> GetBienServicio(int id)
+        {
+            {
+                try
+                {
+                    return Ok(await RP.GetAllProveedoresBienServicio(id));
+                }
+                catch (Exception ex)
+                {
+                    // Manejar excepciones generales
+                    return StatusCode(StatusCodes.Status500InternalServerError, "No hay proveedores con ese bien servicio: " + ex.Message);
+                }
+            }
+        }
     }
 }

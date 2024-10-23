@@ -52,10 +52,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, p.Nombre_Fantasia
-                FROM dbo.Cotizacion c
-                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario
-                INNER JOIN dbo.Proveedores p ON c.Id_Proveedor = p.ID_Proveedores
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
+                FROM dbo.Cotizacion c 
+                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
+                INNER JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio 
                 where C.ID_Cotizacion = @ID_Cotizacion";
 
                 Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = id;
@@ -78,7 +78,7 @@ namespace APIPortalTPC.Repositorio
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    cot.Id_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
                         cot.Solped = Convert.ToInt32(reader["Solped"]);
@@ -120,11 +120,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"
-                SELECT c.*, u.Nombre_Usuario, p.Nombre_Fantasia
-                FROM dbo.Cotizacion c
-                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario
-                INNER JOIN dbo.Proveedores p ON c.Id_Proveedor = p.ID_Proveedores";// leer base datos 
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
+                FROM dbo.Cotizacion c 
+                INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
+                INNER JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio ";// leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -141,7 +140,7 @@ namespace APIPortalTPC.Repositorio
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    cot.Id_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
                         cot.Solped = Convert.ToInt32(reader["Solped"]);
@@ -190,7 +189,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
                                    "Id_Solicitante = @Id_Solicitante, " +
                                    "Estado = @Estado, " +
-                                   "Id_Proveedor = @Id_Proveedor, " +
+                                   "ID_Bien_Servicio = @ID_Bien_Servicio, " +
                                    "Detalle = @Detalle, " +
                                    "Solped = @Solped " +
                                    "WHERE ID_Cotizacion = @ID_Cotizacion";
@@ -198,7 +197,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.VarChar, 50).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                Comm.Parameters.Add("@Id_Proveedor", SqlDbType.VarChar,50).Value = cotizacion.Id_Proveedor;
+                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.VarChar,50).Value = cotizacion.ID_Bien_Servicio;
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar,500).Value = cotizacion.Detalle;
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
                 Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion.ID_Cotizacion;
@@ -238,14 +237,14 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO " +
-                    "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,Id_Proveedor,Detalle,Solped) " +
-                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@Id_Proveedor,@Detalle,@Solped); " +
+                    "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,ID_Bien_Servicio,Detalle,Solped) " +
+                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@ID_Bien_Servicio,@Detalle,@Solped); " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = cotizacion.Fecha_Creacion_Cotizacion;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = cotizacion.Id_Proveedor;
+                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
                 if (cotizacion.Solped != null)
                 {

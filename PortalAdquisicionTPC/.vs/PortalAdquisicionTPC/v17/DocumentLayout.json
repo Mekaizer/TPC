@@ -3,13 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorproveedores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\interfaceexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioproveedores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\interfaceenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,7 +25,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,40 +45,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "RepositorioExcel.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAHAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "RepositorioProveedores.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioProveedores.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioProveedores.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioProveedores.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioProveedores.cs",
+              "ViewState": "AgIAADUBAAAAAAAAAAAqwDsBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-22T19:14:16.948Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ControladorExcel.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-22T18:57:22.218Z",
+              "WhenOpened": "2024-10-23T14:26:41.586Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "InterfaceExcel.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA3AAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ControladorProveedores.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAcwIkAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-22T18:53:36.044Z"
+              "WhenOpened": "2024-10-23T14:24:17.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ControladorEnviarCorreo.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T12:45:14.985Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InterfaceEnviarCorreo.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T12:21:13.896Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RepositorioEnviarCorreo.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T12:20:56.239Z",
+              "EditorCaption": ""
             }
           ]
         }

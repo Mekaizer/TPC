@@ -23,7 +23,8 @@ builder.Services.AddScoped<IRepositorioRelacion,RepositorioRelacion>();
 builder.Services.AddScoped<IRepositorioTicket,RepositorioTicket>();
 builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 builder.Services.AddScoped<IRepositorioDepartamentoUsuario, RepositorioDepartamentoUsuario>();
-
+builder.Services.AddScoped<InterfaceExcel, RepositorioExcel>();
+builder.Services.AddScoped<InterfaceEnviarCorreo, RepositorioEnviarCorreo>();
 
 var config = builder.Configuration;
 var sqlConfig = new AccesoDatos(config.GetConnectionString("SQL"));

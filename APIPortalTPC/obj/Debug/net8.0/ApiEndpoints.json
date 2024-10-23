@@ -524,6 +524,26 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "EnviarCorreo",
+    "RelativePath": "api/ControladorEnviarCorreo/Cotizacion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelProveedores",
+    "RelativePath": "api/ControladorExcel/Proveedores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
     "Method": "GetAll",
     "RelativePath": "api/ControladorOrdenCompra",
@@ -771,6 +791,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorProveedores",
+    "Method": "GetBienServicio",
+    "RelativePath": "api/ControladorProveedores/BienServicio{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorReemplazos",

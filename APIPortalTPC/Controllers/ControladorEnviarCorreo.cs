@@ -5,29 +5,34 @@ namespace APIPortalTPC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-    public class ControladorExcel :ControllerBase
+    public class ControladorEnviarCorreo : ControllerBase
     {
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
-        private readonly InterfaceExcel Excel;
-        public ControladorExcel(InterfaceExcel Excel)
+        private readonly InterfaceEnviarCorreo IEC;
+        public ControladorEnviarCorreo(InterfaceEnviarCorreo IEC)
         {
-            this.Excel = Excel;
+            this.IEC = IEC;
         }
-        [HttpPost("Proveedores")]
-        public async Task<ActionResult> ExcelProveedores()
+        [HttpPost("Cotizacion{id:int}")]
+        public async Task<ActionResult> EnviarCorreo(int id)
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\PRO4.xlsx";
 
-                return Ok(await Excel.LeerExcelProveedor(path));
+
+                await IEC.CorreoCotizacion();
+
+                return Ok("Correos enviados con exito");
             }
             catch (Exception ex)
             {
                 // Manejar excepciones generales
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
+
+            }
+
         }
+
+
     }
-}
