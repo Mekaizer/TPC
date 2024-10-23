@@ -58,8 +58,8 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceo"]);
-                    cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    cc.Id_Ceco = Convert.ToInt32(reader["Id_CeCo"]);
+                    cc.Nombre = (Convert.ToString(reader["NombreCeCo"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
 
                 }
@@ -101,7 +101,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     CentroCosto cc = new();
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
-                    cc.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
+                    cc.Nombre = (Convert.ToString(reader["NombreCeCo"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
                     lista.Add(cc);
                 }
@@ -136,13 +136,13 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Centro_de_costo SET " +
-                    "Nombre = @Nombre" +
+                    "NombreNombreCeCo = @NombreNombreCeCo" +
                     "Codigo_Ceco = @Codigo_Ceco" +
                     "WHERE Id_Ceco = @Id_Ceco";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = ccmod.Id_Ceco;
                 //Usar cuando se corrija el ingresar datos, porque por ahora no se como meter una clase
-                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = ccmod.Nombre;
+                Comm.Parameters.Add("@NombreNombreCeCo", SqlDbType.VarChar, 50).Value = ccmod.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = ccmod.Codigo_Ceco;
 
                 //Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = "Pan";
@@ -178,11 +178,11 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Centro_de_costo (Nombre,Codigo_Ceco) " +
-                    "VALUES (@Nombre,@Codigo_Ceco); " +
+                Comm.CommandText = "INSERT INTO Centro_de_costo (NombreNombreCeCo,Codigo_Ceco) " +
+                    "VALUES (@NombreNombreCeCo,@Codigo_Ceco); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Ceco";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
+                Comm.Parameters.Add("@NombreNombreCeCo", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = Ceco.Codigo_Ceco;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 Ceco.Id_Ceco = (int)idDecimal;
