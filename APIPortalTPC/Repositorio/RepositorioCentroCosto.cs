@@ -178,18 +178,18 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Centro_de_costo (NombreNombreCeCo,Codigo_Ceco) " +
-                    "VALUES (@NombreNombreCeCo,@Codigo_Ceco); " +
+                Comm.CommandText = "INSERT INTO Centro_de_costo (NombreCeCo,Codigo_Ceco) " +
+                    "VALUES (@NombreCeCo,@Codigo_Ceco); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Ceco";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@NombreNombreCeCo", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
+                Comm.Parameters.Add("@NombreCeCo", SqlDbType.VarChar, 50).Value = Ceco.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = Ceco.Codigo_Ceco;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 Ceco.Id_Ceco = (int)idDecimal;
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error creando los datos en tabla Bien_Servicio " + ex.Message);
+                throw new Exception("Error creando los datos en tabla Centro de costo " + ex.Message);
             }
             finally
             {

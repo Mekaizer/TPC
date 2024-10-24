@@ -70,6 +70,10 @@
               "target": "Package",
               "version": "[1.0.0, )"
             },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.7.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
@@ -175,6 +179,10 @@
             "Microsoft.SqlServer.Server": {
               "target": "Package",
               "version": "[1.0.0, )"
+            },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.7.1, )"
             },
             "System.Data.SqlClient": {
               "target": "Package",

@@ -541,6 +541,26 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelCeCo",
+    "RelativePath": "api/ControladorExcel/CeCo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelOE",
+    "RelativePath": "api/ControladorExcel/OE",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
     "Method": "ExcelProveedores",
     "RelativePath": "api/ControladorExcel/Proveedores",
     "HttpMethod": "POST",

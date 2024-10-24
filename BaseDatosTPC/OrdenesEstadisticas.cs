@@ -19,7 +19,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Codigo de la nave asociada
         /// </summary>
-        public string? Codigo_Nave { get; set; }
+        public string? Codigo_OE { get; set; }
         /// <summary>
         /// Id del centro de costo asociado
         /// </summary>

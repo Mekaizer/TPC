@@ -8,5 +8,7 @@ namespace APIPortalTPC.Repositorio
     public interface InterfaceExcel
     {
         public Task<Proveedores> LeerExcelProveedor(string filePath);
+        public Task<List<CentroCosto>> LeerExcelCeCo(string filePath);
+        public Task<List<OrdenesEstadisticas>> LeerExcelOE(string filePath);
     }
 }
