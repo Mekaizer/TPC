@@ -25,7 +25,7 @@ namespace APIPortalTPC.Controllers
 
             {   
                 var lista = IRP.GetAllProveedoresBienServicio(id);
-                string mensaje = "Mensaje de prueba con archivo";
+                string mensaje = "Otro mensaje";
                 //   return Ok(await lista);
                 foreach (var P in await lista)
                 {

@@ -92,11 +92,13 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT OC.*, OE.Nombre,U.Nombre_Usuario " +
-                    "FROM dbo.Orden_de_Compra OC " +
-                    " LEFT OUTER JOIN  dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE " +
-                    "LEFT OUTER JOIN dbo.Usuario U ON OC.UsuarioRecepcionador = U.Id_Usuario" +
-                    "where OC.Id_Orden_Compra = @Id_Orden_Compra";
+                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U1.Nombre_Usuario AS PrimerUsuario ,U2.Nombre_Usuario AS SegundoUsuario , U3.Nombre_Usuario AS TercerUsuario 
+                FROM dbo.Orden_de_Compra OC 
+                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE
+                LEFT OUTER JOIN dbo.Usuario U1 ON OC.UsuarioRecepcionador = U1.Id_Usuario 
+                LEFT OUTER JOIN dbo.Usuario U2 ON OC.SegundoUsuarioRecepcionador = U2.Id_Usuario 
+                LEFT OUTER JOIN dbo.Usuario U3 ON OC.TercerUsuarioRecepcionador = U3.Id_Usuario
+                where OC.Id_Orden_Compra = @Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = id;
@@ -113,7 +115,9 @@ namespace APIPortalTPC.Repositorio
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["PrimerUsuario"]).Trim();
+                    oc.SegundoUsuarioRecepcionador = Convert.ToString(reader["SegundoUsuario"]).Trim();
+                    oc.TercerUsuarioRecepcionador = Convert.ToString(reader["TercerUsuario"]).Trim();
                 }
             }
             catch (SqlException ex)
@@ -145,11 +149,12 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U.Nombre_Usuario 
-                FROM dbo.Orden_de_Compra OC 
-                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE 
-                LEFT OUTER JOIN dbo.Usuario U ON OC.UsuarioRecepcionador = U.Id_Usuario"
-                  ; // leer base datos 
+                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U1.Nombre_Usuario AS PrimerUsuario ,U2.Nombre_Usuario AS SegundoUsuario , U3.Nombre_Usuario AS TercerUsuario 
+                FROM dbo.Orden_de_Compra OC
+                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE
+                LEFT OUTER JOIN dbo.Usuario U1 ON OC.UsuarioRecepcionador = U1.Id_Usuario 
+                LEFT OUTER JOIN dbo.Usuario U2 ON OC.SegundoUsuarioRecepcionador = U2.Id_Usuario 
+                LEFT OUTER JOIN dbo.Usuario U3 ON OC.TercerUsuarioRecepcionador = U3.Id_Usuario"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -163,7 +168,9 @@ namespace APIPortalTPC.Repositorio
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    oc.UsuarioRecepcionador = Convert.ToString(reader["PrimerUsuario"]).Trim();
+                    oc.SegundoUsuarioRecepcionador = Convert.ToString(reader["SegundoUsuario"]).Trim();
+                    oc.TercerUsuarioRecepcionador = Convert.ToString(reader["TercerUsuario"]).Trim();
 
                     lista.Add(oc);
                 }

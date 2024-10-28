@@ -90,7 +90,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Reemplazos where ID_Reemplazos = @ID_Reemplazos";
+                Comm.CommandText = "SELECT Re.*, U.Nombre_Usuario AS U_Vacaciones, U1.Nombre_Usuario AS U_Reemplazo  " +
+                    "FROM dbo.Reemplazos Re " +
+                    "INNER JOIN Usuario U on U.Id_Usuario = Re.Id_Usuario_Vacaciones " +
+                    "INNER JOIN Usuario U1 on U1.Id_Usuario = Re.Id_Usuario_Vacaciones" +
+                    "where RE.ID_Reemplazos = @ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = id;
@@ -99,13 +103,14 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
-                    R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
-                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
-                    R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
-                    R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
-                    R.Valido = Convert.ToBoolean(reader["Valido"]);
-                  
+                    Reemplazos Rem = new();
+                    Rem.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
+                    Rem.Id_Usuario_Vacaciones = Convert.ToString(reader["U_Vacaciones"]).Trim();
+                    Rem.Id_Usuario_Reemplazante = Convert.ToString(reader["U_Reemplazo"]).Trim();
+                    Rem.Comentario = Convert.ToString(reader["Comentario"]).Trim();
+                    Rem.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
+                    Rem.Valido = Convert.ToBoolean(reader["Valido"]);
+
                 }
             }
             catch (SqlException ex)
@@ -137,7 +142,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Reemplazos"; // leer base datos 
+                Comm.CommandText = "SELECT R.*, U.Nombre_Usuario AS U_Vacaciones, U1.Nombre_Usuario AS U_Reemplazo  " +
+                    "FROM dbo.Reemplazos R " +
+                    "INNER JOIN Usuario U on U.Id_Usuario = R.Id_Usuario_Vacaciones " +
+                    "INNER JOIN Usuario U1 on U1.Id_Usuario = R.Id_Usuario_Vacaciones"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -145,9 +153,9 @@ namespace APIPortalTPC.Repositorio
                 {
                     Reemplazos R = new();
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
-                    R.Id_Usuario_Vacaciones = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
-                    R.Id_Usuario_Reemplazante = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
-                    R.Comentario = (Convert.ToString(reader["Comentario"])).Trim();
+                    R.Id_Usuario_Vacaciones = Convert.ToString(reader["U_Vacaciones"]).Trim();
+                    R.Id_Usuario_Reemplazante = Convert.ToString(reader["U_Reemplazo"]).Trim();
+                    R.Comentario = Convert.ToString(reader["Comentario"]).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
                     R.Valido = Convert.ToBoolean(reader["Valido"]);
 

@@ -8,9 +8,9 @@ namespace BaseDatosTPC
 
         [Key]
         public int ID_Reemplazos { get; set; }
-        public int? Id_Usuario_Vacaciones { get; set; }
+        public string? Id_Usuario_Vacaciones { get; set; }
 
-        public int? Id_Usuario_Reemplazante { get; set; }
+        public string? Id_Usuario_Reemplazante { get; set; }
 
         public string? Comentario { get; set; }
 

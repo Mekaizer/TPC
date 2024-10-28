@@ -13,22 +13,12 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "API/ControladorDepartamento",
+      "launchUrl": "API/ControladorOrdenCompra",
       "applicationUrl": "http://localhost:5237",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
 
-  },
-  "APIPortalTPC": {
-    "commandName": "Project",
-    "dotnetRunMessages": true,
-    "launchBrowser": true,
-    "launchUrl": "API/ControladorBienServicio",
-    "applicationUrl": "http://localhost:5237",
-    "environmentVariables": {
-      "ASPNETCORE_ENVIRONMENT": "Development"
-    }
   }
 }

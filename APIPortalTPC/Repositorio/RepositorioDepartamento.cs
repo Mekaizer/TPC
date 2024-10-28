@@ -51,7 +51,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Departamento where Id_Departamento = @Id_Departamento";
+                Comm.CommandText = "SELECT D.*, U.Nombre_Usuario " +
+                    "FROM dbo.Departamento D " +
+                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario +" +
+                    "where Id_Departamento = @Id_Departamento";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = id;
@@ -60,7 +63,7 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     dep.Descripcion = (Convert.ToString(reader["Descripcion"])).Trim();
-                    dep.Encargado = (Convert.ToString(reader["Encargado"])).Trim();
+                    dep.Encargado = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                 }
@@ -94,7 +97,9 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Departamento"; // leer base datos 
+                Comm.CommandText = "SELECT D.*, U.Nombre_Usuario " +
+                    "FROM dbo.Departamento D " +
+                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario "; // leer base datos"; 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -102,7 +107,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Departamento dep = new Departamento();
                     dep.Descripcion = (Convert.ToString(reader["Descripcion"])).Trim();
-                    dep.Encargado = (Convert.ToString(reader["Encargado"])).Trim();
+                    dep.Encargado = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                     lista.Add(dep);

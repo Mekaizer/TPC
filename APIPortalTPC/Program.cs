@@ -50,8 +50,9 @@ builder.Services.AddCors(options =>
 });
 
 app.UseCors("NuevaPolitica");
- 
-*/
+ */
+
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -59,3 +60,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
