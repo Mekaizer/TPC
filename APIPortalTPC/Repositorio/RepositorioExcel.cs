@@ -105,48 +105,31 @@ namespace APIPortalTPC.Repositorio
                 throw new Exception("Error en leer los datos");
         }
 
-        // Inicializar NPOI para manejar archivos .xls
-        using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-        {
-            // Crear el objeto Workbook para manejar el archivo
-            IWorkbook workbook = new HSSFWorkbook(file);
+            // Listas para almacenar datos de las columnas C y Q
+            List<string> columnaC = new List<string>();
+            List<string> columnaQ = new List<string>();
 
-            // Obtener la primera hoja de trabajo
-            ISheet sheet = workbook.GetSheetAt(0);
-
-            // Leer las columnas B, C, D, E hacia abajo desde la fila 5
-            int rowCount = sheet.LastRowNum;
-            for (int row = 4; row <= rowCount; row++) // Comienza desde fila 5 (row 4 en índice 0)
+            // Cargar el archivo Excel
+            FileInfo fileInfo = new FileInfo(filePath);
+            using (ExcelPackage package = new ExcelPackage(fileInfo))
             {
-                IRow currentRow = sheet.GetRow(row);
-                if (currentRow == null) continue; // Saltar filas vacías
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Primera hoja del archivo
 
-                // Leer cada columna y mostrar su contenido
-
-                string colB = currentRow.GetCell(1)?.ToString() ?? ""; // Columna B
-                string colC = currentRow.GetCell(2)?.ToString() ?? ""; // Columna C
-                string colD = currentRow.GetCell(3)?.ToString() ?? ""; // Columna D
-
-                // Verificar si todas las celdas están vacías, y detener el bucle si es necesario
-                if (string.IsNullOrEmpty(colB)  && string.IsNullOrEmpty(colC) && string.IsNullOrEmpty(colD) )
-                    break;
-                else
+                // Leer las columnas C y Q al mismo tiempo (empieza desde la fila 5)
+                int row = 5;
+                while (worksheet.Cells[row, 3].Value != null || worksheet.Cells[row, 17].Value != null) // Columnas C (3) y Q (17)
                 {
-                    var OE = new OrdenesEstadisticas
-                    {
-                        Nombre = colC,
+                    // Agregar el valor de la columna C (Documentos) o una cadena vacía si es nulo
+                    columnaC.Add(worksheet.Cells[row, 3].Text ?? string.Empty);
 
-                        Codigo_OE = colB,
+                    // Agregar el valor de la columna Q (Denominación StatLib) o una cadena vacía si es nulo
+                    columnaQ.Add(worksheet.Cells[row, 17].Text ?? string.Empty);
 
-                        Id_Centro_de_Costo = colD
-
-                    };
-                    ListaOE.Add(OE);
+                    row++;
                 }
-
             }
-        }
-        return ListaOE;
+
+            return ListaOE;
     }
     }
 }

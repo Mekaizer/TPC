@@ -653,6 +653,16 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenCompra",
+    "Method": "GetExcel",
+    "RelativePath": "api/ControladorOrdenCompra/Imprimir",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorOrdenesEstadisticas",
     "Method": "GetAll",
     "RelativePath": "api/ControladorOrdenesEstadisticas",

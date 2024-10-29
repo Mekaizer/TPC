@@ -18,14 +18,28 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioOrdenCompra ROC;
+        private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="ROC">Interface de RepositorioOrdenCompra</param>
 
-        public ControladorOrdenCompra(IRepositorioOrdenCompra ROC)
+        public ControladorOrdenCompra(IRepositorioOrdenCompra ROC, InterfaceCrearExcel ICE)
         {
             this.ROC = ROC;
+            this.ICE = ICE;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Imprimir")]
+        public async Task<ActionResult> GetExcel(){
+
+            var lista = await ROC.GetAllOC();
+
+            // Assuming DescargarExcel returns a byte array and a filename
+            return Ok(await ICE.DescargarExcel((List<OrdenCompra>)lista));
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla

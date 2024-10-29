@@ -25,6 +25,7 @@ builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 builder.Services.AddScoped<IRepositorioDepartamentoUsuario, RepositorioDepartamentoUsuario>();
 builder.Services.AddScoped<InterfaceExcel, RepositorioExcel>();
 builder.Services.AddScoped<InterfaceEnviarCorreo, RepositorioEnviarCorreo>();
+builder.Services.AddScoped<InterfaceCrearExcel, RepositorioCrearExcel>();
 
 var config = builder.Configuration;
 var sqlConfig = new AccesoDatos(config.GetConnectionString("SQL"));

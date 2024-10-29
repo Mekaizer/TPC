@@ -60,17 +60,18 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                   
-                    try
-                    {
-                        a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
-                    }
-                    catch (InvalidCastException)
-                    {
 
-                        a.ArchivoDoc = [0];
-                    }
+                    a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
+                    /*   try
+                       {
+                           a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                       }
+                       catch (InvalidCastException)
+                       {
 
+                           a.ArchivoDoc = [0];
+                       }
+                    */
                 } 
 
 
@@ -111,16 +112,17 @@ namespace APIPortalTPC.Repositorio
                 {
                     Archivo a = new ();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    try
-                    {
-                       a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        
-                        a.ArchivoDoc = [0];
-                    }
+                    /*  try
+                      {
+                         a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                      }
+                      catch (InvalidCastException)
+                      {
 
+                          a.ArchivoDoc = [0];
+                      }
+                    */
+                    a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
                     lista.Add(a);
                 }
             }   
@@ -154,14 +156,19 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Archivo SET " +
-                    "ArchivoDoc = @ArchivoDoc, " +
+                    "NombreDoc = @NombreDoc, " +
+                    "ArchivoDoc = @ArchivoDoc " +
                     "WHERE Id_Archivo = @Id_Archivo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
-                if (A.ArchivoDoc != null)
-                    Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
-                else
-                    Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value  = DBNull.Value;
+                Comm.Parameters.Add("@NombreDoc", SqlDbType.VarChar,50).Value = A.NombreDoc;
+                A.ArchivoDoc = File.ReadAllBytes(@"C:\Users\drako\Desktop\PRO4.xlsx");
+                Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary).Value = A.ArchivoDoc;
+
+                // Crear un objeto de la clase Archivo
+
+
+                // Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc; DBNull.Value;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -196,13 +203,16 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Archivo " +
-                    "(ArchivoDoc) " +
-                    "VALUES (@ArchivoDoc); " +
+                    "(ArchivoDoc,NombreDoc) " +
+                    "VALUES (@ArchivoDoc,@NombreDoc); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Archivo";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
+                Comm.Parameters.Add("@NombreDoc", SqlDbType.VarChar, 50).Value = A.NombreDoc;
+                A.ArchivoDoc = File.ReadAllBytes(@"C:\Users\drako\Desktop\PRO4.xlsx");
+                Comm.Parameters.Add("@ArchivoDoc",SqlDbType.VarBinary).Value = A.ArchivoDoc;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                A.Id_Archivo = (int)idDecimal;
+            
             }
             catch (SqlException ex)
             {
