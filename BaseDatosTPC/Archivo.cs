@@ -15,7 +15,6 @@ namespace BaseDatosTPC
         /// Guarda el archivo
         /// </summary>
         public byte[]? ArchivoDoc { get; set; }
-
- 
+        public string? NombreDoc { get; set; }
     }
 }

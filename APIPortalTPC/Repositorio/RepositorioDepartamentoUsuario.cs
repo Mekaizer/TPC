@@ -168,7 +168,7 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
         /// </summary>
-        /// <param name="R">Objeto del tipo Relacion que se usará para modificar su homonimo por Id</param>
+        /// <param name="DP">Objeto del tipo DepartamentoUsuario que se usará para modificar su homonimo por Id</param>
         /// <returns>Retorna el objeto Modificado</returns>
         /// <exception cref="Exception"></exception>
         public async Task<DepartamentoUsuario> Modificar(DepartamentoUsuario DP)
