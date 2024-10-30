@@ -9,6 +9,6 @@ namespace APIPortalTPC.Repositorio
     {
         public Task<Proveedores> LeerExcelProveedor(string filePath);
         public Task<List<CentroCosto>> LeerExcelCeCo(string filePath);
-        public Task<List<OrdenesEstadisticas>> LeerExcelOE(string filePath);
+        public Task<string> LeerExcelOC(string filePath);
     }
 }

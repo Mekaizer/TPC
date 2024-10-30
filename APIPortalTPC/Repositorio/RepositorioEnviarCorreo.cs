@@ -8,7 +8,14 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioEnviarCorreo : InterfaceEnviarCorreo
     {
-
+        /// <summary>
+        /// Metodo que envia un correo al proveedor, indicando su correo y nombre
+        /// </summary>
+        /// <param name="productos"></param>
+        /// <param name="P"></param>
+        /// <param name="subject"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<string> CorreoCotizacion(string productos, Proveedores P, string subject)
         {
             // Configuración del servidor SMTP
@@ -72,7 +79,13 @@ namespace APIPortalTPC.Repositorio
                 throw new Exception($"Error al enviar el correo: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Metodo que permite enviar correo a un Usuario que debe liberar ordenes de compra, usando su correo y nombre
+        /// </summary>
+        /// <param name="U"></param>
+        /// <param name="subject"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<string> CorreoLiberador(Usuario U,string subject) {
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
