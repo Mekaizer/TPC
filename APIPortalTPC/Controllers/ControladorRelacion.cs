@@ -55,8 +55,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RR.GetRelacion(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.Id_Relacion == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro la relacion");
 
                 return Ok(resultado);
             }

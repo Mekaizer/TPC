@@ -69,8 +69,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await ROC.GetOC(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.Id_Orden_Compra == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro la orden de compra");
 
                 return Ok(resultado);
             }

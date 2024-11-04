@@ -208,8 +208,3 @@ namespace APIPortalTPC.Repositorio
     }
 }
 
-
-/*
- *
-
- */

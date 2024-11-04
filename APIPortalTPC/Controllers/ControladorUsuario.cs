@@ -52,8 +52,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RU.GetUsuario(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.Id_Usuario== 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el usuario");
 
                 return Ok(resultado);
             }

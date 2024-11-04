@@ -55,8 +55,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RP.GetProveedor(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.ID_Proveedores == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el proveedor");
 
                 return Ok(resultado);
             }

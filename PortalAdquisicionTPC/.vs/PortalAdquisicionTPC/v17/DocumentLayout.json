@@ -3,40 +3,49 @@
   "WorkspaceRootPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorusuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorarchivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioarchivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorbienservicio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorcentrocosto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\interfaceexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorcotizacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\irepositorioordenesestadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladordepartamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioordencompra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladordepartamentousuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorordencompra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorordenesestadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\irepositorioordencompra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorproveedores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\interfaceenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorreemplazos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\irepositorioarchivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorrelacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,19 +55,201 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "RepositorioTicket.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioTicket.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioTicket.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioTicket.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioTicket.cs",
-              "ViewState": "AgIAAIkAAAAAAAAAAAAIwJUAAAAoAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ControladorArchivo.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorArchivo.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorArchivo.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorArchivo.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorArchivo.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDcAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T17:05:31.106Z",
+              "WhenOpened": "2024-11-04T15:16:40.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ControladorBienServicio.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorBienServicio.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorBienServicio.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorBienServicio.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorBienServicio.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAowDgAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:16:12.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ControladorCentroCosto.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorCentroCosto.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorCentroCosto.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorCentroCosto.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorCentroCosto.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDoAAABnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:51.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ControladorCotizacion.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorCotizacion.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorCotizacion.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorCotizacion.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorCotizacion.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAowDoAAABiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:23.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ControladorDepartamento.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorDepartamento.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorDepartamento.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorDepartamento.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorDepartamento.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:18.365Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ControladorDepartamentoUsuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorDepartamentoUsuario.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorDepartamentoUsuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorDepartamentoUsuario.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorDepartamentoUsuario.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:14.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ControladorEnviarCorreo.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:12.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ControladorExcel.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:11.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ControladorOrdenCompra.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:15:04.058Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ControladorOrdenesEstadisticas.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenesEstadisticas.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorOrdenesEstadisticas.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenesEstadisticas.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorOrdenesEstadisticas.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:14:58.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ControladorProveedores.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:14:50.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ControladorReemplazos.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:14:28.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ControladorUsuario.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorUsuario.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDcAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:13:40.417Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ControladorTicket.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDoAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:12:59.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ControladorRelacion.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorRelacion.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorRelacion.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorRelacion.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorRelacion.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowDMAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T15:09:59.408Z",
               "EditorCaption": ""
             },
             {
@@ -76,144 +267,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{26341fe2-71dd-46fd-bb1b-2e51a92a0d64}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "InterfaceExcel.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\InterfaceExcel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T13:36:12.914Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "RepositorioOrdenCompra.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioOrdenCompra.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioOrdenCompra.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioOrdenCompra.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioOrdenCompra.cs",
-              "ViewState": "AgIAAIkAAAAAAAAAAAAIwI8AAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T18:58:02.066Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ControladorOrdenCompra.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorOrdenCompra.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAIwCkAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T18:50:00.939Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "IRepositorioOrdenCompra.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioOrdenCompra.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\IRepositorioOrdenCompra.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioOrdenCompra.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\IRepositorioOrdenCompra.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T18:49:55.014Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IRepositorioOrdenesEstadisticas.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioOrdenesEstadisticas.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\IRepositorioOrdenesEstadisticas.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioOrdenesEstadisticas.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\IRepositorioOrdenesEstadisticas.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T18:49:54.051Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "RepositorioExcel.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAUwIAAAABwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-28T20:52:38.575Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Program.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Program.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Program.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T19:41:09.093Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RepositorioArchivo.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioArchivo.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioArchivo.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioArchivo.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioArchivo.cs",
-              "ViewState": "AgIAAKAAAAAAAAAAAAAIwLYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T14:00:54.43Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RepositorioEnviarCorreo.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioEnviarCorreo.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwFIAAAB3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T13:54:03.948Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "InterfaceEnviarCorreo.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\InterfaceEnviarCorreo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T13:53:58.327Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "IRepositorioArchivo.cs",
-              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioArchivo.cs",
-              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\IRepositorioArchivo.cs",
-              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\IRepositorioArchivo.cs",
-              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\IRepositorioArchivo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T13:38:25.577Z"
             }
           ]
         }

@@ -53,8 +53,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado= await RBS.GetServicio(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.ID_Bien_Servicio == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el bien o servicio ");
 
                 return Ok(resultado) ;
             }

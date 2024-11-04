@@ -52,8 +52,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RA.GetArchivo(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.Id_Archivo == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el archivo");
 
                 return Ok(resultado);
             }

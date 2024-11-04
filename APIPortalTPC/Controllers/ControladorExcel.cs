@@ -19,6 +19,11 @@ namespace APIPortalTPC.Controllers
             this.IRC = IRC;
             this.IRE = IRE;
         }
+        
+        /// <summary>
+        /// Metodo que permite leer el excel con el formato que agrega un proveedor a la base de datos
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("Proveedores")]
         public async Task<ActionResult> ExcelProveedores()
         {
@@ -34,6 +39,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
         }
+        
+        /// <summary>
+        /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("CeCo")]
         public async Task<ActionResult> ExcelCeCo()
         {
@@ -58,24 +68,20 @@ namespace APIPortalTPC.Controllers
             }
           
         }
-        [HttpPost("OE")]
-        public async Task<ActionResult> ExcelOE()
+        /// <summary>
+        /// Metodo que lee un archivo excel que tiene orden de compra y lo actualiza en la base de datos
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("OC")]
+        public async Task<ActionResult> ExcelOC()
         {
             try
             {
                 string path = @"C:\Users\drako\Desktop\cap.xls";
 
 
-                List<OrdenesEstadisticas> lc = (await Excel.LeerExcelOE(path));
-                
-                foreach(OrdenesEstadisticas oe in lc)
-                {
-                OrdenesEstadisticas OEA=   await IRE.AjustarCodigo(oe);
-                string res = await IRE.Existe(OEA.Codigo_OE);
-                    if (res == "ok")
-                        await IRE.NuevoOE(OEA);
-                }
-                return Ok(true);
+                return Ok(await Excel.LeerExcelOC(path));
+            
             }
             catch (Exception ex)
             {

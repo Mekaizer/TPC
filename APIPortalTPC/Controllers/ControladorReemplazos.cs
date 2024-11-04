@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp.Processing;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -55,8 +56,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RR.GetReemplazo(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.ID_Reemplazos == 0)
+                    return StatusCode(StatusCodes.Status404NotFound,"No se encontro el reemplazo");
 
                 return Ok(resultado);
             }

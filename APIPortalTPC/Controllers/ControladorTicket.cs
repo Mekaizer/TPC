@@ -55,8 +55,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RT.GetTicket(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.ID_Ticket == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el ticket");
 
                 return Ok(resultado);
             }

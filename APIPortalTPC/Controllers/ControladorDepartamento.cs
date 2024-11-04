@@ -56,7 +56,7 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RD.GetDepartamento(id);
-                if (resultado == null)
+                if (resultado.Id_Departamento == 0)
                     return NotFound();
 
                 return Ok(resultado);

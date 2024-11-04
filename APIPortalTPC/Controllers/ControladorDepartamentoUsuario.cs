@@ -48,7 +48,7 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RDU.Get(id);
-                if (resultado == null)
+                if (resultado.Id_DepartamentoUsuarios == 0)
                     return NotFound();
 
                 return Ok(resultado);

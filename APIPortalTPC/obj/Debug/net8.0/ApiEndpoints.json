@@ -551,8 +551,8 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
-    "Method": "ExcelOE",
-    "RelativePath": "api/ControladorExcel/OE",
+    "Method": "ExcelOC",
+    "RelativePath": "api/ControladorExcel/OC",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

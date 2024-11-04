@@ -55,8 +55,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado= await RC.GetCotizacion(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.ID_Cotizacion == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro la cotizacion");
 
                 return Ok(resultado);
             }

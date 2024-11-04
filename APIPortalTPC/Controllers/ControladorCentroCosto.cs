@@ -55,8 +55,8 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RC.GetCeCo(id);
-                if (resultado == null)
-                    return NotFound();
+                if (resultado.Id_Ceco == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el centro de costo");
 
                 return Ok(resultado);
             }
