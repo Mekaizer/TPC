@@ -1,9 +1,7 @@
 
 using APIPortalTPC.Datos;
 using APIPortalTPC.Repositorio;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 IConfiguration Configuration;
@@ -31,6 +29,12 @@ var config = builder.Configuration;
 var sqlConfig = new AccesoDatos(config.GetConnectionString("SQL"));
 builder.Services.AddSingleton(sqlConfig);
 
+//metodo para cerrar la sesion si el usuario no hace nada
+builder.Services.AddAuthentication();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -46,7 +50,6 @@ builder.Services.AddCors(options =>
         app.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowAnyOrigin();
-
     });
 });
 

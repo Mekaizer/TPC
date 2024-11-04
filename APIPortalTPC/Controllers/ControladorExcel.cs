@@ -49,7 +49,7 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\excel.xlsx";
+                string path = @"C:\Users\drako\Desktop\cap.xlsx";
 
 
                 List<CentroCosto> lc= (await Excel.LeerExcelCeCo(path));
@@ -77,7 +77,7 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\cap.xls";
+                string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
 
 
                 return Ok(await Excel.LeerExcelOC(path));

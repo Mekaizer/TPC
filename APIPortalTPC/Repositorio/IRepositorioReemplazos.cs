@@ -1,6 +1,4 @@
 ﻿using BaseDatosTPC;
-using ClasesBaseDatosTPC;
-
 namespace APIPortalTPC.Repositorio
 {
     public interface IRepositorioReemplazos

@@ -19,7 +19,7 @@ namespace APIPortalTPC.Controllers
 
 
         [HttpPost("Cotizacion{id:int}")]
-        public async Task<ActionResult> EnviarCorreo(int id)
+        public async Task<ActionResult> EnviarCorreoProveedores(int id)
         {
             try
 
@@ -55,9 +55,45 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
 
+        }
+        [HttpPost("Liberador{id:int}")]
+        public async Task<ActionResult> EnviarCorreoLiberador(int id)
+        {
+            try
+
+            {
+                var lista = IRP.GetAllProveedoresBienServicio(id);
+                string mensaje = "Otro mensaje";
+                //   return Ok(await lista);
+                foreach (var P in await lista)
+                {
+                    string? productos = P.ID_Bien_Servicio;
+
+                    if (P.ID_Bien_Servicio.ToString() != null)
+                    {
+                        await IEC.CorreoCotizacion(productos, P, mensaje);
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
+                    }
+
+
+                }
+                if (lista == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, "no existen proveedores con el bien servicio ");
+                }
+
+                return Ok("Correos enviados con exito");
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones generales
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
 
         }
 
-
+    }
     }

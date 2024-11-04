@@ -2,7 +2,6 @@
 using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
-using System.Runtime.Intrinsics.Arm;
 
 namespace APIPortalTPC.Repositorio
 {

@@ -1,7 +1,7 @@
-﻿using APIPortalTPC.Datos;
+﻿
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
-using System.Data.SqlClient;
+using NPOI.SS.Formula.Functions;
 using System.Net.Mail;
 
 namespace APIPortalTPC.Repositorio
@@ -95,7 +95,20 @@ namespace APIPortalTPC.Repositorio
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
-            string htmlBody ="";
+            string htmlBody = $@"
+            <html>
+            <head></head>
+            <body>
+                <p>Estimado/a {U.Nombre_Usuario},</p>
+                <p>Junto con saludar, nos dirigimos a usted para avisar que tiene solicitudes para recepcionar</p>
+               
+                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo. Para enviar su cotización o cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
+                <p>Agradecemos su pronta colaboración.</p>
+                <p>Saludos cordiales,</p>
+                <p>Equipo de Adquisiciones<br/>
+                <strong>Terminal Puerto de Coquimbo</strong></p>
+            </body>
+        </html>";
             try
             {
                 // Crear el mensaje de correo

@@ -1,6 +1,4 @@
 ﻿using BaseDatosTPC;
-using Microsoft.AspNetCore.Mvc;
-using NPOI.HPSF;
 using OfficeOpenXml;
 
 namespace APIPortalTPC.Repositorio
@@ -18,7 +16,7 @@ namespace APIPortalTPC.Repositorio
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("OrdenCompras");
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaOrdenCompras");
 
                 // Encabezado
                 worksheet.Cells[1, 1].Value = "Ticket";
@@ -41,7 +39,7 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[row, 6].Style.Numberformat.Format = "yyyy-MM-dd";
                     row++;
                 }
-                string filePath = "C:/Users/drako/Desktop/OrdenCompras.xlsx";
+                string filePath = "C:/Users/drako/Desktop/ListaOrdenCompras.xlsx";
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -49,7 +47,10 @@ namespace APIPortalTPC.Repositorio
 
                
             }
-            return "Archivo Excel guardado en: ";
+            return "Archivo Excel guardado ";
         }
+    
+    
+    
     }
 }

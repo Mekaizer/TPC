@@ -1,5 +1,4 @@
 ﻿using BaseDatosTPC;
-using ClasesBaseDatosTPC;
 
 namespace APIPortalTPC.Repositorio
 {

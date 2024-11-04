@@ -1,5 +1,4 @@
 ﻿using BaseDatosTPC;
-using Microsoft.AspNetCore.Mvc;
 
 namespace APIPortalTPC.Repositorio
 {

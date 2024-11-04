@@ -1,4 +1,5 @@
 ﻿using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -8,5 +9,6 @@ namespace APIPortalTPC.Repositorio
     public interface InterfaceEnviarCorreo
     {
         public Task<string> CorreoCotizacion(string productos, Proveedores P, string subject);
+        public Task<string> CorreoLiberador(Usuario U, string subject);
     }
 }

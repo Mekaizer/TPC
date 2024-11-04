@@ -1,9 +1,8 @@
 ﻿using APIPortalTPC.Datos;              
-using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
 using ClasesBaseDatosTPC;
-using System.Reflection.PortableExecutable;
+
 
 namespace APIPortalTPC.Repositorio
 {

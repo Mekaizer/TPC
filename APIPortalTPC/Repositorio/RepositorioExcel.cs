@@ -2,14 +2,8 @@
 using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
-using ClasesBaseDatosTPC;
-using System.Reflection.PortableExecutable;
-using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using System.Collections.Generic;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.SS.Formula.Functions;
+
 
 namespace APIPortalTPC.Repositorio
 {
