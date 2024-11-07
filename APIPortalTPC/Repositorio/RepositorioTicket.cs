@@ -41,28 +41,40 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ticket " +
-                                         "(Estado,Fecha_Creacion_OC,Id_Usuario,Id_Proveedor) " +
-                                         "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@Id_Proveedor); " +
+                                         "(Estado,Fecha_Creacion_OC,Id_Usuario,ID_Proveedor, Fecha_OC_Recepcionada, Fecha_OC_Enviada, Fecha_OC_Liberada, Detalle, Solped, Id_OE) " +
+                                         "VALUES (@Estado,@Fecha_Creacion_OC,@Id_Usuario,@ID_Proveedor, @Fecha_OC_Recepcionada, @Fecha_OC_Enviada, @Fecha_OC_Liberada, @Detalle, @Solped, @Id_OE); " +
                                          "SELECT SCOPE_IDENTITY() AS ID_Ticket;";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
+                if (T.Fecha_OC_Recepcionada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = DBNull.Value;
+                if (T.Fecha_OC_Enviada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = DBNull.Value;
+                if (T.Fecha_OC_Liberada.HasValue)
+                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
+                else
+                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = DBNull.Value;
+
+                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = T.Detalle;
+
+                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
+
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.Id_OE;
 
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 T.ID_Ticket = (int)idDecimal;
             }
             catch (SqlException ex)
             {
-                if (ex.Message.Contains("FK_Ticket_OC_Proveedores")) // Check if the error is related to the foreign key
-                {
-                    throw new Exception("Error: The specified supplier (ID_Proveedor) does not exist. Please verify the supplier ID.");
-                }
-                else
-                {
                     throw new Exception("Error creando los datos en tabla Ticket " + ex.Message);
-                }
+                
             }
             finally
             {
@@ -97,10 +109,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia " +
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre " +
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
                     "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
                     "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -119,8 +132,9 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
-
                 }
             }
             catch (SqlException ex)
@@ -152,10 +166,11 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia " +
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre " +
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
-                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores"; // leer base datos 
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE "; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -170,7 +185,10 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+
                     lista.Add(T);
                 }
             }
@@ -208,29 +226,39 @@ namespace APIPortalTPC.Repositorio
                     "Estado = ISNULL(@Estado, Estado)," +
                     "Id_Usuario = ISNULL(@Id_Usuario, Id_Usuario), " +
                     "Id_Proveedor = ISNULL(@Id_Proveedor, Id_Proveedor), " +
+                    "Solped = @Solped, " +
+                    "Fecha_Creacion_OC = @Fecha_Creacion_OC, " +
                     "Fecha_OC_Recepcionada = ISNULL(@Fecha_OC_Recepcionada, Fecha_OC_Recepcionada),  " +
                     "Fecha_OC_Enviada = ISNULL(@Fecha_OC_Enviada, Fecha_OC_Enviada)," +
-                    "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada) " +
+                    "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada)," +
+                    "Detalle = @Detalle," +
+                    "Id_OE = @Id_OE " +
                     "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
+
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
+                Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
                 if (T.Fecha_OC_Recepcionada.HasValue)
-                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada.Value;
+                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
                 else
                     Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = DBNull.Value;
-
                 if (T.Fecha_OC_Enviada.HasValue)
                     Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
                 else
                     Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = DBNull.Value;
-                
                 if (T.Fecha_OC_Liberada.HasValue)
                     Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
                 else
                     Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = DBNull.Value;
-              
+
+                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = T.Detalle;
+
+                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
+
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.Id_OE;
+
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
                 reader = await Comm.ExecuteReaderAsync();

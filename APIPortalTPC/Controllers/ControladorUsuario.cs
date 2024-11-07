@@ -121,7 +121,7 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Usuario = {id} no encontrado");
 
-                return await RU.ModificarUsuario(U);
+                return Ok(await RU.ModificarUsuario(U));
             }
             catch (Exception ex)
             {

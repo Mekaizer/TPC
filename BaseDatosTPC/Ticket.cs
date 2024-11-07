@@ -24,5 +24,9 @@ namespace BaseDatosTPC
 
         public string? Detalle { get; set; }
 
+        public int? Solped { get; set; }
+        
+        public string? Id_OE { get; set; }
+
     }
 }

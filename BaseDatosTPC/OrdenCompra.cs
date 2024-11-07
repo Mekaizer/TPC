@@ -16,39 +16,49 @@ namespace BaseDatosTPC
         /// <summary>
         /// Codigo de la orden de compra
         /// </summary>
-        public int? Numero_OC {  get; set; }
+        public int? Numero_OC { get; set; }
         /// <summary>
-        /// numero de la solped
+        /// Id del ticket asociado a la orden de compra
         /// </summary>
-        public int? Solped { get; set; }
+        public int? Id_Ticket { get; set; }
+
         /// <summary>
-        /// Id de la orden estadistica asociada
+        /// fecha que la orden de compra es liberada
         /// </summary>
-        public string? Id_OE { get; set; }
+        public DateTime? Fecha_Recepcion { get; set; }
+        public string? Texto { get; set; }
+        public bool IsCiclica { get; set; }
+
         /// <summary>
         /// Orden de posicionamiento entre varias ordenes de compras relacionadas
         /// </summary>
         public string? posicion { get; set; }
         /// <summary>
-        /// Id del ticket asociado a la orden de compra
+        /// Cantidad de materiales
         /// </summary>
-        public int? Id_Ticket { get; set; }
+        public int Cantidad {get; set;}
         /// <summary>
-        /// fecha que la orden de compra es liberada
+        /// Tipo de moneda
         /// </summary>
-        public DateTime? Fecha_Recepcion { get; set; }
+        public string? Mon {get; set;}
+        //Precio unitario
+        public decimal? PrcNeto {get; set;}
         /// <summary>
-        /// ID del liberador... en este caso generalmente será Carla
+        /// Nombre del proveedor
         /// </summary>
-        public string? UsuarioRecepcionador { get; set; }
+        public string? Proveedor { get; set; }
         /// <summary>
-        /// Id del liberador del departamento
+        /// Codigo del material
         /// </summary>
-        public string? SegundoUsuarioRecepcionador { get; set; }
+        public int? Material { get; set; }
         /// <summary>
-        /// En caso de haber un tercer liberador se guarda
+        /// Valor del total
         /// </summary>
-        public string? TercerUsuarioRecepcionador { get; set; }
+        public decimal? ValorNeto { get; set; }
+        /// <summary>
+        /// Es para ver si fue recepcionado la orden de compra
+        /// </summary>
+        public bool Recepcion { get; set; }
 
     }
 }

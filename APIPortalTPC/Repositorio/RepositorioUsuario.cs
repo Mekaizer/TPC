@@ -305,5 +305,52 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
+        
+        public async Task<IEnumerable<Usuario>> GetAllUsauriosLiberadores()
+        {
+            List<Usuario> lista = new List<Usuario>();
+            SqlConnection sql = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "SELECT * FROM dbo.Usuario"; // leer base datos 
+                Comm.CommandType = CommandType.Text;
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    Usuario U = new();
+                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
+                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
+                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
+                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
+                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
+                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
+                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                    U.Activado = Convert.ToBoolean(reader["Activado"]);
+                    U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    lista.Add(U);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Usuario " + "aaa" + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+                Comm?.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return lista;
+        }
     }
+
+    
 }    

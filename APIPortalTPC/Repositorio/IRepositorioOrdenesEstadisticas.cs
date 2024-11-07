@@ -8,7 +8,7 @@ namespace APIPortalTPC.Repositorio
         public Task<OrdenesEstadisticas> GetOE(int id);
         public Task<IEnumerable<OrdenesEstadisticas>> GetAllOE();
         public Task<OrdenesEstadisticas> ModificarOE(OrdenesEstadisticas OE);
-        public Task<OrdenesEstadisticas> AjustarCodigo(OrdenesEstadisticas OE);
+
         public Task<string> Existe(string code);
     }
 }

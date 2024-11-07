@@ -1,27 +1,22 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
-/*
- * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
- * **/
+
 namespace APIPortalTPC.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
-    public class ControladorArchivo : ControllerBase
+    public class ControladorRecepcion : ControllerBase
     {
-
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
-        private readonly IRepositorioArchivo RA;
+        private readonly IRepositorioRecepcion RR;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
-        /// <param name="RA">Interface de RepositorioArchivo</param>
+        /// <param name="RR">Interface de RepositorioRecepcion</param>
 
-        public ControladorArchivo(IRepositorioArchivo RA) => this.RA = RA;
+        public ControladorRecepcion(IRepositorioRecepcion RR) => this.RR = RR;
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
         /// </summary>
@@ -31,12 +26,12 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                return Ok(await RA.GetAllArchivo());
+                return Ok(await RR.GetAllRecepcion());
             }
             catch (Exception ex)
             {
                 // Manejar excepciones generales
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el archivo: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener las recepciones: " + ex.Message);
             }
         }
         /// <summary>
@@ -49,9 +44,9 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                var resultado = await RA.GetArchivo(id);
-                if (resultado.Id_Archivo == 0)
-                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el archivo");
+                var resultado = await RR.GetRecepcion(id);
+                if (resultado.Id_Recepcion == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro la recepcion");
 
                 return Ok(resultado);
             }
@@ -61,20 +56,16 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        /// <summary>
-        /// Metodo asincrónico para crear nuevo objeto
-        /// </summary>
-        /// <param name="A">Objeto del tipo de Archivo</param>
-        /// <returns>Retorna el objeto creado</returns>
+
         [HttpPost]
-        public async Task<ActionResult<Archivo>> Nuevo(Archivo A)
+        public async Task<ActionResult<Recepcion>> Nuevo(Recepcion R)
         {
             try
             {
-                if (A == null)
+                if (R == null)
                     return BadRequest();
 
-                Archivo nuevo = await RA.NuevoArchivo(A);
+                Recepcion nuevo = await RR.NuevaRecepcion(R);
                 return nuevo;
             }
             catch (Exception ex)
@@ -83,31 +74,22 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        /// <summary>
-        /// Metodo asincrónico para modificar un objeto por ID, si el objeto coincide con la Id se procede a agregarse a la base de datos
-        /// </summary>
-        /// <param name="A">Objeto del tipo Archivo que se quiere modificar</param>
-        /// <param name="id">Id del objeto que se quiere buscar</param>
-        /// <returns>Regresa el Objeto modificado</returns>
+
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Archivo>> Modificar(Archivo A, int id)
+        public async Task<ActionResult<Recepcion>> Modificar(Recepcion R, int id)
         {
             try
             {
-                if (id != A.Id_Archivo)
+                if (id != R.Id_Recepcion)
                     return BadRequest("La Id no coincide");
 
-                var Modificar = await RA.GetArchivo(id);
-
-                if (Modificar == null)
-                    return NotFound($"Archivo con = {id} no encontrado");
-
-                return await RA.ModificarArchivo(A);
+                return await RR.ModificarRecepcion(R);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos " + ex.Message);
             }
         }
     }
 }
+

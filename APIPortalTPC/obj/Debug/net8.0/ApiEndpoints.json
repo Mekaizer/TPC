@@ -275,6 +275,89 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCorreo",
+    "Method": "GetAll",
+    "RelativePath": "api/ControladorCorreo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCorreo",
+    "Method": "Nuevo",
+    "RelativePath": "api/ControladorCorreo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "C",
+        "Type": "BaseDatosTPC.Correo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Correo",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCorreo",
+    "Method": "Get",
+    "RelativePath": "api/ControladorCorreo/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCorreo",
+    "Method": "Modificar",
+    "RelativePath": "api/ControladorCorreo/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "C",
+        "Type": "BaseDatosTPC.Correo",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Correo",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorCotizacion",
     "Method": "GetAll",
     "RelativePath": "api/ControladorCotizacion",
@@ -525,8 +608,8 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
-    "Method": "EnviarCorreo",
-    "RelativePath": "api/ControladorEnviarCorreo/Cotizacion{id}",
+    "Method": "EnviarCorreoProveedores",
+    "RelativePath": "api/ControladorEnviarCorreo/Proveedor{id}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -843,6 +926,89 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorRecepcion",
+    "Method": "GetAll",
+    "RelativePath": "api/ControladorRecepcion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorRecepcion",
+    "Method": "Nuevo",
+    "RelativePath": "api/ControladorRecepcion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "R",
+        "Type": "BaseDatosTPC.Recepcion",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Recepcion",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorRecepcion",
+    "Method": "Get",
+    "RelativePath": "api/ControladorRecepcion/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorRecepcion",
+    "Method": "Modificar",
+    "RelativePath": "api/ControladorRecepcion/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "R",
+        "Type": "BaseDatosTPC.Recepcion",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Recepcion",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorReemplazos",

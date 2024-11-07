@@ -42,13 +42,12 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_Compra " +
-                    "(Numero_OC,Solped,Id_OE,Posicion,Id_Ticket) " +
-                    "VALUES (@Numero_OC,@Solped,@Id_OE,@Posicion,@Id_Ticket); " +
+                    "(Numero_OC,Posicion,Id_Ticket) " +
+                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_OE;
+
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = OC.Id_Ticket;
 
@@ -92,13 +91,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U1.Nombre_Usuario AS PrimerUsuario ,U2.Nombre_Usuario AS SegundoUsuario , U3.Nombre_Usuario AS TercerUsuario 
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia 
                 FROM dbo.Orden_de_Compra OC 
-                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE
-                LEFT OUTER JOIN dbo.Usuario U1 ON OC.UsuarioRecepcionador = U1.Id_Usuario 
-                LEFT OUTER JOIN dbo.Usuario U2 ON OC.SegundoUsuarioRecepcionador = U2.Id_Usuario 
-                LEFT OUTER JOIN dbo.Usuario U3 ON OC.TercerUsuarioRecepcionador = U3.Id_Usuario
-                where OC.Id_Orden_Compra = @Id_Orden_Compra";
+                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores 
+                where P.Id_Orden_Compra =@Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = id;
@@ -110,14 +106,21 @@ namespace APIPortalTPC.Repositorio
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
-                    oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = reader["Nombre"] is DBNull ? " " : Convert.ToString(reader["Nombre"]).Trim();
-                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["PrimerUsuario"]).Trim();
-                    oc.SegundoUsuarioRecepcionador = Convert.ToString(reader["SegundoUsuario"]).Trim();
-                    oc.TercerUsuarioRecepcionador = Convert.ToString(reader["TercerUsuario"]).Trim();
+                    oc.Texto = Convert.ToString(reader["Texto"]).Trim();
+                    oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
+                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
+                    oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
+                    oc.Mon = Convert.ToString(reader["Mon"]).Trim();
+                    oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
+                    string Prov = Convert.ToString(reader["ID_Proveedores"]);
+                    Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    oc.Proveedor = Prov;
+                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
+                    oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
+
                 }
             }
             catch (SqlException ex)
@@ -149,12 +152,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT OC.*, OE.Nombre, U1.Nombre_Usuario AS PrimerUsuario ,U2.Nombre_Usuario AS SegundoUsuario , U3.Nombre_Usuario AS TercerUsuario 
-                FROM dbo.Orden_de_Compra OC
-                LEFT OUTER JOIN dbo.Ordenes_estadisticas OE ON OE.Id_Orden_Estadistica = OC.ID_OE
-                LEFT OUTER JOIN dbo.Usuario U1 ON OC.UsuarioRecepcionador = U1.Id_Usuario 
-                LEFT OUTER JOIN dbo.Usuario U2 ON OC.SegundoUsuarioRecepcionador = U2.Id_Usuario 
-                LEFT OUTER JOIN dbo.Usuario U3 ON OC.TercerUsuarioRecepcionador = U3.Id_Usuario"; // leer base datos 
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia 
+                FROM dbo.Orden_de_Compra OC 
+                 LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores "
+;               // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -163,14 +164,22 @@ namespace APIPortalTPC.Repositorio
                     OrdenCompra oc = new();
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
-                    oc.Solped = reader["Solped"] is DBNull ? 0 : Convert.ToInt32(reader["Solped"]);
-                    oc.Id_OE = reader["Nombre"] is DBNull ? " " : Convert.ToString(reader["Nombre"]).Trim();
-                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
-                    oc.UsuarioRecepcionador = Convert.ToString(reader["PrimerUsuario"]).Trim();
-                    oc.SegundoUsuarioRecepcionador = Convert.ToString(reader["SegundoUsuario"]).Trim();
-                    oc.TercerUsuarioRecepcionador = Convert.ToString(reader["TercerUsuario"]).Trim();
+                    oc.Texto = Convert.ToString(reader["Texto"]).Trim();
+                    oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
+                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
+                    oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
+                    oc.Mon = Convert.ToString(reader["Mon"]).Trim();
+                    oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
+                    string Prov = Convert.ToString(reader["ID_Proveedores"]);
+                    Prov= Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    oc.Proveedor = Prov;
+                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
+                    oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
+
+
 
                     lista.Add(oc);
                 }
@@ -207,25 +216,19 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Orden_de_Compra SET " +
                                    "Numero_OC = @Numero_OC, " +  // Add comma after Solped
-                                   "Solped = @Solped, " +
-                                   "Id_OE = @Id_OE, " +
+
                                    "Posicion = @Posicion, " +
-                                   "Fecha_Recepcion = @Fecha_Recepcion, " +
-                                   "UsuarioRecepcionador = @UsuarioRecepcionador " +
+                                   "Fecha_Recepcion = @Fecha_Recepcion " +
+
                                    "WHERE Id_OE = @Id_OE";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = OC.Solped;
-                Comm.Parameters.Add("@Id_OE", SqlDbType.VarChar).Value = OC.Id_OE;
+
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar).Value = OC.posicion;
                 if (OC.Fecha_Recepcion.HasValue)
                     Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = OC.Fecha_Recepcion;
                 else
                     Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = DBNull.Value;
-                if (OC.UsuarioRecepcionador != null)
-                    Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.VarChar).Value = OC.UsuarioRecepcionador;
-                else
-                    Comm.Parameters.Add("@UsuarioRecepcionador", SqlDbType.VarChar).Value = DBNull.Value;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

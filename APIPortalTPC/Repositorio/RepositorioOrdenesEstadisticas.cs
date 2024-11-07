@@ -40,13 +40,14 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Ordenes_estadisticas " +
-                    "(Nombre,Codigo_OE,Id_Centro_de_Costo) " +
-                    "VALUES (@Nombre,@Codigo_OE,@Id_Centro_de_Costo); " +
+                    "(Nombre,Codigo_OE,Id_Centro_de_Costo,Activado) " +
+                    "VALUES (@Nombre,@Codigo_OE,@Id_Centro_de_Costo,@Activado); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_OE", SqlDbType.VarChar, 50).Value = OE.Codigo_OE;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = OE.Activado;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 OE.Id_Orden_Estadistica = (int)idDecimal;
             }
@@ -85,6 +86,7 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 //se ejecuta la base de datos
                 Comm = sql.CreateCommand();
+
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
                 Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo " +
@@ -104,6 +106,7 @@ namespace APIPortalTPC.Repositorio
                     OE.Codigo_OE = (Convert.ToString(reader["Codigo_OE"])).Trim();
                     OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
+                    OE.Activado = Convert.ToBoolean(reader["Activado"]);
                 }
             }
             catch (SqlException ex)
@@ -148,6 +151,7 @@ namespace APIPortalTPC.Repositorio
                     OE.Codigo_OE = (Convert.ToString(reader["Codigo_OE"])).Trim();
                     OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
+                    OE.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(OE);
                 }
             }
@@ -184,14 +188,15 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET " +
                     "Nombre = @Nombre, " +
                     "Codigo_OE = @Codigo_OE, " +
-                    "Id_Centro_de_Costo = @Id_Centro_de_Costo " +
+                    "Id_Centro_de_Costo = @Id_Centro_de_Costo," +
+                    "Activado = @Activado " +
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE.Id_Orden_Estadistica;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_OE", SqlDbType.VarChar, 50).Value = OE.Codigo_OE;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
-
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = OE.Activado;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     OEmod = await GetOE(Convert.ToInt32(reader["Id_Orden_Estadistica"]));
@@ -210,45 +215,6 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return OEmod;
-        }
-        /// <summary>
-        /// Metodo que permite ajustar un Codigo_Ceco de una orden estadistica a su homonimo de la llave foranea OrdenCentroCosto
-        /// </summary>
-        /// <param name="OE"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<OrdenesEstadisticas> AjustarCodigo(OrdenesEstadisticas OE)
-        {
-            SqlConnection sql = conectar();
-            SqlCommand? Comm = null;
-            SqlDataReader reader = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Centro_de_costo " +
-                    "where Codigo_Ceco = @Codigo_Ceco";
-                Comm.CommandType = CommandType.Text;
-
-                Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = OE.Id_Centro_de_Costo;
-                reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    OE.Id_Centro_de_Costo = (Convert.ToString(reader["Id_Ceco"])).Trim();
-
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error creando los datos en tabla Centro de costo " + ex.Message);
-            }
-            finally
-            {
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return OE;
         }
         public async Task<string> Existe(string code)
         {

@@ -11,56 +11,21 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly InterfaceEnviarCorreo IEC;
         private readonly IRepositorioProveedores IRP;
-        public ControladorEnviarCorreo(InterfaceEnviarCorreo IEC, IRepositorioProveedores iRP)
+        private readonly IRepositorioUsuario IRU;
+        public ControladorEnviarCorreo(IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
         {
             this.IEC = IEC;
-            IRP = iRP;
+            this.IRP = IRP;
+            this.IRU = IRU;
         }
 
 
-        [HttpPost("Cotizacion{id:int}")]
+
+        [HttpPost("Proveedor{id:int}")]
         public async Task<ActionResult> EnviarCorreoProveedores(int id)
         {
             try
 
-            {   
-                var lista = IRP.GetAllProveedoresBienServicio(id);
-                string mensaje = "Otro mensaje";
-                //   return Ok(await lista);
-                foreach (var P in await lista)
-                {
-                    string? productos = P.ID_Bien_Servicio;
-
-                    if (P.ID_Bien_Servicio.ToString() != null)
-                    {
-                        await IEC.CorreoCotizacion(productos,P,mensaje);
-                    }
-                    else
-                    {
-                        return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
-                    }
-
-
-                }
-                if ( lista == null)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound, "no existen proveedores con el bien servicio ");
-                }
-
-                return Ok("Correos enviados con exito");
-            }
-            catch (Exception ex)
-            {
-                // Manejar excepciones generales
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-            }
-
-        }
-        [HttpPost("Liberador{id:int}")]
-        public async Task<ActionResult> EnviarCorreoLiberador(int id)
-        {
-            try
-
             {
                 var lista = IRP.GetAllProveedoresBienServicio(id);
                 string mensaje = "Otro mensaje";
@@ -71,7 +36,7 @@ namespace APIPortalTPC.Controllers
 
                     if (P.ID_Bien_Servicio.ToString() != null)
                     {
-                        await IEC.CorreoCotizacion(productos, P, mensaje);
+                        await IEC.CorreoProveedores(productos, P, mensaje);
                     }
                     else
                     {
@@ -96,4 +61,4 @@ namespace APIPortalTPC.Controllers
         }
 
     }
-    }
+}
