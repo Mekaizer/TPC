@@ -37,7 +37,7 @@ namespace BaseDatosTPC
 
         public string? Email_Representante { get; set; }
 
-        public string? Estado { get; set; }
+        public bool? Estado { get; set; }
 
         public string? N_Cuenta { get; set; }
 

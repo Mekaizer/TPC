@@ -73,7 +73,7 @@ namespace APIPortalTPC.Repositorio
                     P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
                     P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
                     P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                    P.Estado = Convert.ToString(reader["Estado"]).Trim();
+                    P.Estado = Convert.ToBoolean(reader["Estado"]);
                     P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]);
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
@@ -137,7 +137,7 @@ namespace APIPortalTPC.Repositorio
                 P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
                 P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
                 P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                P.Estado = Convert.ToString(reader["Estado"]).Trim();
+                P.Estado = Convert.ToBoolean(reader["Estado"]);
                 P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]).Trim();
                 P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                 P.Swift = (Convert.ToString(reader["Swift"])).Trim();
@@ -176,15 +176,13 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Proveedores " +
-                    "(Rut_Proveedor,Razon_Social,Nombre_Fantasia,ID_Bien_Servicio,Direccion,Comuna,Correo_Proveedor,Telefono_Proveedor,Nombre_Representante,Email_Representante," +
-                    "N_Cuenta,Banco,Swift,Estado) " +
-                    "VALUES (@Rut_Proveedor,@Razon_Social,@Nombre_Fantasia,@ID_Bien_Servicio,@Direccion,@Comuna,@Correo_Proveedor,@Telefono_Proveedor,@Nombre_Representante," +
-                    "@Email_Representante,@N_Cuenta,@Banco,@Swift,@Estado); " +
-                    "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
+                                   "(Rut_Proveedor, Razon_Social, Nombre_Fantasia, ID_Bien_Servicio, Direccion, Comuna, Correo_Proveedor, Telefono_Proveedor, Nombre_Representante, Email_Representante, N_Cuenta, Banco, Swift, Estado, Cargo_Representante) " +
+                                   "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante); " +
+                                   "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 20).Value = P.Rut_Proveedor;
-                Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 20).Value = P.Razon_Social;
-                Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 20).Value = P.Razon_Social;
+                Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = P.Rut_Proveedor;
+                Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 50).Value = P.Razon_Social;
+                Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 50).Value = P.Razon_Social;
                 Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
                 Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 50).Value = P.Razon_Social;
                 Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 50).Value = P.Comuna;
@@ -192,10 +190,26 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.VarChar, 50).Value = P.Telefono_Proveedor;
                 Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 50).Value = P.Nombre_Representante;
                 Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 50).Value = P.Email_Representante;
-                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = P.Estado;
-                Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = P.N_Cuenta;
-                Comm.Parameters.Add("@Banco", SqlDbType.VarChar).Value = P.Banco;
-                Comm.Parameters.Add("@Swift", SqlDbType.VarChar).Value = P.Swift;
+
+                if (string.IsNullOrEmpty(P.N_Cuenta))
+                    Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = "";
+                else
+                    Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = P.N_Cuenta;
+
+                if (string.IsNullOrEmpty(P.Banco))
+                    Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = "";
+                else
+                    Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = P.Banco;
+                if (string.IsNullOrEmpty(P.Swift))
+                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = "";
+                else
+                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = P.Swift;
+                if (string.IsNullOrEmpty(P.Cargo_Representante))
+                    Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = "";
+                else
+                    Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = P.Cargo_Representante;
+                Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = P.Estado;
+
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
                 P.ID_Proveedores = id;
@@ -283,7 +297,8 @@ namespace APIPortalTPC.Repositorio
                     P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
                     P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
                     P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                    P.Estado = Convert.ToString(reader["Estado"]).Trim();
+                    P.Estado = Convert.ToBoolean(reader["Estado"]);
+                    P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]).Trim();
                     P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]).Trim();
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
@@ -345,11 +360,12 @@ namespace APIPortalTPC.Repositorio
                     P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
                     P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
                     P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                    P.Estado = Convert.ToString(reader["Estado"]).Trim();
+                    P.Estado = Convert.ToBoolean(reader["Estado"]);
                     P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]).Trim();
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
+                    P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]).Trim();
                     lista.Add(P);
                 }
             }

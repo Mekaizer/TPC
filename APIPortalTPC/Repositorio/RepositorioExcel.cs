@@ -116,7 +116,6 @@ namespace APIPortalTPC.Repositorio
                 centrosCostos.Add(centroCosto);
             }
         }
-
         return centrosCostos;
     }
 
@@ -276,6 +275,67 @@ namespace APIPortalTPC.Repositorio
             }
 
             return "listo";
+        }
+        
+        public async Task<List<BienServicio>> LeerBienServicio(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var lista = new List<BienServicio>();
+            string hoja = "Hoja1"; 
+            int columna = 2; 
+            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
+
+
+                int rowCount = worksheet.Dimension.Rows;
+                List<string> datosColumna = new List<string>();
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    string valorCelda = worksheet.Cells[row, columna].Value?.ToString();
+                    BienServicio bienServicio = new();
+                    bienServicio.Bien_Servicio = valorCelda;
+                    lista.Add(bienServicio);
+                }
+            }
+            return lista;
+        }
+    
+        public async Task<List<Proveedores>> LeerProveedores(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<Proveedores> lista = new List<Proveedores>();
+            string hoja = "Hoja1";
+
+            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
+
+
+                int rowCount = worksheet.Dimension.Rows;
+                List<string> datosColumna = new List<string>();
+                for (int row = 2; row <= rowCount; row++)
+                {
+
+                        Proveedores P = new Proveedores();
+                        P.ID_Bien_Servicio = worksheet.Cells[row, 1].Value?.ToString();
+                        P.Rut_Proveedor = worksheet.Cells[row, 2].Value?.ToString();
+                        P.Razon_Social = worksheet.Cells[row, 3].Value?.ToString();
+                        P.Nombre_Fantasia = worksheet.Cells[row, 4].Value?.ToString();
+                        P.Direccion = worksheet.Cells[row, 5].Value?.ToString();
+                        P.Comuna = worksheet.Cells[row, 6].Value?.ToString();
+                        P.Telefono_Proveedor = worksheet.Cells[row, 7].Value?.ToString();
+                        P.Correo_Proveedor = worksheet.Cells[row, 8].Value?.ToString();
+                        P.Email_Representante = worksheet.Cells[row, 9].Value?.ToString();
+                        P.Nombre_Representante = worksheet.Cells[row, 10].Value?.ToString();
+                        P.Estado = Convert.ToBoolean(worksheet.Cells[row, 11].Value);
+                        P.N_Cuenta = worksheet.Cells[row, 13].Value?.ToString();
+                    if(P.Rut_Proveedor != null)
+                        lista.Add(P);
+
+                }
+            }
+            return lista;
         }
     }
 }

@@ -13,19 +13,23 @@ namespace APIPortalTPC.Controllers
         private readonly InterfaceExcel Excel;
         private readonly IRepositorioCentroCosto IRC;
         private readonly IRepositorioOrdenesEstadisticas IRE;
-        public ControladorExcel(InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE)
+        private readonly IRepositorioBienServicio IBS;
+        private readonly IRepositorioProveedores IRP;
+        public ControladorExcel(IRepositorioProveedores IRP , InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE, IRepositorioBienServicio IBS)
         {
             this.Excel = Excel;
             this.IRC = IRC;
             this.IRE = IRE;
+            this.IBS = IBS;
+            this.IRP = IRP;
         }
         
         /// <summary>
         /// Metodo que permite leer el excel con el formato que agrega un proveedor a la base de datos
         /// </summary>
         /// <returns></returns>
-        [HttpPost("Proveedores")]
-        public async Task<ActionResult> ExcelProveedores()
+        [HttpPost("Proveedor")]
+        public async Task<ActionResult> ExcelProveedor()
         {
             try
             {
@@ -88,6 +92,54 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
 
+        }
+        /// <summary>
+        /// Metodo para agregar los Bien y Servicios mediante un excel que tenga dos columnas
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("BS")]
+        public async Task<ActionResult> ExcelBS()
+        {
+            try
+            {
+                string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
+                List<BienServicio> lista= (await Excel.LeerBienServicio(path));
+                foreach (BienServicio bs in lista)
+                {
+                    string res = await IBS.Existe(bs.Bien_Servicio);
+                    if (res == "ok")
+                        await IBS.NuevoBienServicio(bs);
+                }
+
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+            }
+
+        }
+
+        [HttpPost("Proveedores")]
+        public async Task<ActionResult> ExcelProveedores()
+        {
+            try
+            {
+                string path = @"C:\Users\drako\Desktop\Proveedores.xlsx";
+                List<Proveedores> lista = (await Excel.LeerProveedores(path));
+                foreach (Proveedores p in lista)
+                {
+                    string res = await IRP.Existe(p.Rut_Proveedor,p.ID_Bien_Servicio);
+                    if (res == "ok")
+                        await IRP.NuevoProveedor(p);
+                }
+
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+            }
         }
     }
 }

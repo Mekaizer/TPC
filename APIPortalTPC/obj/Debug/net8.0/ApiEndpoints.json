@@ -441,6 +441,16 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCotizacion",
+    "Method": "GetExcel",
+    "RelativePath": "api/ControladorCotizacion/Imprimir",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorDepartamento",
     "Method": "GetAll",
     "RelativePath": "api/ControladorDepartamento",
@@ -624,6 +634,16 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelBS",
+    "RelativePath": "api/ControladorExcel/BS",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
     "Method": "ExcelCeCo",
     "RelativePath": "api/ControladorExcel/CeCo",
     "HttpMethod": "POST",
@@ -636,6 +656,16 @@
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
     "Method": "ExcelOC",
     "RelativePath": "api/ControladorExcel/OC",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelProveedor",
+    "RelativePath": "api/ControladorExcel/Proveedor",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

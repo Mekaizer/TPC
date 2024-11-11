@@ -18,15 +18,31 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioCotizacion RC;
+        private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RC">Interface de RepositorioCotizacion</param>
 
-        public ControladorCotizacion(IRepositorioCotizacion RC)
+        public ControladorCotizacion(IRepositorioCotizacion RC, InterfaceCrearExcel ICE)
         {
             this.RC = RC;
+            this.ICE = ICE;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Imprimir")]
+        public async Task<ActionResult> GetExcel()
+        {
+
+            var lista = await RC.GetAllCotizacion();
+
+            // Assuming DescargarExcel returns a byte array and a filename
+            return Ok(await ICE.DescargarExcel((List<Cotizacion>)lista));
+        }
+
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
         /// </summary>

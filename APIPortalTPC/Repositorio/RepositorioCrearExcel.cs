@@ -1,4 +1,5 @@
 ﻿using BaseDatosTPC;
+using NPOI.SS.Formula;
 using OfficeOpenXml;
 
 namespace APIPortalTPC.Repositorio
@@ -69,6 +70,47 @@ namespace APIPortalTPC.Repositorio
             return "Archivo Excel guardado ";
         }
     
+        public async Task<string> DescargarExcel(List<Cotizacion> LC)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaCotizacion");
+
+                // Encabezado
+                worksheet.Cells[1, 1].Value = "ID Cotizacion";
+                worksheet.Cells[1, 2].Value = "Solicitante";
+                worksheet.Cells[1, 3].Value = "Fecha de Creacion de la cotizacion";
+                worksheet.Cells[1, 4].Value = "Estado";
+                worksheet.Cells[1, 5].Value = "Detalle";
+                worksheet.Cells[1, 6].Value = "Solped";
+                worksheet.Cells[1, 7].Value ="Bien y/o servicio";                
+                int row = 2;
+                foreach (var OC in LC)
+                {
+                    worksheet.Cells[row, 1].Value = OC.ID_Cotizacion;
+                    worksheet.Cells[row, 2].Value = OC.Id_Solicitante;
+                    worksheet.Cells[row, 3].Value = OC.Fecha_Creacion_Cotizacion;
+                    worksheet.Cells[row, 3].Style.Numberformat.Format = "yyyy-MM-dd";
+                    worksheet.Cells[row, 4].Value = OC.Estado;
+                    worksheet.Cells[row, 5].Value = OC.Detalle;
+                    worksheet.Cells[row, 6].Value = OC.Solped;
+                    worksheet.Cells[row, 7].Value = OC.ID_Bien_Servicio;
+                    row++;
+                }
+                string filePath = "C:/Users/drako/Desktop/ListaCotizacion.xlsx";
+
+                // Guardar el archivo en la ruta especificada
+                FileInfo fileInfo = new FileInfo(filePath);
+                package.SaveAs(fileInfo);
+
+
+
+            }
+
+                return "listo";
+        }
     
     
     }
