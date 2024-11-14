@@ -3,8 +3,7 @@ using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
 using OfficeOpenXml;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+
 
 
 namespace APIPortalTPC.Repositorio

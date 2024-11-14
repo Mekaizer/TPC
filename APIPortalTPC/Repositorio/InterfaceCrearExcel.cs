@@ -1,4 +1,5 @@
 ﻿using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -6,5 +7,6 @@ namespace APIPortalTPC.Repositorio
     {
         public  Task<string> DescargarExcel(List<OrdenCompra> LOC);
         public Task<string> DescargarExcel(List<Cotizacion> LC);
+        public Task<string> DescargarExcel(List<Usuario> LU);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;

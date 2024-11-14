@@ -1,7 +1,5 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 /*
@@ -12,12 +10,13 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 
     public class ControladorDepartamento : ControllerBase
     {
 
-        //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
+        //Se usa readonly para evitar que se pueda modificar pero se necesita
+        //inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioDepartamento RD;
         /// <summary>
         /// Se inicializa la Interface Repositorio

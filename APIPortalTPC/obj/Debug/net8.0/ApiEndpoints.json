@@ -618,6 +618,16 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "EnviarCorreoLiberadores",
+    "RelativePath": "api/ControladorEnviarCorreo/Liberadores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
     "Method": "EnviarCorreoProveedores",
     "RelativePath": "api/ControladorEnviarCorreo/Proveedor{id}",
     "HttpMethod": "POST",
@@ -630,6 +640,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "EnviarCorreoReceptores",
+    "RelativePath": "api/ControladorEnviarCorreo/Receptores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

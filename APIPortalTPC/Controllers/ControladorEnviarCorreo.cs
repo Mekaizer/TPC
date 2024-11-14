@@ -1,6 +1,8 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.XWPF.UserModel;
 
 namespace APIPortalTPC.Controllers
 {
@@ -59,6 +61,36 @@ namespace APIPortalTPC.Controllers
             }
 
         }
+        [HttpPost("Liberadores")]
+        public async Task<ActionResult> EnviarCorreoLiberadores()
+        {
+            string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
+            var lista = await IRU.GetAllUsuariosLiberadores();
+            foreach (var U in lista)
 
+                    await IEC.CorreoLiberador(U, subject);
+
+
+            if (lista == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "no existen liberadores pendientes!!! :D ");
+            }
+
+            return Ok("Correos enviados con exito");
+
+        }
+        [HttpPost("Receptores")]
+        public async Task<ActionResult> EnviarCorreoReceptores()
+        {
+            string subject = "TPC Confirmación recepción";
+            var lista = await IRU.GetAllUsuario();
+            foreach(var U in lista)
+                await IEC.CorreoRecepciones(U, subject);
+                
+            if (lista == null)
+                return StatusCode(StatusCodes.Status404NotFound, "No hay problemas de recepción");
+
+            return Ok("Correos enviados con exito");
+        }
     }
 }

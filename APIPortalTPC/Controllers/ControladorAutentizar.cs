@@ -36,5 +36,7 @@ namespace APIPortalTPC.Controllers
             }
             return User;
         }
+        //metodo para verificacion dos pasos
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using NPOI.SS.Formula;
 using OfficeOpenXml;
 
@@ -111,7 +112,82 @@ namespace APIPortalTPC.Repositorio
 
                 return "listo";
         }
-    
-    
+        public async Task<string> DescargarExcel(List<Usuario> LU)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaUsuario");
+
+                // Encabezado
+                worksheet.Cells[1, 1].Value = "ID Usuario";
+                worksheet.Cells[1, 2].Value = "Nombre Usuario";
+                worksheet.Cells[1, 3].Value = "Apellido Paterno";
+                worksheet.Cells[1, 4].Value = "Apellido Materno";
+                worksheet.Cells[1, 5].Value = "Rut";
+                worksheet.Cells[1, 6].Value = "Correo Usuario";
+                worksheet.Cells[1, 7].Value = "Contraseña Usuario";
+                worksheet.Cells[1, 8].Value = "Activado";
+                worksheet.Cells[1, 9].Value = "Tipo Liberador";
+                worksheet.Cells[1, 10].Value = "En vacaciones";
+                worksheet.Cells[1, 11].Value = "Admin";
+                int row = 2;
+                foreach (var U in LU)
+                {
+                    worksheet.Cells[1, 1].Value = U.Id_Usuario;
+                    worksheet.Cells[1, 2].Value = U.Nombre_Usuario;
+                    worksheet.Cells[1, 3].Value = U.Apellido_paterno;
+                    worksheet.Cells[1, 4].Value = U.Apellido_materno;
+                    worksheet.Cells[1, 5].Value = U.Rut_Usuario_Sin_Digito+"-"+U.Digito_Verificador;
+                    worksheet.Cells[1, 6].Value = U.Correo_Usuario;
+                    worksheet.Cells[1, 7].Value = U.Contraseña_Usuario;
+                    worksheet.Cells[1, 8].Value = U.Activado;
+                    worksheet.Cells[1, 9].Value = U.Tipo_Liberador;
+                    worksheet.Cells[1, 10].Value = U.En_Vacaciones;
+                    worksheet.Cells[1, 11].Value = U.Admin;
+                    row++;
+                }
+                string filePath = "C:/Users/drako/Desktop/ListaUsuario.xlsx";
+
+                // Guardar el archivo en la ruta especificada
+                FileInfo fileInfo = new FileInfo(filePath);
+                package.SaveAs(fileInfo);
+
+
+            }
+
+            return "listo";
+        }
+        public async Task<string> DescargarExcel(List<BienServicio> LBS)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaBienServicio");
+
+                // Encabezado
+                worksheet.Cells[1, 1].Value = "ID Bien Servicio";
+                worksheet.Cells[1, 2].Value = "Nombre Bien Servicio";
+
+                int row = 2;
+                foreach (var BS in LBS)
+                {
+                    worksheet.Cells[1, 1].Value = BS.ID_Bien_Servicio;
+                    worksheet.Cells[1, 2].Value = BS.Bien_Servicio;
+                    row++;
+                }
+                string filePath = "C:/Users/drako/Desktop/ListaBienServicio.xlsx";
+
+                // Guardar el archivo en la ruta especificada
+                FileInfo fileInfo = new FileInfo(filePath);
+                package.SaveAs(fileInfo);
+
+
+            }
+
+            return "listo";
+        }
     }
 }

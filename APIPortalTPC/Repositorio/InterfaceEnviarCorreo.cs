@@ -10,5 +10,6 @@ namespace APIPortalTPC.Repositorio
     {
         public Task<string> CorreoProveedores(string productos, Proveedores P, string subject);
         public Task<string> CorreoLiberador(Usuario U, string subject);
+        public Task<string> CorreoRecepciones(Usuario U, string subject);
     }
 }

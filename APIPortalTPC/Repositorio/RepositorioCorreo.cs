@@ -27,6 +27,7 @@ namespace APIPortalTPC.Repositorio
 
             return new SqlConnection(Conexion);
         }
+ 
         public async Task<Correo> NuevoCorreo(Correo C)
         {
             SqlConnection sql = conectar();

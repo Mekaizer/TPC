@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using ClasesBaseDatosTPC;
+using Org.BouncyCastle.Crypto;
 
 
 namespace APIPortalTPC.Repositorio
@@ -131,9 +132,14 @@ namespace APIPortalTPC.Repositorio
                     "FROM Departamento d JOIN DepartamentoUsuario du ON d.Id_Departamento = du.id_departamento " +
                     "WHERE du.id_usuario = @Id_Usuario";
                 reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    listaDep.Add((Convert.ToString(reader["nombre"])).Trim());
+                while (reader.Read()) {
+                    int c = 0;
+                    string dep = Convert.ToString(reader["nombre"]).Trim();
+                foreach (string d in listaDep)
+                    if (d == dep)
+                         c = 1;
+                if(c== 0)
+                        listaDep.Add(dep);
                 }
                 U.ListaDepartamento = listaDep;
 
@@ -306,7 +312,7 @@ namespace APIPortalTPC.Repositorio
             }
         }
         
-        public async Task<IEnumerable<Usuario>> GetAllUsauriosLiberadores()
+        public async Task<IEnumerable<Usuario>> GetAllUsuariosLiberadores()
         {
             List<Usuario> lista = new List<Usuario>();
             SqlConnection sql = conectar();
@@ -316,7 +322,60 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Usuario"; // leer base datos 
+                Comm.CommandText = @"select  U.*
+                from dbo.Departamento D
+                inner join dbo.Usuario U on D.Encargado = U.Id_Usuario
+                inner join dbo.Ticket T on T.Id_Usuario = U.Id_Usuario
+                where lower(T.Estado) != 'liberación concluida' and Lower(U.Tipo_Liberador) != 'no' and U.Activado != 0"; // leer base datos 
+                Comm.CommandType = CommandType.Text;
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    Usuario U = new();
+                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
+                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
+                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
+                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
+                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
+                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
+                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                    U.Activado = Convert.ToBoolean(reader["Activado"]);
+                    U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    lista.Add(U);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Usuario " + "aaa" + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+                Comm?.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return lista;
+        }
+        
+        public async Task<IEnumerable<Usuario>> GetAllUsuarioReceptores()
+        {
+            List<Usuario> lista = new List<Usuario>();
+            SqlConnection sql = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = @"select U.*
+                from Usuario U
+                inner join Ticket T on U.Id_Usuario = T.Id_Usuario
+                inner join Orden_de_Compra OC on T.ID_Ticket= OC.Id_Ticket
+                where lower(T.Estado) != lower('LIBERACIÓN CONCLUIDA') "; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
