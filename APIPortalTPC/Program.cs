@@ -44,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-/*Metodo para dar acceso al front-end
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("NuevaPolitica", app =>
@@ -56,7 +56,7 @@ builder.Services.AddCors(options =>
 });
 
 app.UseCors("NuevaPolitica");
- */
+
 
 
 app.UseHttpsRedirection();

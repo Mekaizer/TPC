@@ -37,6 +37,12 @@ namespace APIPortalTPC.Controllers
             return User;
         }
         //metodo para verificacion dos pasos
-
+        public async Task<IActionResult> RecuperarContraseña()
+        {
+            //Logica: entregas el correo,
+            //retorna el usuario y mandas un correo,
+            //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
+            throw new NotImplementedException();
+        }
     }
 }

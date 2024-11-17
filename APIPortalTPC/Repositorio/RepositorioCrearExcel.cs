@@ -25,7 +25,7 @@ namespace APIPortalTPC.Repositorio
                 worksheet.Cells[1, 2].Value = "Numero de Orden Compra";
                 worksheet.Cells[1, 3].Value = "Fecha de Recepcion";
                 worksheet.Cells[1, 4].Value = "Texto";
-                worksheet.Cells[1, 5].Value = "Ciclico?";
+                worksheet.Cells[1, 5].Value = "Ciclicidad";
                 worksheet.Cells[1, 6].Value = "Posicion";
                 worksheet.Cells[1, 7].Value = "Cantidad"; 
                 worksheet.Cells[1, 8].Value = "Moneda";
