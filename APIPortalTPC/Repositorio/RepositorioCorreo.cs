@@ -42,7 +42,7 @@ namespace APIPortalTPC.Repositorio
                     "SELECT SCOPE_IDENTITY() AS Id_Correo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = C.Id_Ticket;
-                Comm.Parameters.Add("@FechaCreacion", SqlDbType.DateTime).Value = C.FechaCreacion;
+                Comm.Parameters.Add("@FechaCreacion", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@CorreosEnviados", SqlDbType.Int).Value = C.CorreosEnviados;
                 Comm.Parameters.Add("@PrimerCorreo", SqlDbType.DateTime).Value = C.PrimerCorreo;
                 Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = C.UltimoCorreo;

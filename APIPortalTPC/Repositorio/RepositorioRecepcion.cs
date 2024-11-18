@@ -42,7 +42,7 @@ namespace APIPortalTPC.Repositorio
                     "SELECT SCOPE_IDENTITY() AS Id_Correo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Correo", SqlDbType.Int).Value = R.Id_Correo;
-                Comm.Parameters.Add("@FechaEnvio", SqlDbType.DateTime).Value = R.FechaEnvio; 
+                Comm.Parameters.Add("@FechaEnvio", SqlDbType.DateTime).Value = DateTime.Now;
                 if (R.FechaRespuesta.HasValue)
                     Comm.Parameters.Add("@FechaRespuesta", SqlDbType.DateTime).Value = R.FechaRespuesta;
                 else

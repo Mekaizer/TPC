@@ -109,6 +109,42 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
+    "Method": "MFA1",
+    "RelativePath": "api/ControladorAutentizar/MFA",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mfa",
+        "Type": "BaseDatosTPC.MFA",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
+    "Method": "RecuperarContrase\u00F1a",
+    "RelativePath": "api/ControladorAutentizar/pass",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorBienServicio",
     "Method": "GetAll",
     "RelativePath": "api/ControladorBienServicio",

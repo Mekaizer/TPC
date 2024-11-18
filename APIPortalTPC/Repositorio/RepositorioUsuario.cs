@@ -125,6 +125,7 @@ namespace APIPortalTPC.Repositorio
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    U.CodigoMFA = Convert.ToInt32(reader["CodigoMFA"]);
                 }
                 reader?.Close();
                 Comm?.Dispose();
@@ -235,7 +236,8 @@ namespace APIPortalTPC.Repositorio
                                     "Contraseña_Usuario = @Contraseña_Usuario, " +
                                     "Tipo_Liberador = @Tipo_Liberador, " +
                                     "En_Vacaciones = @En_Vacaciones, " +
-                                    "Activado = @Activado, " +
+                                    "Activado = @Activado," +
+                                    "CodigoMFA = @CodigoMFA, " +
                                     "Admin = @Admin " +
                                     " WHERE  Id_Usuario = @Id_Usuario;";
                 Comm.CommandType = CommandType.Text;
@@ -250,6 +252,14 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
+                if (U.CodigoMFA != null)
+                {
+                    Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = U.CodigoMFA;
+                }
+                else
+                {
+                    Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = 0;
+                }
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = U.Id_Usuario;
 
                 reader = await Comm.ExecuteReaderAsync();

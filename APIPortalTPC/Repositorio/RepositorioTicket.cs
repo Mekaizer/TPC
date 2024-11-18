@@ -46,7 +46,7 @@ namespace APIPortalTPC.Repositorio
                                          "SELECT SCOPE_IDENTITY() AS ID_Ticket;";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
-                Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
+                Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
                 if (T.Fecha_OC_Recepcionada.HasValue)
@@ -109,10 +109,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre " +
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre, OC.Numero_OC " +
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
-                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " + 
+                    "INNER JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
                     "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
                     "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
@@ -134,6 +135,7 @@ namespace APIPortalTPC.Repositorio
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
+                    T.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                 }
             }
@@ -166,10 +168,11 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre " +
+                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre, OC.Numero_OC " +
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
                     "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "INNER JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
                     "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE "; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
@@ -187,9 +190,16 @@ namespace APIPortalTPC.Repositorio
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
+                    T.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
-
-                    lista.Add(T);
+                    int cont = 0;
+                    foreach (Ticket ticket in lista)
+                        if (ticket.ID_Ticket == T.ID_Ticket)
+                            cont = 1;
+                    if (cont == 0)
+                    {
+                        lista.Add(T);
+                    }
                 }
             }
             catch (SqlException ex)
@@ -198,11 +208,13 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
+             
                 reader.Close();
                 Comm.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
+
             return lista;
         }
 

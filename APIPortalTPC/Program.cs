@@ -36,15 +36,6 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
 
 
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("NuevaPolitica", app =>
@@ -54,6 +45,15 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin();
     });
 });
+
+
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseCors("NuevaPolitica");
 

@@ -27,6 +27,8 @@ namespace BaseDatosTPC
         public int? Solped { get; set; }
         
         public string? Id_OE { get; set; }
+      
+        public int Numero_OC { get; set; }
 
     }
 }

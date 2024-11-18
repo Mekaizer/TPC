@@ -14,9 +14,10 @@ namespace ClasesBaseDatosTPC
         public string? Correo_Usuario { get; set; }
         public string? Contraseña_Usuario { get; set; }
         public bool? En_Vacaciones {  get; set; }
-        public string Tipo_Liberador {  get; set; }
+        public string? Tipo_Liberador {  get; set; }
         public bool? Activado { get; set; }
         public bool? Admin {  get; set; }
         public List<String>? ListaDepartamento { get; set; }
+        public int? CodigoMFA { get; set; }
     }
 }

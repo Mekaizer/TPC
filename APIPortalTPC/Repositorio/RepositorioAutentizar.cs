@@ -2,6 +2,10 @@
 using ClasesBaseDatosTPC;
 using System.Data;
 using System.Data.SqlClient;
+using static NPOI.HSSF.Util.HSSFColor;
+using System.Net.Mail;
+using BaseDatosTPC;
+using NPOI.SS.Formula.Functions;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -76,12 +80,10 @@ namespace APIPortalTPC.Repositorio
             {
                 throw new Exception("Error creando los datos en tabla Usuario " + ex.Message);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Error inesperado " + ex.Message);
-            }
+
             finally
             {
+                MFA(U.Correo_Usuario);
                 Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
@@ -90,6 +92,50 @@ namespace APIPortalTPC.Repositorio
 
             return U;
         }
+
+        /// <summary>
+        /// Metodo que crea el numero aleatorio y manda el correo al usuario
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<int> MFA(string correo)
+        {
+            Random random = new Random();
+            int codigoVerificacion = random.Next(100000, 999999);
+            string smtpServer = " tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP
+            int smtpPort = 25; // Cambia el puerto si es necesario
+            string fromEmail = "portaldeadq@tpc.cl"; // Cambia esto a tu correo
+            string subject = "Código de Verificación - Autenticación en dos pasos";
+
+            // Crear el cuerpo del mensaje
+            string body = $"Su código de verificación es: {codigoVerificacion}";
+
+            try
+            {
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(fromEmail);
+                    mail.To.Add(correo);
+                    mail.Subject = subject;
+                    mail.Body = body;
+
+                    using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+                    {
+                        smtpClient.EnableSsl = true; // Habilitar SSL si es necesario
+                        smtpClient.Send(mail);
+                    }
+                }
+
+                Console.WriteLine("Código de verificación enviado exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al enviar el correo: {ex.Message}");
+            }
+            return codigoVerificacion;
+        }
+    
 
     }
 }
