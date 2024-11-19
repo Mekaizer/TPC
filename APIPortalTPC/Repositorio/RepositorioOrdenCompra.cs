@@ -42,14 +42,25 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_Compra " +
-                    "(Numero_OC,Posicion,Id_Ticket) " +
-                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket); " +
+                    "(Numero_OC,Posicion,Id_Ticket,Texto,IsCiclica,Cantidad,Mon,PrcNeto,Proveedor,Material,ValorNeto,Recepcion) " +
+                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket,@Texto,@IsCiclica,@Cantidad,@Mon,@PrcNeto,@Proveedor,@Material,@ValorNeto,@Recepcion) " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
-
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar, 10).Value = OC.posicion;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = OC.Id_Ticket;
+
+                Comm.Parameters.Add("@Texto", SqlDbType.VarChar,500).Value = OC.Texto;
+                Comm.Parameters.Add("@IsCiclica", SqlDbType.Bit).Value = OC.IsCiclica;
+                Comm.Parameters.Add("@Cantidad", SqlDbType.Int).Value = OC.Cantidad;
+
+                Comm.Parameters.Add("@Mon", SqlDbType.VarChar,100).Value = OC.Mon;
+                Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
+                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = OC.Proveedor;
+
+                Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
+                Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
+                Comm.Parameters.Add("@Recepcion", SqlDbType.Bit).Value = OC.Recepcion;
 
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 OC.Id_Orden_Compra = (int)idDecimal;
@@ -91,11 +102,12 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia , T.Fecha_OC_Recepcionada
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC 
                 FROM dbo.Orden_de_Compra OC 
+				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
                 LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores 
-                LEFT OUTER JOIN dbo.Ticket T ON T.ID_Ticket= OC.Id_Ticket
-                where P.Id_Orden_Compra =@Orden_Compra";
+                where OC.Id_Orden_Compra = @Id_Orden_Compra
+               ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Compra", SqlDbType.Int).Value = id;
@@ -107,8 +119,8 @@ namespace APIPortalTPC.Repositorio
                     //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
-                    oc.Fecha_Recepcion = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
                     oc.Texto = Convert.ToString(reader["Texto"]).Trim();
                     oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
@@ -121,7 +133,7 @@ namespace APIPortalTPC.Repositorio
                     oc.Material = Convert.ToInt32(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
-
+                  
                 }
             }
             catch (SqlException ex)
@@ -153,9 +165,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia 
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC 
                 FROM dbo.Orden_de_Compra OC 
-                 LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores "
+				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
+                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores  "
 ;               // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
@@ -165,8 +178,8 @@ namespace APIPortalTPC.Repositorio
                     OrdenCompra oc = new();
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
-                    oc.Fecha_Recepcion = reader["Fecha_Recepcion"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_Recepcion"];
                     oc.Texto = Convert.ToString(reader["Texto"]).Trim();
                     oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
@@ -174,7 +187,7 @@ namespace APIPortalTPC.Repositorio
                     oc.Mon = Convert.ToString(reader["Mon"]).Trim();
                     oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
                     string Prov = Convert.ToString(reader["ID_Proveedores"]);
-                    Prov= Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     oc.Proveedor = Prov;
                     oc.Material = Convert.ToInt32(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
@@ -217,20 +230,33 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Orden_de_Compra SET " +
                                    "Numero_OC = @Numero_OC, " +  // Add comma after Solped
-
                                    "Posicion = @Posicion, " +
-                                   "Fecha_Recepcion = @Fecha_Recepcion " +
-
-                                   "WHERE Id_OE = @Id_OE";
+                                   "Texto = @Texto, " +
+                                   "IsCiclica= @IsCiclica, " +
+                                   "Cantidad = @Cantidad, " +
+                                   "Mon=@Mon, " +
+                                   "PrcNeto=@PrcNeto, " +
+                                   "Proveedor=@Proveedor, " +
+                                   "Material= @Material, " +
+                                   "ValorNeto=@ValorNeto, " +
+                                   "Recepcion=@Recepcion " +
+                                   "WHERE Id_Orden_Compra = @Id_OE";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
-
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar).Value = OC.posicion;
-                if (OC.Fecha_Recepcion.HasValue)
-                    Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = OC.Fecha_Recepcion;
-                else
-                    Comm.Parameters.Add("@Fecha_Recepcion", SqlDbType.DateTime).Value = DBNull.Value;
+                Comm.Parameters.Add("@Texto", SqlDbType.VarChar,500).Value = OC.Texto;
+                Comm.Parameters.Add("@IsCiclica", SqlDbType.Bit).Value = OC.IsCiclica;
+                Comm.Parameters.Add("@Cantidad", SqlDbType.Int).Value = OC.Cantidad;
 
+                Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
+                Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
+                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = Int32.Parse(OC.Proveedor);
+
+                Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
+                Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
+                Comm.Parameters.Add("@Recepcion", SqlDbType.Bit).Value = OC.Recepcion;
+
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = OC.Id_Orden_Compra;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     ocmod = await GetOC(Convert.ToInt32(reader["Id_OE"]));

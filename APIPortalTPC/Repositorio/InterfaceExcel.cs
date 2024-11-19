@@ -12,7 +12,6 @@ namespace APIPortalTPC.Repositorio
         //public Task<> LeerReporteSap(string filePath);
         public Task<List<CentroCosto>> LeerExcelCeCo(string filePath);
         public Task<string> LeerExcelOC(string filePath);
-        public Task<string> LeerExcelActualizarOC(string filePath);
         public Task<List<BienServicio>> LeerBienServicio(string filePath);
 
 

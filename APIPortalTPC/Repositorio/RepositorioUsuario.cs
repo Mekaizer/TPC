@@ -45,8 +45,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Usuario" +
-                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Activado,Admin) " +
-                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones, @Activado,@Admin);" +
+                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Admin) " +
+                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin);" +
                     "SELECT SCOPE_IDENTITY() AS Id_Usuario";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
@@ -59,7 +59,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
-                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
+                
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
                 U.Id_Usuario = id;

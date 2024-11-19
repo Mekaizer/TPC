@@ -107,10 +107,28 @@ namespace APIPortalTPC.Repositorio
             int smtpPort = 25; // Cambia el puerto si es necesario
             string fromEmail = "portaldeadq@tpc.cl"; // Cambia esto a tu correo
             string subject = "Código de Verificación - Autenticación en dos pasos";
-
             // Crear el cuerpo del mensaje
-            string body = $"Su código de verificación es: {codigoVerificacion}";
 
+            string body = $@"
+            <html>
+            <head>
+                <style>
+                    .numero-grande {{
+                        font-size: 50px;
+                        font-weight: bold;
+                        text-align: center;
+                        color: #333;
+                    }}
+            </style>
+            </head>
+            <body>
+                <p>Estimado,</p>
+                <p>Su código de verificación es: </p>
+                <p class='numero-grande'>{codigoVerificacion}</p>
+                <p>Saludos cordiales,</p>
+                <p>Equipo de Soporte</p>
+            </body>
+            </html>";
             try
             {
                 using (MailMessage mail = new MailMessage())
@@ -127,7 +145,7 @@ namespace APIPortalTPC.Repositorio
                     }
                 }
 
-                Console.WriteLine("Código de verificación enviado exitosamente.");
+                
             }
             catch (Exception ex)
             {

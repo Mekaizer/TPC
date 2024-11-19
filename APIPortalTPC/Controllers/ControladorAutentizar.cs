@@ -39,7 +39,6 @@ namespace APIPortalTPC.Controllers
             }
 
             int codigo = await RA.MFA(User.Correo_Usuario);
-            //User.CodigoMFA = 0;
             User.CodigoMFA = codigo;
             await RU.ModificarUsuario(User);
             return User;
@@ -67,7 +66,7 @@ namespace APIPortalTPC.Controllers
                 
             else
             {
-                return NotFound("Codigo Incorrecto"+ U.Nombre_Usuario);
+                return NotFound("Codigo Incorrecto");
             }
         }
 
