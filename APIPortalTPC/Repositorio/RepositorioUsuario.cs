@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using ClasesBaseDatosTPC;
-using Org.BouncyCastle.Crypto;
+using System.Text.RegularExpressions;
 
 
 namespace APIPortalTPC.Repositorio
@@ -38,43 +38,51 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> NuevoUsuario(Usuario U)
         {
-            SqlConnection sql = conectar();
-            SqlCommand? Comm = null;
-            try
+            U.Rut_Usuario= U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", ""); ;
+            if (!CalcularDigitoVerificador(U.Rut_Usuario))
             {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Usuario" +
-                    "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario_Sin_Digito, Digito_Verificador, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Admin) " +
-                    "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario_Sin_Digito, @Digito_Verificador, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin);" +
-                    "SELECT SCOPE_IDENTITY() AS Id_Usuario";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
-                Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
-                Comm.Parameters.Add("@Rut_Usuario_Sin_Digito", SqlDbType.Int).Value = U.Rut_Usuario_Sin_Digito;
-                Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
-                Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
-                Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
-                Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
-                Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
-                Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
-                
-                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                int id = (int)idDecimal;
-                U.Id_Usuario = id;
+                throw new Exception("Error de Rut ");
             }
-            catch (SqlException ex)
+            else
             {
-                throw new Exception("Error creando los datos en tabla Usuario " + ex.Message);
+
+                SqlConnection sql = conectar();
+                SqlCommand? Comm = null; ;
+                try
+                {
+                    sql.Open();
+                    Comm = sql.CreateCommand();
+                    Comm.CommandText = "INSERT INTO Usuario" +
+                        "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Admin) " +
+                        "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin) " +
+                        "SELECT SCOPE_IDENTITY() AS Id_Usuario";
+                    Comm.CommandType = CommandType.Text;
+                    Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
+                    Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
+                    Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar, 50).Value = U.Rut_Usuario;
+                    Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
+                    Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
+                    Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
+                    Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
+                    Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
+                    Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
+
+                    decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                    int id = (int)idDecimal;
+                    U.Id_Usuario = id;
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception("Error creando los datos en tabla Usuario " + ex.Message);
+                }
+                finally
+                {
+                    Comm?.Dispose();
+                    sql.Close();
+                    sql.Dispose();
+                }
+                return U;
             }
-            finally
-            {
-                Comm?.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return U;
         }
 
         /// <summary>
@@ -115,17 +123,15 @@ namespace APIPortalTPC.Repositorio
                 {
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
-                    U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
+                    U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    U.CodigoMFA = Convert.ToInt32(reader["CodigoMFA"]);
                 }
                 reader?.Close();
                 Comm?.Dispose();
@@ -183,13 +189,12 @@ namespace APIPortalTPC.Repositorio
                     Usuario U = new();
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
@@ -218,6 +223,10 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> ModificarUsuario(Usuario U)
         {
+            U.Rut_Usuario = U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", ""); 
+
+            if (!CalcularDigitoVerificador(U.Rut_Usuario))
+                throw new Exception("Error de Rut ");
             Usuario? Umod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
@@ -229,8 +238,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Usuario SET " +
                                     "Nombre_Usuario = @Nombre_Usuario, " +
                                     "Apellido_Paterno = @Apellido_Paterno, " +
-                                    "Rut_Usuario_Sin_Digito = @Rut_Usuario_Sin_Digito, " +
-                                    "Digito_Verificador = @Digito_Verificador, " +
+                                    "Rut_Usuario = @Rut_Usuario, " +
                                     "Apellido_Materno = @Apellido_Materno, " +
                                     "Correo_Usuario = @Correo_Usuario, " +
                                     "Contraseña_Usuario = @Contraseña_Usuario, " +
@@ -243,8 +251,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
                 Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
-                Comm.Parameters.Add("@Rut_Usuario_Sin_Digito", SqlDbType.Int).Value = U.Rut_Usuario_Sin_Digito;
-                Comm.Parameters.Add("@Digito_Verificador", SqlDbType.VarChar, 10).Value = U.Digito_Verificador;
+                Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar,50).Value = U.Rut_Usuario;
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
@@ -288,8 +295,13 @@ namespace APIPortalTPC.Repositorio
         /// <param name="rut">Rut a buscar</param>
         /// <param name="correo">Correo a buscar</param>
         /// <returns></returns>
-        public async Task<string> Existe(int rut, string correo)
+        public async Task<string> Existe(string rut, string correo)
         {
+            rut=rut.Replace(".", "").Replace("-", "").Replace(" ", "");
+            if (!CalcularDigitoVerificador(rut))
+            {
+                return "El rut no es valido";
+            }
             using (SqlConnection sqlConnection = conectar())
             {
                 sqlConnection.Open();
@@ -297,7 +309,7 @@ namespace APIPortalTPC.Repositorio
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario_Sin_Digito = @rut";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario = @rut";
                     command.Parameters.AddWithValue("@rut", rut);
                     SqlDataReader reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
@@ -322,6 +334,11 @@ namespace APIPortalTPC.Repositorio
             }
         }
         
+        /// <summary>
+        /// muestra todos los usuarios que son liberadores
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Usuario>> GetAllUsuariosLiberadores()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -344,13 +361,12 @@ namespace APIPortalTPC.Repositorio
                     Usuario U = new();
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
@@ -393,13 +409,12 @@ namespace APIPortalTPC.Repositorio
                     Usuario U = new();
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
                     U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
@@ -418,6 +433,46 @@ namespace APIPortalTPC.Repositorio
                 sql.Dispose();
             }
             return lista;
+        }
+        /// <summary>
+        /// Metodo para asegurar que el rut sea valido
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public bool CalcularDigitoVerificador(string rut)
+        {
+            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "");
+
+            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
+
+            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
+
+            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
+                return false;
+            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
+            {
+                return false;
+            }
+            int suma = 0;
+            int multiplicador = 2;
+
+            // Iterar sobre los dígitos del RUT de derecha a izquierda
+            for (int i = rutSinDV.Length - 1; i >= 0; i--)
+            {
+                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
+                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
+            }
+
+            int resto = 11 - (suma % 11);
+
+            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
+            if (resto == 11)
+            {
+                return digito.Equals("0");
+            }
+
+            else if (resto == 10) return digito.Equals("K");
+            else return digito.Equals(resto.ToString());
         }
     }
 

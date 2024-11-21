@@ -1,6 +1,5 @@
 ﻿using BaseDatosTPC;
 using ClasesBaseDatosTPC;
-using NPOI.SS.Formula;
 using OfficeOpenXml;
 
 namespace APIPortalTPC.Repositorio
@@ -139,7 +138,7 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[1, 2].Value = U.Nombre_Usuario;
                     worksheet.Cells[1, 3].Value = U.Apellido_paterno;
                     worksheet.Cells[1, 4].Value = U.Apellido_materno;
-                    worksheet.Cells[1, 5].Value = U.Rut_Usuario_Sin_Digito+"-"+U.Digito_Verificador;
+                    worksheet.Cells[1, 5].Value = U.Rut_Usuario;
                     worksheet.Cells[1, 6].Value = U.Correo_Usuario;
                     worksheet.Cells[1, 7].Value = U.Contraseña_Usuario;
                     worksheet.Cells[1, 8].Value = U.Activado;

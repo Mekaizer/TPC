@@ -42,8 +42,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_Compra " +
-                    "(Numero_OC,Posicion,Id_Ticket,Texto,IsCiclica,Cantidad,Mon,PrcNeto,Proveedor,Material,ValorNeto,Recepcion) " +
-                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket,@Texto,@IsCiclica,@Cantidad,@Mon,@PrcNeto,@Proveedor,@Material,@ValorNeto,@Recepcion) " +
+                    "(Numero_OC,Posicion,Id_Ticket,Texto,Cantidad,Mon,PrcNeto,Proveedor,Material,ValorNeto,Recepcion) " +
+                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket,@Texto,@Cantidad,@Mon,@PrcNeto,@Proveedor,@Material,@ValorNeto,@Recepcion) " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
@@ -51,7 +51,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = OC.Id_Ticket;
 
                 Comm.Parameters.Add("@Texto", SqlDbType.VarChar,500).Value = OC.Texto;
-                Comm.Parameters.Add("@IsCiclica", SqlDbType.Bit).Value = OC.IsCiclica;
+
                 Comm.Parameters.Add("@Cantidad", SqlDbType.Int).Value = OC.Cantidad;
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar,100).Value = OC.Mon;
@@ -181,7 +181,6 @@ namespace APIPortalTPC.Repositorio
                     oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Texto = Convert.ToString(reader["Texto"]).Trim();
-                    oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
                     oc.Mon = Convert.ToString(reader["Mon"]).Trim();
@@ -232,7 +231,6 @@ namespace APIPortalTPC.Repositorio
                                    "Numero_OC = @Numero_OC, " +  // Add comma after Solped
                                    "Posicion = @Posicion, " +
                                    "Texto = @Texto, " +
-                                   "IsCiclica= @IsCiclica, " +
                                    "Cantidad = @Cantidad, " +
                                    "Mon=@Mon, " +
                                    "PrcNeto=@PrcNeto, " +
@@ -245,7 +243,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
                 Comm.Parameters.Add("@Posicion", SqlDbType.VarChar).Value = OC.posicion;
                 Comm.Parameters.Add("@Texto", SqlDbType.VarChar,500).Value = OC.Texto;
-                Comm.Parameters.Add("@IsCiclica", SqlDbType.Bit).Value = OC.IsCiclica;
                 Comm.Parameters.Add("@Cantidad", SqlDbType.Int).Value = OC.Cantidad;
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
@@ -276,6 +273,7 @@ namespace APIPortalTPC.Repositorio
             }
             return ocmod;
         }
+
 
     }
 }

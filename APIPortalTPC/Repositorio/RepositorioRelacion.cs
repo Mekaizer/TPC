@@ -42,14 +42,15 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
                     "(Id_Archivo,Id_Responsable1,Id_Responsable2) " +
-                    "VALUES (@Id_Archivo,@Id_Responsable,@Id_Responsable2); " +
-                    "SELECT SCOPE_IDENTITY() AS ID_Relacion";
+                    "VALUES (@Id_Archivo,@Id_Responsable1,@Id_Responsable2); " +
+                    "SELECT SCOPE_IDENTITY() AS Id_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
                 Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
                 Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                R.Id_Relacion = (int)idDecimal;
+                int id = (int)idDecimal;
+                R.Id_Relacion = id;
             }
             catch (SqlException ex)
             {
@@ -88,7 +89,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Relacion " +
+                Comm.CommandText = "SELECT * FROM dbo.Relacion, A.Nombre " +
                     "where Id_Relacion = @Id_Relacion";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 

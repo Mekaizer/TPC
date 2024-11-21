@@ -294,5 +294,66 @@ namespace APIPortalTPC.Repositorio
         }
 
 
+        public async Task<Ticket> ActualizarEstadoTicket(int  id_T)
+        {
+            Ticket T = await GetTicket(id_T);
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            int cont = 0;
+            int total = 0;
+            try
+            {
+
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = "SELECT OC.*, t.Estado " +
+                    "FROM Orden_de_Compra OC " +
+                    "inner join Ticket t on  t.ID_Ticket = OC.Id_Ticket " +
+                    "where t.ID_Ticket = @ID_Ticket";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
+
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    bool recep = Convert.ToBoolean(reader["Recepcion"]);
+                    if (!recep)
+                        cont++;
+                    total++;
+                }
+                if (cont == total)
+                {
+                    T.Estado = "Liberado";
+                }
+                else if (cont < total)
+                    T.Estado = "Parcialmente Recepcionado";
+                else
+                    T.Estado = "No";
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Ticket " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return T;
+        }
     }
 }

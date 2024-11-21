@@ -2,6 +2,7 @@
 using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -102,6 +103,11 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Proveedores> ModificarProveedor(Proveedores P)
         {
+            if (!CalcularDigitoVerificador(P.Rut_Proveedor))
+            {
+                throw new Exception("Error de Rut ");
+            }
+            else { 
             Proveedores Pmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
@@ -161,6 +167,7 @@ namespace APIPortalTPC.Repositorio
             }
             return Pmod;
         }
+    }
         /// <summary>
         /// Se crea una en un nuevo objeto y se agrega a la base de datos
         /// </summary>
@@ -169,62 +176,70 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Proveedores> NuevoProveedor(Proveedores P)
         {
-            SqlConnection sql = conectar();
-            SqlCommand? Comm = null;
-            try
+            if (!CalcularDigitoVerificador(P.Rut_Proveedor))
             {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = "INSERT INTO Proveedores " +
-                                   "(Rut_Proveedor, Razon_Social, Nombre_Fantasia, ID_Bien_Servicio, Direccion, Comuna, Correo_Proveedor, Telefono_Proveedor, Nombre_Representante, Email_Representante, N_Cuenta, Banco, Swift, Estado, Cargo_Representante) " +
-                                   "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante); " +
-                                   "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
-                Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = P.Rut_Proveedor;
-                Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 50).Value = P.Razon_Social;
-                Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 50).Value = P.Razon_Social;
-                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
-                Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 50).Value = P.Razon_Social;
-                Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 50).Value = P.Comuna;
-                Comm.Parameters.Add("@Correo_Proveedor", SqlDbType.VarChar, 50).Value = P.Correo_Proveedor;
-                Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.VarChar, 50).Value = P.Telefono_Proveedor;
-                Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 50).Value = P.Nombre_Representante;
-                Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 50).Value = P.Email_Representante;
-
-                if (string.IsNullOrEmpty(P.N_Cuenta))
-                    Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = "";
-                else
-                    Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = P.N_Cuenta;
-
-                if (string.IsNullOrEmpty(P.Banco))
-                    Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = "";
-                else
-                    Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = P.Banco;
-                if (string.IsNullOrEmpty(P.Swift))
-                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = "";
-                else
-                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = P.Swift;
-                if (string.IsNullOrEmpty(P.Cargo_Representante))
-                    Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = "";
-                else
-                    Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = P.Cargo_Representante;
-                Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = P.Estado;
-
-                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                int id = (int)idDecimal;
-                P.ID_Proveedores = id;
+                throw new Exception("Error de Rut ");
+            
             }
-            catch (SqlException ex)
+            else
             {
-                throw new Exception("Error creando los datos en tabla Proveedores " + ex.Message);
+                SqlConnection sql = conectar();
+                SqlCommand? Comm = null;
+                try
+                {
+                    sql.Open();
+                    Comm = sql.CreateCommand();
+                    Comm.CommandText = "INSERT INTO Proveedores " +
+                                       "(Rut_Proveedor, Razon_Social, Nombre_Fantasia, ID_Bien_Servicio, Direccion, Comuna, Correo_Proveedor, Telefono_Proveedor, Nombre_Representante, Email_Representante, N_Cuenta, Banco, Swift, Estado, Cargo_Representante) " +
+                                       "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante); " +
+                                       "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
+                    Comm.CommandType = CommandType.Text;
+                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = P.Rut_Proveedor;
+                    Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 50).Value = P.Razon_Social;
+                    Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 50).Value = P.Razon_Social;
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
+                    Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 50).Value = P.Razon_Social;
+                    Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 50).Value = P.Comuna;
+                    Comm.Parameters.Add("@Correo_Proveedor", SqlDbType.VarChar, 50).Value = P.Correo_Proveedor;
+                    Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.VarChar, 50).Value = P.Telefono_Proveedor;
+                    Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 50).Value = P.Nombre_Representante;
+                    Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 50).Value = P.Email_Representante;
+
+                    if (string.IsNullOrEmpty(P.N_Cuenta))
+                        Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = "";
+                    else
+                        Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 50).Value = P.N_Cuenta;
+
+                    if (string.IsNullOrEmpty(P.Banco))
+                        Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = "";
+                    else
+                        Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 50).Value = P.Banco;
+                    if (string.IsNullOrEmpty(P.Swift))
+                        Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = "";
+                    else
+                        Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 50).Value = P.Swift;
+                    if (string.IsNullOrEmpty(P.Cargo_Representante))
+                        Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = "";
+                    else
+                        Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = P.Cargo_Representante;
+                    Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = P.Estado;
+
+                    decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
+                    int id = (int)idDecimal;
+                    P.ID_Proveedores = id;
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception("Error creando los datos en tabla Proveedores " + ex.Message);
+                }
+                finally
+                {
+                    Comm.Dispose();
+                    sql.Close();
+                    sql.Dispose();
+                }
+                return P;
             }
-            finally
-            {
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return P;
         }
 
         /// <summary>
@@ -235,31 +250,35 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         public async Task<string> Existe(string rut,string bs)
         {
-            using (SqlConnection sqlConnection = conectar())
+            if (!CalcularDigitoVerificador(rut))
             {
-                sqlConnection.Open();
-                
-                using (SqlCommand command = new SqlCommand())
+                return "Rut no valido";
+            }
+            else { 
+                using (SqlConnection sqlConnection = conectar())
                 {
-                    int valuebs = int.Parse(bs);
-                    command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut and ID_Bien_Servicio = @bs";
-
-                    command.Parameters.AddWithValue("@bs", valuebs); 
-                    command.Parameters.AddWithValue("@rut", rut);
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
-                    if (reader.HasRows)
+                    sqlConnection.Open();
+                
+                    using (SqlCommand command = new SqlCommand())
                     {
-                        return "El rut proveedor con ese bien/servicio ya existe";
-                    }
-                    else
-                    {
-                        reader.Close();
-                        return "ok";
+                        int valuebs = int.Parse(bs);
+                        command.Connection = sqlConnection;
+                        command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut and ID_Bien_Servicio = @bs";
+                        command.Parameters.AddWithValue("@bs", valuebs); 
+                        command.Parameters.AddWithValue("@rut", rut);
+                        SqlDataReader reader = await command.ExecuteReaderAsync();
+                        if (reader.HasRows)
+                        {
+                            return "El rut proveedor con ese bien/servicio ya existe";
+                        }
+                        else
+                        {
+                            reader.Close();
+                            return "ok";
+                        }
                     }
                 }
             }
-            
         }
 
         /// <summary>
@@ -383,5 +402,46 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+
+        /// <summary>
+        /// Metodo para asegurar que el rut sea valido
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public bool CalcularDigitoVerificador(string rut)
+        {
+            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "");
+
+            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
+
+            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
+
+            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
+                return false;
+            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
+            {
+                return false;
+            }
+            int suma = 0;
+            int multiplicador = 2;
+
+            // Iterar sobre los dígitos del RUT de derecha a izquierda
+            for (int i = rutSinDV.Length - 1; i >= 0; i--)
+            {
+                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
+                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
+            }
+
+            int resto = 11 - (suma % 11);
+
+            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
+            if (resto == 11)
+            {
+                return digito.Equals("0");
+            }
+
+            else if (resto == 10) return digito.Equals("K");
+            else return digito.Equals(resto.ToString());
+        }
     }
 }

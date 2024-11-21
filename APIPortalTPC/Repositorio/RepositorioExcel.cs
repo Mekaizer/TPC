@@ -125,7 +125,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="filePath"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> LeerExcelOC(string filePath)
+        public async Task<string> ActualizarOC(string filePath)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -256,6 +256,38 @@ namespace APIPortalTPC.Repositorio
                     if(P.Rut_Proveedor != null)
                         lista.Add(P);
 
+                }
+            }
+            return lista;
+        }
+    
+        public async Task<List<OrdenCompra>> LeerExcelOC(string filePath){
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<OrdenCompra> lista = new List<OrdenCompra>();
+            string hoja = "Hoja1";
+
+            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
+
+
+                int rowCount = worksheet.Dimension.Rows;
+                List<string> datosColumna = new List<string>();
+                for (int row = 5; row <= rowCount; row++)
+                {
+
+                    OrdenCompra OC = new OrdenCompra();
+                    OC.posicion = worksheet.Cells[row, 2].Value?.ToString();
+                    OC.Id_Orden_Compra = Convert.ToInt32(worksheet.Cells[row, 3].Value?.ToString());
+                    OC.Cantidad=Convert.ToInt32(worksheet.Cells[row, 4].Value?.ToString());
+                    OC.Mon=worksheet.Cells[row, 6].Value?.ToString();
+                    OC.PrcNeto= Convert.ToInt32(worksheet.Cells[row, 7].Value?.ToString());
+                    OC.Proveedor=worksheet.Cells[row, 18].Value?.ToString();
+                    OC.Texto=worksheet.Cells[row, 19].Value?.ToString();
+                    //OC.Fecha_Recepcion = worksheet.Cells[row, 21].Value?.ToString();
+                    OC.Material = Convert.ToInt32(worksheet.Cells[row, 22].Value?.ToString());
+                    OC.ValorNeto = Convert.ToInt32(worksheet.Cells[row, 23].Value?.ToString());
                 }
             }
             return lista;

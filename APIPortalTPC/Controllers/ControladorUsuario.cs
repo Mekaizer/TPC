@@ -77,12 +77,7 @@ namespace APIPortalTPC.Controllers
                 if (U == null)
                     return BadRequest();
 
-                int rut = 0;
-                if (U.Rut_Usuario_Sin_Digito.HasValue)
-                {
-                    rut = U.Rut_Usuario_Sin_Digito.Value;
-
-                }
+                string rut = U.Rut_Usuario;
                 string res = await RU.Existe(rut, U.Correo_Usuario);
                 if (res == "ok")
                 {

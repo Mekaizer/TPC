@@ -1,6 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios

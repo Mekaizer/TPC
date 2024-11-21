@@ -710,8 +710,8 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
-    "Method": "ExcelOC",
-    "RelativePath": "api/ControladorExcel/OC",
+    "Method": "ActualizarOC",
+    "RelativePath": "api/ControladorExcel/OCA",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1327,6 +1327,32 @@
         "Type": "BaseDatosTPC.Ticket",
         "IsRequired": true
       },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Ticket",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
+    "Method": "EstadoTicket",
+    "RelativePath": "api/ControladorTicket/Estado{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
         "Name": "id",
         "Type": "System.Int32",

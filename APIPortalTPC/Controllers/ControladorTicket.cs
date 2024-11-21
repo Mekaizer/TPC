@@ -113,5 +113,19 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
+
+        [HttpPut("Estado{id:int}")]    
+        public async Task<ActionResult<Ticket>> EstadoTicket(int id)
+        {
+            try
+            {
+                return await RT.ActualizarEstadoTicket(id);
+            }
+            catch(Exception ex) 
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+            
+        }
     }
 }

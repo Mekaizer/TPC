@@ -76,15 +76,15 @@ namespace APIPortalTPC.Controllers
         /// Metodo que lee un archivo excel que tiene orden de compra y lo actualiza en la base de datos
         /// </summary>
         /// <returns></returns>
-        [HttpPost("OC")]
-        public async Task<ActionResult> ExcelOC()
+        [HttpPost("OCA")]
+        public async Task<ActionResult> ActualizarOC()
         {
             try
             {
                 string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
 
 
-                return Ok(await Excel.LeerExcelOC(path));
+                return Ok(await Excel.ActualizarOC(path));
             
             }
             catch (Exception ex)

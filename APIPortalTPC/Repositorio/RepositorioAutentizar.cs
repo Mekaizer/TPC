@@ -2,10 +2,8 @@
 using ClasesBaseDatosTPC;
 using System.Data;
 using System.Data.SqlClient;
-using static NPOI.HSSF.Util.HSSFColor;
 using System.Net.Mail;
-using BaseDatosTPC;
-using NPOI.SS.Formula.Functions;
+
 
 namespace APIPortalTPC.Repositorio
 {
@@ -63,13 +61,12 @@ namespace APIPortalTPC.Repositorio
 
                         U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                         U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                        U.Digito_Verificador = (Convert.ToString(reader["Digito_Verificador"])).Trim();
                         U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                         U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                         U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim(); 
                         U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
                         U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                        U.Rut_Usuario_Sin_Digito = Convert.ToInt32(reader["Rut_Usuario_Sin_Digito"]);
+                        U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                         U.Activado = Convert.ToBoolean(reader["Activado"]);
                         U.Admin = Convert.ToBoolean(reader["Admin"]);
                         U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
