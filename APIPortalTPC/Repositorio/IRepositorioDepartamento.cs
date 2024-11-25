@@ -8,6 +8,7 @@ namespace APIPortalTPC.Repositorio
         public Task<Departamento> GetDepartamento(int id);
         public Task<IEnumerable<Departamento>> GetAllDepartamento();
         public Task<Departamento> ModificarDepartamento(Departamento D);
+        public Task<Departamento> EliminarDepartamento(int D);
         public Task<string> Existe(string nombre);
     }
 }

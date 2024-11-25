@@ -136,14 +136,15 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Centro_de_costo SET " +
-                    "NombreNombreCeCo = @NombreNombreCeCo" +
-                    "Codigo_Ceco = @Codigo_Ceco" +
+                    "NombreCeCo = @NombreCeCo, " +
+                    "Codigo_Ceco = @Codigo_Ceco " +
                     "WHERE Id_Ceco = @Id_Ceco";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = ccmod.Id_Ceco;
+
                 //Usar cuando se corrija el ingresar datos, porque por ahora no se como meter una clase
-                Comm.Parameters.Add("@NombreNombreCeCo", SqlDbType.VarChar, 50).Value = ccmod.Nombre;
-                Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = ccmod.Codigo_Ceco;
+                Comm.Parameters.Add("@NombreCeCo", SqlDbType.VarChar, 50).Value = CeCo.Nombre;
+                Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = CeCo.Codigo_Ceco;
+                Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = CeCo.Id_Ceco;
 
                 //Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = "Pan";
                 reader = await Comm.ExecuteReaderAsync();
@@ -228,6 +229,44 @@ namespace APIPortalTPC.Repositorio
                     }
                 }
             }
+        }
+        public async Task<CentroCosto> EliminarCeCo(int CeCo)
+        {
+            CentroCosto ccmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Centro_de_costo SET " +
+                    "Activado = @Activado " +
+                    "WHERE Id_Ceco = @Id_Ceco";
+                Comm.CommandType = CommandType.Text;
+
+                //Usar cuando se corrija el ingresar datos, porque por ahora no se como meter una clase
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = CeCo;
+
+                //Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = "Pan";
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    ccmod = await GetCeCo(Convert.ToInt32(reader["Id_Ceco"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando el Centro de costo " + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return ccmod;
         }
     }
 }

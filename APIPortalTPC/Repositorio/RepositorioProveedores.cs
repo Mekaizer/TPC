@@ -78,6 +78,7 @@ namespace APIPortalTPC.Repositorio
                     P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]);
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
+                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                 }
             }
@@ -117,37 +118,45 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Proveedores SET " +
-                    "Rut_Proveedor = @Rut_Proveedor " +
-                    "Nombre_Fantasia = @Nombre_Fantasia " +
-                    "ID_Bien_Servicio = @ID_Bien_Servicio " +
-                    "Comuna = @Comuna " +
-                    "Correo_Proveedor = @Correo_Proveedor " +
-                    "Telefono_Proveedor = @Telefono_Proveedor " +
-                    "Cargo_Representante = @Cargo_Representante " +
-                    "Nombre_Representante = @Nombre_Representante " +
-                    "Email_Representante = @Email_Representante " +
-                    "Estado = @Estado" +
-                    "N_Cuenta = @N_Cuenta " +
-                    "Banco = @Banco " +
+                    "Rut_Proveedor = @Rut_Proveedor," +
+                    "Razon_social = @Razon_social, " +
+                    "Nombre_Fantasia = @Nombre_Fantasia, " +
+                    "ID_Bien_Servicio = @ID_Bien_Servicio, " +
+                    "Comuna = @Comuna, " +
+                    "Correo_Proveedor = @Correo_Proveedor, " +
+                    "Telefono_Proveedor = @Telefono_Proveedor, " +
+                    "Cargo_Representante = @Cargo_Representante, " +
+                    "Nombre_Representante = @Nombre_Representante, " +
+                    "Email_Representante = @Email_Representante, " +
+                    "Estado = @Estado, " +
+                    "N_Cuenta = @N_Cuenta, " +
+                    "Banco = @Banco, " +
                     "Swift = @Swift " +
                     "WHERE ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
-                P.Rut_Proveedor = (Convert.ToString(reader["Rut_Proveedor"])).Trim();
-                P.Razon_Social = (Convert.ToString(reader["Razon_social"])).Trim();
-                P.Nombre_Fantasia = (Convert.ToString(reader["Nombre_Fantasia"])).Trim();
-                P.ID_Bien_Servicio = Convert.ToString(reader["ID_Bien_Servicio"]);
-                P.Direccion = Convert.ToString(reader["Direccion"]).Trim();
-                P.Comuna = Convert.ToString(reader["Comuna"]).Trim();
-                P.Correo_Proveedor = (Convert.ToString(reader["Correo_Proveedor"])).Trim();
-                P.Telefono_Proveedor = Convert.ToString(reader["Telefono_Proveedor"]).Trim();
-                P.Cargo_Representante = (Convert.ToString(reader["Cargo_Representante"])).Trim();
-                P.Nombre_Representante = (Convert.ToString(reader["Nombre_Representante"])).Trim();
-                P.Email_Representante = (Convert.ToString(reader["Email_Representante"])).Trim();
-                P.Estado = Convert.ToBoolean(reader["Estado"]);
-                P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]).Trim();
-                P.Banco = (Convert.ToString(reader["Banco"])).Trim();
-                P.Swift = (Convert.ToString(reader["Swift"])).Trim();
-                P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
+                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 500).Value = P.Rut_Proveedor;
+                    Comm.Parameters.Add("@Razon_social", SqlDbType.VarChar, 500).Value = P.Razon_Social;
+                    Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 500).Value = P.Nombre_Fantasia;
+
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.VarChar, 500).Value = P.ID_Bien_Servicio;
+                    Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 500).Value = P.Direccion;
+                    Comm.Parameters.Add("@Comuna", SqlDbType.VarChar, 500).Value = P.Comuna;
+
+                    Comm.Parameters.Add("@Correo_Proveedor", SqlDbType.VarChar, 500).Value = P.Correo_Proveedor;
+                    Comm.Parameters.Add("@Telefono_Proveedor", SqlDbType.VarChar, 500).Value = P.Telefono_Proveedor;
+                    Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 500).Value = P.Cargo_Representante;
+
+                    Comm.Parameters.Add("@Nombre_Representante", SqlDbType.VarChar, 500).Value = P.Nombre_Representante;
+                    Comm.Parameters.Add("@Email_Representante", SqlDbType.VarChar, 500).Value = P.Email_Representante;
+                    Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = P.Estado;
+
+                    Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 500).Value = P.N_Cuenta;
+                    Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 500).Value = P.Banco;
+                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 500).Value = P.Rut_Proveedor;
+
+                    Comm.Parameters.Add("@ID_Proveedores", SqlDbType.Int).Value = P.ID_Proveedores;
+
+
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Pmod = await GetProveedor(Convert.ToInt32(reader["ID_Proveedores"]));
@@ -322,6 +331,7 @@ namespace APIPortalTPC.Repositorio
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
+                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(P);
                 }
             }
@@ -385,6 +395,7 @@ namespace APIPortalTPC.Repositorio
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                     P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]).Trim();
+                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(P);
                 }
             }
@@ -443,5 +454,50 @@ namespace APIPortalTPC.Repositorio
             else if (resto == 10) return digito.Equals("K");
             else return digito.Equals(resto.ToString());
         }
+        /// <summary>
+        /// Metodo que "elimina" al proveedor, con confundir con Estado
+        /// </summary>
+        /// <param name="P"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Proveedores> EliminarProveedor(int P)
+        {
+            
+            
+        Proveedores Pmod = null;
+        SqlConnection sqlConexion = conectar();
+        SqlCommand? Comm = null;
+        SqlDataReader reader = null;
+        try
+        {
+            sqlConexion.Open();
+            Comm = sqlConexion.CreateCommand();
+            Comm.CommandText = "UPDATE dbo.Proveedores SET " +
+                "Activado = @Activado " +
+                "WHERE ID_Proveedores = @ID_Proveedores";
+            Comm.CommandType = CommandType.Text;
+            Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+            Comm.Parameters.Add("@ID_Proveedores", SqlDbType.Int).Value = P;
+
+
+            reader = await Comm.ExecuteReaderAsync();
+            if (reader.Read())
+                Pmod = await GetProveedor(Convert.ToInt32(reader["ID_Proveedores"]));
+        }
+        catch (SqlException ex)
+        {
+            throw new Exception("Error modificando la cotización " + ex.Message);
+        }
+        finally
+        {
+            if (reader != null)
+                reader.Close();
+
+            Comm.Dispose();
+            sqlConexion.Close();
+            sqlConexion.Dispose();
+        }
+        return Pmod;
     }
+        }
 }

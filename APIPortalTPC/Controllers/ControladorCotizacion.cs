@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft. AspNetCore.Mvc;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
@@ -119,9 +120,27 @@ namespace APIPortalTPC.Controllers
 
                 return await RC.ModificarCotizacion(c);
             }
-            catch (Exception)
+            catch (Exception  ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+ex);
+            }
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Cotizacion>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RC.GetCotizacion(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro la cotizacion");
+                }
+                return Ok(await RC.EliminarCotizacion(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
     }

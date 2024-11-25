@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 /*
@@ -142,6 +143,25 @@ namespace APIPortalTPC.Controllers
                     // Manejar excepciones generales
                     return StatusCode(StatusCodes.Status500InternalServerError, "No hay proveedores con ese bien servicio: " + ex.Message);
                 }
+            }
+
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Proveedores>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RP.GetProveedor(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el proveedor");
+                }
+                return Ok(await RP.EliminarProveedor(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
     }

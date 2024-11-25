@@ -24,6 +24,9 @@ namespace BaseDatosTPC
         /// Persona responsable del departamento
         /// </summary>
         public string? Encargado { get; set; }
+        public int? Id_Encargado { get; set; }
+        public bool Activado { get; set;}
+
     
     }
 }

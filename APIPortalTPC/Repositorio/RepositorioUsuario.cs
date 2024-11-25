@@ -131,7 +131,9 @@ namespace APIPortalTPC.Repositorio
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+
                 }
                 reader?.Close();
                 Comm?.Dispose();
@@ -198,6 +200,8 @@ namespace APIPortalTPC.Repositorio
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
+
                     lista.Add(U);
                 }
             }
@@ -244,7 +248,6 @@ namespace APIPortalTPC.Repositorio
                                     "Contraseña_Usuario = @Contraseña_Usuario, " +
                                     "Tipo_Liberador = @Tipo_Liberador, " +
                                     "En_Vacaciones = @En_Vacaciones, " +
-                                    "Activado = @Activado," +
                                     "CodigoMFA = @CodigoMFA, " +
                                     "Admin = @Admin " +
                                     " WHERE  Id_Usuario = @Id_Usuario;";
@@ -257,7 +260,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
                 Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
-                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 if (U.CodigoMFA != null)
                 {
@@ -473,6 +475,48 @@ namespace APIPortalTPC.Repositorio
 
             else if (resto == 10) return digito.Equals("K");
             else return digito.Equals(resto.ToString());
+        }
+    
+    /// <summary>
+    /// Metodo que busca por Id el Usuario para "eliminarlo"
+    /// </summary>
+    /// <param name="U"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+        public async Task<Usuario> EliminarUsuario(int U)
+        {
+            Usuario? Umod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Usuario SET " +
+                                    "Activado = @Activado, " +
+                                    " WHERE  Id_Usuario = @Id_Usuario;";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = U;
+
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    Umod = await GetUsuario(Convert.ToInt32(reader["Id_Usuario"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando del Usuario " + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+
+                Comm?.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return Umod;
         }
     }
 

@@ -8,5 +8,6 @@ namespace APIPortalTPC.Repositorio
         public Task<OrdenCompra> GetOC(int id);
         public Task<IEnumerable<OrdenCompra>> GetAllOC();
         public Task<OrdenCompra> ModificarOC(OrdenCompra OC);
+        public Task<OrdenCompra> EliminarOC(int OC);
     }
 }

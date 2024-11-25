@@ -1,6 +1,7 @@
 ﻿using APIPortalTPC.Repositorio;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.X509Certificates;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -52,7 +53,7 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var resultado = await RU.GetUsuario(id);
-                if (resultado.Id_Usuario== 0)
+                if (resultado.Id_Usuario == 0)
                     return StatusCode(StatusCodes.Status404NotFound, "No se encontro el usuario");
 
                 return Ok(resultado);
@@ -122,8 +123,27 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
+
         }
-  
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Usuario>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RU.GetUsuario(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el Usuario");
+                }
+                return Ok(await RU.EliminarUsuario(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
+        }
+    
 
     }
 }

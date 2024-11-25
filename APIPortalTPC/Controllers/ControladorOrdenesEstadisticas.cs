@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -112,6 +113,24 @@ namespace APIPortalTPC.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos " +ex.Message);
+            }
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<OrdenesEstadisticas>> Eliminar(int id)
+        {
+            try
+            {
+                var u = ROE.GetOE(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro la orden estadistica");
+                }
+                return Ok(await ROE.EliminarOE(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
     }

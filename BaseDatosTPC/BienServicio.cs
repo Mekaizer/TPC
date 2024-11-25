@@ -18,6 +18,7 @@ namespace BaseDatosTPC
         /// </summary>
         public string? Bien_Servicio { get; set;}
 
-        
+        public bool Activado { get; set; }
+
     }
 }

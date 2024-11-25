@@ -38,9 +38,9 @@ namespace APIPortalTPC.Controllers
                 return NotFound("Clave o contraseña incorrecta");
             }
 
-            int codigo = await RA.MFA(User.Correo_Usuario);
-            User.CodigoMFA = codigo;
-            await RU.ModificarUsuario(User);
+            ///int codigo = await RA.MFA(User.Correo_Usuario);
+            ///User.CodigoMFA = codigo;
+            ///await RU.ModificarUsuario(User);
             return User;
 
         }

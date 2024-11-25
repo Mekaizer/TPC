@@ -55,7 +55,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
-                INNER JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio 
+                LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio 
                 where C.ID_Cotizacion = @ID_Cotizacion";
 
                 Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = id;
@@ -81,7 +81,7 @@ namespace APIPortalTPC.Repositorio
                     cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
-                        cot.Solped = Convert.ToInt32(reader["Solped"]);
+                        cot.Solped = Convert.ToInt64(reader["Solped"]);
                     }
                     else
                     {
@@ -123,7 +123,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
-                INNER JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio ";// leer base datos 
+                LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio ";// leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -143,7 +143,7 @@ namespace APIPortalTPC.Repositorio
                     cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
-                        cot.Solped = Convert.ToInt32(reader["Solped"]);
+                        cot.Solped = Convert.ToInt64(reader["Solped"]);
                     }
                     else
                     {
@@ -187,19 +187,22 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
-                                   "Id_Solicitante = @Id_Solicitante, " +
                                    "Estado = @Estado, " +
                                    "ID_Bien_Servicio = @ID_Bien_Servicio, " +
                                    "Detalle = @Detalle, " +
                                    "Solped = @Solped " +
                                    "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
-
-                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.VarChar, 50).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.VarChar,50).Value = cotizacion.ID_Bien_Servicio;
-                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar,500).Value = cotizacion.Detalle;
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
+                if (!cotizacion.ID_Bien_Servicio.Equals(null))
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
+                else Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
+                if(cotizacion.Detalle != null)
+                    Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = cotizacion.Detalle;
+                else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = "";
+                if (cotizacion.Solped != null)
+                    Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = cotizacion.Solped;
+                else Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = 0;
                 Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion.ID_Cotizacion;
 
                 reader = await Comm.ExecuteReaderAsync();
@@ -244,11 +247,18 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
-                Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
+                if (cotizacion.ID_Bien_Servicio != null)
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
+                else
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
+
+                if(cotizacion.Detalle != null)
+                    Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
+                else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = "Sin detalle";
+
                 if (cotizacion.Solped != null)
                 {
-                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = cotizacion.Solped;
+                    Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = cotizacion.Solped;
                 }
                 else {
                     Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = 0;
@@ -270,6 +280,50 @@ namespace APIPortalTPC.Repositorio
             return cotizacion;
         }
 
+        /// <summary>
+        /// Busca la cotizacion por ID para "Eliminar" la cotizacion
+        /// </summary>
+        /// <param name="cotizacion"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Cotizacion> EliminarCotizacion(int cotizacion)
+        {
+            Cotizacion cotmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
+                                   "Estado = @Estado, " +
+                                   "Activado = @Activado "+
+                                   "WHERE ID_Cotizacion = @ID_Cotizacion";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "Cancelado";
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = cotizacion;
+
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    cotmod = await GetCotizacion(Convert.ToInt32(reader["ID_Cotizacion"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando la cotización " + ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return cotmod;
+        }
     }
 }
 

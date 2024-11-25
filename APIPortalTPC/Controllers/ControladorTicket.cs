@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 /*
@@ -126,6 +127,25 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
             
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Ticket>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RT.GetTicket(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el ticket");
+                }
+                return Ok(await RT.EliminarTicket(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
         }
     }
 }

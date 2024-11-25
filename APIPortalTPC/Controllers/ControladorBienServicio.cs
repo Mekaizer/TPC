@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 /*
@@ -125,6 +126,24 @@ namespace APIPortalTPC.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+            }
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<BienServicio>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RBS.GetServicio(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el bien o servicio");
+                }
+                return Ok(await RBS.EliminarBien_Servicio(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
     }

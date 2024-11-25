@@ -133,7 +133,8 @@ namespace APIPortalTPC.Repositorio
                     oc.Material = Convert.ToInt32(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
-                  
+                    oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
+
                 }
             }
             catch (SqlException ex)
@@ -191,8 +192,7 @@ namespace APIPortalTPC.Repositorio
                     oc.Material = Convert.ToInt32(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
-
-
+                    oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
 
                     lista.Add(oc);
                 }
@@ -247,7 +247,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
                 Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
-                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = Int32.Parse(OC.Proveedor);
+                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = Int64.Parse(OC.Proveedor);
 
                 Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
                 Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
@@ -273,7 +273,48 @@ namespace APIPortalTPC.Repositorio
             }
             return ocmod;
         }
+        /// <summary>
+        /// "Elimina" la OC
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<OrdenCompra> EliminarOC(int id)
+        {
+            OrdenCompra ocmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Orden_de_Compra SET " +
+                    "Estado_OC =@Estado_OC " +
+                    "WHERE Id_Orden_Compra = @Id_OE";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("Estado_OC", SqlDbType.Bit).Value = false;
 
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value =id;
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    ocmod = await GetOC(Convert.ToInt32(reader["Id_OE"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando la orden de compra " + ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return ocmod;
+        }
 
     }
 }

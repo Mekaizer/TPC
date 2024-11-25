@@ -12,5 +12,6 @@ namespace APIPortalTPC.Repositorio
         public Task<IEnumerable<BienServicio>> GetAllServicio();
         public Task<BienServicio> ModificarBien_Servicio(BienServicio bs);
         public Task<string> Existe(string BienServicio);
+        public Task<BienServicio> EliminarBien_Servicio(int bs);
     }
 }

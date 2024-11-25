@@ -59,6 +59,7 @@ namespace BaseDatosTPC
         /// Es para ver si fue recepcionado la orden de compra
         /// </summary>
         public bool Recepcion { get; set; }
+        public bool Estado_OC { get; set; }
 
     }
 }

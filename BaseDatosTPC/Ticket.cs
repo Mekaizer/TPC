@@ -16,12 +16,6 @@ namespace BaseDatosTPC
 
         public string? ID_Proveedor { get; set; }
 
-        public DateTime? Fecha_OC_Recepcionada { get; set; }
-
-        public DateTime? Fecha_OC_Enviada { get; set; }
-        
-        public DateTime? Fecha_OC_Liberada { get; set; }
-
         public string? Detalle { get; set; }
 
         public int? Solped { get; set; }
@@ -29,6 +23,13 @@ namespace BaseDatosTPC
         public string? Id_OE { get; set; }
       
         public int Numero_OC { get; set; }
+        public DateTime? Fecha_OC_Recepcionada { get; set; }
+
+        public DateTime? Fecha_OC_Enviada { get; set; }
+
+        public DateTime? Fecha_OC_Liberada { get; set; }
+
+        public bool Activado { get; set; }
 
     }
 }

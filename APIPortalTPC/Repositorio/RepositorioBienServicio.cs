@@ -60,7 +60,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
                     bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); ;
-
+                    bs.Activado = Convert.ToBoolean(reader["Activado"]);
                 }
             }
             catch (SqlException ex)
@@ -101,7 +101,7 @@ namespace APIPortalTPC.Repositorio
                     BienServicio bs = new();
                     bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
                     bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim();
-
+                    bs.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(bs);
                 }
             }
@@ -216,5 +216,45 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
+
+        /// <summary>
+        /// "Elimina" el bien y servicio
+        /// </summary>
+        /// <param name="bs"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<BienServicio> EliminarBien_Servicio(int bs)
+        {
+            BienServicio? bsmodificado = null;
+            SqlConnection? sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Bien_Servicio SET Activado=@Activado WHERE ID_Bien_Servicio = @ID_Bien_Servicio";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = bs;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    bsmodificado = await GetServicio(Convert.ToInt32(reader["ID_Bien_Servicio"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando el bien/servicio " + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+
+                Comm?.Dispose();
+                sqlConexion?.Close();
+                sqlConexion?.Dispose();
+            }
+            return bsmodificado;
+        }
+
     }
 }

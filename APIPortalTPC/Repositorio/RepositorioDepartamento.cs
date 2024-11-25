@@ -52,7 +52,7 @@ namespace APIPortalTPC.Repositorio
                 //muestra los datos de la tabla correspondiente con sus condiciones
                 Comm.CommandText = "SELECT D.*, U.Nombre_Usuario " +
                     "FROM dbo.Departamento D " +
-                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario +" +
+                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario " +
                     "where Id_Departamento = @Id_Departamento";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -65,6 +65,8 @@ namespace APIPortalTPC.Repositorio
                     dep.Encargado = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
+                    dep.Id_Encargado = Convert.ToInt32(reader["Encargado"]);
+                    dep.Activado = Convert.ToBoolean(reader["Activado"]);
                 }
             }
             catch (SqlException ex)
@@ -109,6 +111,8 @@ namespace APIPortalTPC.Repositorio
                     dep.Encargado = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     dep.Nombre = (Convert.ToString(reader["Nombre"])).Trim();
                     dep.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
+                    dep.Id_Encargado = Convert.ToInt32(reader["Encargado"]);
+                    dep.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(dep);
                 }
             }
@@ -143,16 +147,16 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Departamento SET " +
-                    "Descripcion = @Descripcion " +
-                    "Encargado = @Encargado " +
+                    "Descripcion = @Descripcion, " +
+                    "Encargado = @Encargado, " +
                     "Nombre = @Nombre " +
                     "WHERE Id_Departamento = @Id_Departamento";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = D.Descripcion;
-                Comm.Parameters.Add("@Encargado", SqlDbType.VarChar, 50).Value = D.Encargado;
+                Comm.Parameters.Add("@Descripcion", SqlDbType.VarChar,50).Value = D.Descripcion;
+                Comm.Parameters.Add("@Encargado", SqlDbType.Int).Value = D.Encargado;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = D.Nombre;
-                decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-                D.Id_Departamento = (int)idDecimal;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = D.Id_Departamento;
+
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Dmod = await GetDepartamento(Convert.ToInt32(reader["Id_Departamento"]));
@@ -238,6 +242,43 @@ namespace APIPortalTPC.Repositorio
                     }
                 }
             }
+        }
+
+        public async Task<Departamento> EliminarDepartamento(int D)
+        {
+            Departamento Dmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Departamento SET " +
+                    "Activado = @Activado " +
+                    "WHERE Id_Departamento = @Id_Departamento";
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Descripcion", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = D;
+                
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    Dmod = await GetDepartamento(Convert.ToInt32(reader["Id_Departamento"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando el departamento " + ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return Dmod;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 /*
@@ -120,12 +121,29 @@ namespace APIPortalTPC.Controllers
 
                 return await RD.ModificarDepartamento(D);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos"+ex);
             }
 
         }
-     
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Departamento>> Eliminar(int id)
+        {
+            try
+            {
+                var u = RD.GetDepartamento(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el departamento");
+                }
+                return Ok(await RD.EliminarDepartamento(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
+        }
     }
 }

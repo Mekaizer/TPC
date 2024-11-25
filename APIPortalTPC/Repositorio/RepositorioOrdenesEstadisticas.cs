@@ -107,6 +107,7 @@ namespace APIPortalTPC.Repositorio
                     OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     OE.Activado = Convert.ToBoolean(reader["Activado"]);
+                    OE.Id_CeCo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                 }
             }
             catch (SqlException ex)
@@ -152,6 +153,7 @@ namespace APIPortalTPC.Repositorio
                     OE.Id_Centro_de_Costo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     OE.Activado = Convert.ToBoolean(reader["Activado"]);
+                    OE.Id_CeCo = Convert.ToInt32(reader["Id_Centro_de_Costo"]);
                     lista.Add(OE);
                 }
             }
@@ -189,14 +191,12 @@ namespace APIPortalTPC.Repositorio
                     "Nombre = @Nombre, " +
                     "Codigo_OE = @Codigo_OE, " +
                     "Id_Centro_de_Costo = @Id_Centro_de_Costo," +
-                    "Activado = @Activado " +
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE.Id_Orden_Estadistica;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_OE", SqlDbType.VarChar, 50).Value = OE.Codigo_OE;
                 Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_Centro_de_Costo;
-                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = OE.Activado;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     OEmod = await GetOE(Convert.ToInt32(reader["Id_Orden_Estadistica"]));
@@ -216,6 +216,11 @@ namespace APIPortalTPC.Repositorio
             }
             return OEmod;
         }
+        /// <summary>
+        /// metodo para asegurarse que no se dupliquen los datos
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public async Task<string> Existe(string code)
         {
             using (SqlConnection sqlConnection = conectar())
@@ -240,6 +245,41 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
-        
+
+        public async Task<OrdenesEstadisticas> EliminarOE(int OE)
+        {
+            OrdenesEstadisticas OEmod = null;
+            SqlConnection sqlConexion = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sqlConexion.Open();
+                Comm = sqlConexion.CreateCommand();
+                Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET " +
+                    "Activado = @Activado " +
+                    "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
+                Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = OE;
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    OEmod = await GetOE(Convert.ToInt32(reader["Id_Orden_Estadistica"]));
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error modificando la orden estadistica " + ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                Comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+            return OEmod;
+        }
     }
 }

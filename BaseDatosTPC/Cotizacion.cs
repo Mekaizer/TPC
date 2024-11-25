@@ -36,8 +36,9 @@ namespace BaseDatosTPC
         /// <summary>
         /// Numero de solped
         /// </summary>
-        public int? Solped {  get; set; }
+        public long? Solped {  get; set; }
 
+        public bool Activado { get; set; }
 
 
     }

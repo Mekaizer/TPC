@@ -49,23 +49,15 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
                 Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
-                if (T.Fecha_OC_Recepcionada.HasValue)
-                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
-                else
-                    Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = DBNull.Value;
-                if (T.Fecha_OC_Enviada.HasValue)
-                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = T.Fecha_OC_Enviada;
-                else
-                    Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = DBNull.Value;
-                if (T.Fecha_OC_Liberada.HasValue)
-                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = T.Fecha_OC_Liberada;
-                else
-                    Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = DBNull.Value;
+                Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = DBNull.Value;
+                Comm.Parameters.Add("@Fecha_OC_Enviada", SqlDbType.DateTime).Value = DBNull.Value;
+                Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.DateTime).Value = DBNull.Value;
 
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = T.Detalle;
 
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
-
+                if (T.Solped != null)
+                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
+                else Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = DBNull.Value;
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.Id_OE;
 
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
@@ -113,8 +105,8 @@ namespace APIPortalTPC.Repositorio
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
                     "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " + 
-                    "INNER JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
-                    "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
+                    "Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
+                    "LEFT JOIN JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
                     "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -137,6 +129,7 @@ namespace APIPortalTPC.Repositorio
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+                    T.Activado = Convert.ToBoolean(reader["Activado"]);
                 }
             }
             catch (SqlException ex)
@@ -172,8 +165,8 @@ namespace APIPortalTPC.Repositorio
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
                     "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
-                    "INNER JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
-                    "INNER JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE "; // leer base datos 
+                    "Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
+                    "LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE "; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -190,12 +183,14 @@ namespace APIPortalTPC.Repositorio
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
-                    T.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    T.Activado = Convert.ToBoolean(reader["Activado"]); 
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+
                     int cont = 0;
                     foreach (Ticket ticket in lista)
-                        if (ticket.ID_Ticket == T.ID_Ticket)
+                        if (ticket.ID_Ticket == T.ID_Ticket && T.Activado)
                             cont = 1;
+
                     if (cont == 0)
                     {
                         lista.Add(T);
@@ -294,6 +289,12 @@ namespace APIPortalTPC.Repositorio
         }
 
 
+        /// <summary>
+        /// Metodo que actualiza el estado del ticket dependiendo de su cotizaciones
+        /// </summary>
+        /// <param name="id_T"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ticket> ActualizarEstadoTicket(int  id_T)
         {
             Ticket T = await GetTicket(id_T);
@@ -340,6 +341,64 @@ namespace APIPortalTPC.Repositorio
                     T.Estado = "Parcialmente Recepcionado";
                 else
                     T.Estado = "No";
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Ticket " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return T;
+        }
+        /// <summary>
+        /// Metodo para "eliminar" el ticket, cambia el valor de Activado a false y las cotizaciones asociadas tambien
+        /// </summary>
+        /// <param name="id_T"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Ticket> EliminarTicket(int id_T)
+        {
+            Ticket T = await GetTicket(id_T);
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            int cont = 0;
+            int total = 0;
+            try
+            {
+
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText =
+                    "Comm.CommandText = UPDATE dbo.Ticket SET " +
+                    "Estado = @Estado, " +
+                    "Activado = @Activado, " +
+                    "Id_OE = @Id_OE " +
+                    "WHERE ID_Ticket = @ID_Ticket"; 
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 500).Value = "Cancelado";
+                Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
+                
+                reader = await Comm.ExecuteReaderAsync();
+                if (reader.Read())
+                    T = await GetTicket(Convert.ToInt32(reader["ID_Ticket"]));
+                //permite regresar objetos de la base de datos para que se puedan leer
+                
             }
             catch (SqlException ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 
 namespace ClasesBaseDatosTPC
 {
@@ -18,5 +19,6 @@ namespace ClasesBaseDatosTPC
         public bool? Admin {  get; set; }
         public List<String>? ListaDepartamento { get; set; }
         public int? CodigoMFA { get; set; }
+        public string? Nombre_Completo { get; set; }
     }
 }

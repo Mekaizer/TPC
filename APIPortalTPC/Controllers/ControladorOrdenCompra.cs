@@ -127,5 +127,25 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<OrdenCompra>> Eliminar(int id)
+        {
+            try
+            {
+                var u = ROC.GetOC(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro la Orden de compra");
+                }
+                return Ok(await ROC.EliminarOC(id));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
+        }
+
     }
 }
