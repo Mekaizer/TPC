@@ -115,16 +115,20 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        [HttpPut("Estado{id:int}")]    
+        [HttpPut("Estado/{id:int}")]    
         public async Task<ActionResult<Ticket>> EstadoTicket(int id)
         {
             try
             {
-                return await RT.ActualizarEstadoTicket(id);
+                var Ticket= await RT.ActualizarEstadoTicket(id);
+                if (Ticket.ID_Ticket != 0)
+                    return Ticket;
+                else
+                    return NotFound("Ticket no encontrado");
             }
             catch(Exception ex) 
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status400BadRequest,"Error no se de que "+ex);
             }
             
         }

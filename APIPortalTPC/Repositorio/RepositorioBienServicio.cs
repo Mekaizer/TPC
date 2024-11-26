@@ -233,7 +233,9 @@ namespace APIPortalTPC.Repositorio
             {
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
-                Comm.CommandText = "UPDATE dbo.Bien_Servicio SET Activado=@Activado WHERE ID_Bien_Servicio = @ID_Bien_Servicio";
+                Comm.CommandText = "UPDATE dbo.Bien_Servicio " +
+                    "SET Activado=@Activado " +
+                    "WHERE ID_Bien_Servicio = @ID_Bien_Servicio";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = bs;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;

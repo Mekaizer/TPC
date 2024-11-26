@@ -1,7 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/

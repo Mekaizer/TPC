@@ -80,7 +80,7 @@ namespace APIPortalTPC.Repositorio
 
             finally
             {
-                MFA(U.Correo_Usuario);
+                //MFA(U.Correo_Usuario);
                 Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();

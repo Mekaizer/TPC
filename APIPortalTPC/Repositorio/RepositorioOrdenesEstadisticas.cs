@@ -190,7 +190,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "UPDATE dbo.Ordenes_Estadisticas SET " +
                     "Nombre = @Nombre, " +
                     "Codigo_OE = @Codigo_OE, " +
-                    "Id_Centro_de_Costo = @Id_Centro_de_Costo," +
+                    "Id_Centro_de_Costo = @Id_Centro_de_Costo " +
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE.Id_Orden_Estadistica;

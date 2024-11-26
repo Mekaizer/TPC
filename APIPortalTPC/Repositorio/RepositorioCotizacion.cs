@@ -194,7 +194,7 @@ namespace APIPortalTPC.Repositorio
                                    "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                if (!cotizacion.ID_Bien_Servicio.Equals(null))
+                if (cotizacion.ID_Bien_Servicio != null)
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
                 else Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
                 if(cotizacion.Detalle != null)

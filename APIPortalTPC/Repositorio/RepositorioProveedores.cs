@@ -122,6 +122,7 @@ namespace APIPortalTPC.Repositorio
                     "Razon_social = @Razon_social, " +
                     "Nombre_Fantasia = @Nombre_Fantasia, " +
                     "ID_Bien_Servicio = @ID_Bien_Servicio, " +
+                    "Direccion = @Direccion, " +
                     "Comuna = @Comuna, " +
                     "Correo_Proveedor = @Correo_Proveedor, " +
                     "Telefono_Proveedor = @Telefono_Proveedor, " +
@@ -137,6 +138,7 @@ namespace APIPortalTPC.Repositorio
                     Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 500).Value = P.Rut_Proveedor;
                     Comm.Parameters.Add("@Razon_social", SqlDbType.VarChar, 500).Value = P.Razon_Social;
                     Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 500).Value = P.Nombre_Fantasia;
+
 
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.VarChar, 500).Value = P.ID_Bien_Servicio;
                     Comm.Parameters.Add("@Direccion", SqlDbType.VarChar, 500).Value = P.Direccion;

@@ -60,7 +60,7 @@ namespace APIPortalTPC.Controllers
             if(U.CodigoMFA== mfa.mfa)
             {
                 U.CodigoMFA = 0;
-                RU.ModificarUsuario(U);
+                //RU.ModificarUsuario(U);
                 return U;
             }
                 

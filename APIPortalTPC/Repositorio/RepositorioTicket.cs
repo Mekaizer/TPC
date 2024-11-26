@@ -2,6 +2,7 @@
 using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
+using NPOI.SS.Formula.Functions;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -101,12 +102,13 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre, OC.Numero_OC " +
+                Comm.CommandText =
+                    "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre, OC.Numero_OC " +
                     "FROM dbo.Ticket T " +
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
-                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " + 
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
                     "Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
-                    "LEFT JOIN JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
+                    "LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE  " +
                     "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -188,7 +190,7 @@ namespace APIPortalTPC.Repositorio
 
                     int cont = 0;
                     foreach (Ticket ticket in lista)
-                        if (ticket.ID_Ticket == T.ID_Ticket && T.Activado)
+                        if (ticket.ID_Ticket == T.ID_Ticket)
                             cont = 1;
 
                     if (cont == 0)
@@ -231,8 +233,6 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Ticket SET " +
                     "Estado = ISNULL(@Estado, Estado)," +
-                    "Id_Usuario = ISNULL(@Id_Usuario, Id_Usuario), " +
-                    "Id_Proveedor = ISNULL(@Id_Proveedor, Id_Proveedor), " +
                     "Solped = @Solped, " +
                     "Fecha_Creacion_OC = @Fecha_Creacion_OC, " +
                     "Fecha_OC_Recepcionada = ISNULL(@Fecha_OC_Recepcionada, Fecha_OC_Recepcionada),  " +
@@ -245,8 +245,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
                 Comm.Parameters.Add("@Fecha_Creacion_OC", SqlDbType.DateTime).Value = T.Fecha_Creacion_OC;
-                Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = T.Id_Usuario;
-                Comm.Parameters.Add("@Id_Proveedor", SqlDbType.Int).Value = T.ID_Proveedor;
+
                 if (T.Fecha_OC_Recepcionada.HasValue)
                     Comm.Parameters.Add("@Fecha_OC_Recepcionada", SqlDbType.DateTime).Value = T.Fecha_OC_Recepcionada;
                 else
@@ -298,49 +297,64 @@ namespace APIPortalTPC.Repositorio
         public async Task<Ticket> ActualizarEstadoTicket(int  id_T)
         {
             Ticket T = await GetTicket(id_T);
+            List<OrdenCompra> lista = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
             SqlCommand? Comm = null;
             //parametro para leer los resultados de una consulta
             SqlDataReader reader = null;
-            int cont = 0;
             int total = 0;
+            int cont = 0;
             try
             {
-
                 //Se crea la instancia con la conexion SQL para interactuar con la base de datos
                 sql.Open();
                 //se ejecuta la base de datos
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT OC.*, t.Estado " +
-                    "FROM Orden_de_Compra OC " +
-                    "inner join Ticket t on  t.ID_Ticket = OC.Id_Ticket " +
-                    "where t.ID_Ticket = @ID_Ticket";
+                Comm.CommandText = @"SELECT OC.* 
+                FROM dbo.Orden_de_Compra OC 
+                where Oc.Id_Ticket = @Id_Ticket
+               ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
+                Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
-
                 while (reader.Read())
                 {
                     bool recep = Convert.ToBoolean(reader["Recepcion"]);
-                    if (!recep)
-                        cont++;
-                    total++;
+                    bool activada = Convert.ToBoolean(reader["Estado_OC"]);
+                    if (activada)
+                    {
+                        if (recep)
+                            cont++;
+                        total++;
+                    }
+
                 }
-                if (cont == total)
-                {
-                    T.Estado = "Liberado";
-                }
-                else if (cont < total)
-                    T.Estado = "Parcialmente Recepcionado";
+                 if (cont == total)
+                    T.Estado = "Recepcionada";
+                
+
+                else if (cont == 0)
+                    T.Estado = "En espera de Recepcion";
+
                 else
-                    T.Estado = "No";
+                    T.Estado = "Parcialmente Recepcionado";
+
+                reader.Close();
+                Comm.Dispose();
+                Comm.CommandText = "UPDATE dbo.Ticket SET " +
+                    "Estado = ISNULL(@Estado, Estado) " +
+                    "WHERE ID_Ticket = @ID_Ticket";
+                Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = T.Estado;
+                reader = await Comm.ExecuteReaderAsync();
             }
             catch (SqlException ex)
             {
@@ -348,6 +362,9 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
+
+                Console.WriteLine(total);
+                    Console.WriteLine(cont);
                 //Se cierran los objetos 
                 reader.Close();
                 Comm.Dispose();
@@ -382,21 +399,19 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText =
-                    "Comm.CommandText = UPDATE dbo.Ticket SET " +
-                    "Estado = @Estado, " +
-                    "Activado = @Activado, " +
-                    "Id_OE = @Id_OE " +
-                    "WHERE ID_Ticket = @ID_Ticket"; 
+                Comm.CommandText = "UPDATE dbo.Ticket SET " +
+                    "Estado = ISNULL(@Estado, Estado)," +
+                    "Activado = @Activado " +
+                    "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
-                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 500).Value = "Cancelado";
-                Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
+                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "Cancelado";
+                Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = id_T;
                 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
-                    T = await GetTicket(Convert.ToInt32(reader["ID_Ticket"]));
+                    T = await GetTicket(id_T);
                 //permite regresar objetos de la base de datos para que se puedan leer
                 
             }

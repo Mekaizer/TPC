@@ -95,7 +95,7 @@ namespace APIPortalTPC.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex.Message);
             }
         }
 
@@ -120,9 +120,9 @@ namespace APIPortalTPC.Controllers
 
                 return await RP.ModificarProveedor(P);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
         /// <summary>

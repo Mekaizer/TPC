@@ -494,8 +494,8 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Usuario SET " +
-                                    "Activado = @Activado, " +
-                                    " WHERE  Id_Usuario = @Id_Usuario;";
+                                    "Activado = @Activado " +
+                                    "WHERE  Id_Usuario = @Id_Usuario";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = U;
