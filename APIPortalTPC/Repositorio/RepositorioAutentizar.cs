@@ -70,6 +70,7 @@ namespace APIPortalTPC.Repositorio
                         U.Activado = Convert.ToBoolean(reader["Activado"]);
                         U.Admin = Convert.ToBoolean(reader["Admin"]);
                         U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                        U.CodigoMFA = Convert.ToInt32(reader["CodigoMFA"]);
                     }
                 }
             }

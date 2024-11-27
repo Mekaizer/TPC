@@ -37,11 +37,16 @@ namespace APIPortalTPC.Controllers
             {
                 return NotFound("Clave o contraseña incorrecta");
             }
+            bool activado = User.Activado;
 
-            ///int codigo = await RA.MFA(User.Correo_Usuario);
-            ///User.CodigoMFA = codigo;
-            ///await RU.ModificarUsuario(User);
-            return User;
+            if (activado)
+            {
+                ///int codigo = await RA.MFA(User.Correo_Usuario);
+                ///User.CodigoMFA = codigo;
+                ///await RU.ModificarUsuario(User);
+                return User;
+            }
+            return NotFound("Usuario no activado");
 
         }
         [HttpPost("MFA")]
@@ -69,6 +74,33 @@ namespace APIPortalTPC.Controllers
                 return NotFound("Codigo Incorrecto");
             }
         }
+        /// <summary>
+        /// Metodo
+        /// </summary>
+        /// <param name="postrq"></param>
+        /// <returns></returns>
+        [HttpPost("nuevo")]
+        public async Task<ActionResult<Usuario>> NuevoUsuario(PostRq postrq)
+        {
+            Usuario User = await RA.ValidarCorreo(postrq.correo, postrq.pass);
+
+            if (User.Id_Usuario == 0)
+            {
+                return NotFound("Clave o contraseña incorrecta");
+            }
+            bool activado = User.Activado;
+            
+            if (!activado)
+            {
+
+                if (User.Contraseña_Usuario == User.CodigoMFA.ToString())
+                    //enviar correo con la contraseña
+
+                    return User;
+            }
+            return NotFound("El usuario ya esta activado");
+        }
+
 
         [HttpPost("pass")]
         //metodo para verificacion dos pasos

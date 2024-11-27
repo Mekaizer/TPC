@@ -136,6 +136,32 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
+    "Method": "NuevoUsuario",
+    "RelativePath": "api/ControladorAutentizar/nuevo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postrq",
+        "Type": "BaseDatosTPC.PostRq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
     "Method": "RecuperarContrase\u00F1a",
     "RelativePath": "api/ControladorAutentizar/pass",
     "HttpMethod": "POST",
@@ -764,6 +790,38 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "VariosLiberadores",
+    "RelativePath": "api/ControladorEnviarCorreo/VariosLiberadores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LID",
+        "Type": "BaseDatosTPC.ListaID",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "VariosReceptores",
+    "RelativePath": "api/ControladorEnviarCorreo/VariosReceptores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LID",
+        "Type": "BaseDatosTPC.ListaID",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

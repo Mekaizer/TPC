@@ -53,16 +53,15 @@ namespace APIPortalTPC.Repositorio
                     sql.Open();
                     Comm = sql.CreateCommand();
                     Comm.CommandText = "INSERT INTO Usuario" +
-                        "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario, Apellido_Materno, Correo_Usuario, Contraseña_Usuario, Tipo_Liberador, En_Vacaciones, Admin) " +
-                        "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario, @Apellido_Materno, @Correo_Usuario, @Contraseña_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin) " +
+                        "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario, Apellido_Materno, Correo_Usuario,  Tipo_Liberador, En_Vacaciones, Admin) " +
+                        "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario, @Apellido_Materno, @Correo_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin) " +
                         "SELECT SCOPE_IDENTITY() AS Id_Usuario";
                     Comm.CommandType = CommandType.Text;
                     Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
                     Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
                     Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar, 50).Value = U.Rut_Usuario;
                     Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
-                    Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                    Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
+                    Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 100).Value = U.Correo_Usuario;
                     Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                     Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                     Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
@@ -207,7 +206,7 @@ namespace APIPortalTPC.Repositorio
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error cargando los datos tabla Usuario " +"aaa"+ ex.Message);
+                throw new Exception("Error cargando los datos tabla Usuario "+ ex.Message);
             }
             finally
             {
@@ -249,6 +248,7 @@ namespace APIPortalTPC.Repositorio
                                     "Tipo_Liberador = @Tipo_Liberador, " +
                                     "En_Vacaciones = @En_Vacaciones, " +
                                     "CodigoMFA = @CodigoMFA, " +
+                                    "Activado =@Activado, " +
                                     "Admin = @Admin " +
                                     " WHERE  Id_Usuario = @Id_Usuario;";
                 Comm.CommandType = CommandType.Text;
@@ -257,10 +257,11 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar,50).Value = U.Rut_Usuario;
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 50).Value = U.Contraseña_Usuario;
+                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = U.Contraseña_Usuario;
                 Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
                 if (U.CodigoMFA != null)
                 {
                     Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = U.CodigoMFA;
@@ -274,6 +275,8 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Umod = await GetUsuario(Convert.ToInt32(reader["Id_Usuario"]));
+
+              
             }
             catch (SqlException ex)
             {
@@ -351,10 +354,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"select  U.*
-                from dbo.Departamento D
-                inner join dbo.Usuario U on D.Encargado = U.Id_Usuario
-                inner join dbo.Ticket T on T.Id_Usuario = U.Id_Usuario
+                Comm.CommandText = @"select  U.* 
+                from dbo.Departamento D 
+                inner join dbo.Usuario U on D.Encargado = U.Id_Usuario 
+                inner join dbo.Ticket T on T.Id_Usuario = U.Id_Usuario 
                 where lower(T.Estado) != 'liberación concluida' and Lower(U.Tipo_Liberador) != 'no' and U.Activado != 0"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
@@ -518,7 +521,17 @@ namespace APIPortalTPC.Repositorio
             }
             return Umod;
         }
+    
+        public async Task<Usuario> ActivarUsuario(Usuario U)
+        {
+            Random random = new Random();
+            int pass = random.Next(100000, 999999);
+            U.Contraseña_Usuario = pass.ToString();
+            U.CodigoMFA = pass;
+            return U;
+        }
     }
+    
 
     
 }    

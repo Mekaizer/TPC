@@ -87,7 +87,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Ticket> GetTicket(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Ticket T = new();
+            List<Ticket> lista = new List<Ticket>();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -108,7 +108,7 @@ namespace APIPortalTPC.Repositorio
                     "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
                     "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
                     "Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
-                    "LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE  " +
+                    "LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
                     "where T.ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -118,7 +118,7 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-
+                    Ticket T = new();
                     T.Estado = Convert.ToString(reader["Estado"]).Trim();
                     T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
                     T.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
@@ -127,11 +127,22 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
-                    T.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
-                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
+                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+                    T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
+
+                    int cont = 0;
+                    foreach (Ticket ticket in lista)
+                        if (ticket.ID_Ticket == T.ID_Ticket)
+                            cont = 1;
+
+                    if (cont == 0)
+                    {
+                        lista.Add(T);
+                    }
                 }
             }
             catch (SqlException ex)
@@ -146,7 +157,7 @@ namespace APIPortalTPC.Repositorio
                 sql.Close();
                 sql.Dispose();
             }
-            return T;
+            return lista[0];
         }
         /// <summary>
         /// Metodo que retorna una lista con los objeto
@@ -183,10 +194,12 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Activado = Convert.ToBoolean(reader["Activado"]); 
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+                    T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
 
                     int cont = 0;
                     foreach (Ticket ticket in lista)
@@ -227,6 +240,7 @@ namespace APIPortalTPC.Repositorio
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
             SqlDataReader reader = null;
+
             try
             {
                 sqlConexion.Open();
@@ -236,8 +250,8 @@ namespace APIPortalTPC.Repositorio
                     "Solped = @Solped, " +
                     "Fecha_Creacion_OC = @Fecha_Creacion_OC, " +
                     "Fecha_OC_Recepcionada = ISNULL(@Fecha_OC_Recepcionada, Fecha_OC_Recepcionada),  " +
-                    "Fecha_OC_Enviada = ISNULL(@Fecha_OC_Enviada, Fecha_OC_Enviada)," +
-                    "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada)," +
+                    "Fecha_OC_Enviada = ISNULL(@Fecha_OC_Enviada, Fecha_OC_Enviada), " +
+                    "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada), " +
                     "Detalle = @Detalle," +
                     "Id_OE = @Id_OE " +
                     "WHERE ID_Ticket = @ID_Ticket";
@@ -336,15 +350,14 @@ namespace APIPortalTPC.Repositorio
                     }
 
                 }
-                 if (cont == total)
-                    T.Estado = "Recepcionada";
-                
+                if (cont == 0)
+                    T.Estado = "Espera de liberación";
 
-                else if (cont == 0)
-                    T.Estado = "En espera de Recepcion";
+                else if (cont == total)
+                    T.Estado = "OC Recepcionada";
 
                 else
-                    T.Estado = "Parcialmente Recepcionado";
+                    T.Estado = "OC Parcial";
 
                 reader.Close();
                 Comm.Dispose();

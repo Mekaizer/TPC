@@ -15,13 +15,15 @@ namespace APIPortalTPC.Controllers
     {
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioUsuario RU;
+        private readonly InterfaceEnviarCorreo IEC;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RU">Interface de RepositorioUsuario</param>
 
-        public ControladorUsuario(IRepositorioUsuario RU)
+        public ControladorUsuario(IRepositorioUsuario RU, InterfaceEnviarCorreo IEC)
         {
+            this.IEC = IEC;
             this.RU = RU;
         }
         /// <summary>
@@ -82,6 +84,9 @@ namespace APIPortalTPC.Controllers
                 if (res == "ok")
                 {
                     Usuario nuevo = await RU.NuevoUsuario(U);
+                    nuevo = await RU.ActivarUsuario(nuevo);
+                    await RU.ModificarUsuario(nuevo);
+                    await IEC.CorreoUsuarioPass(nuevo);
                     return nuevo;
                 }
                 else

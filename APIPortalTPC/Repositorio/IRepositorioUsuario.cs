@@ -11,5 +11,6 @@ namespace APIPortalTPC.Repositorio
         public Task<string> Existe(string rut, string correo );
         public Task<IEnumerable<Usuario>> GetAllUsuariosLiberadores();
         public Task<Usuario> EliminarUsuario(int U);
+        public Task<Usuario> ActivarUsuario(Usuario U);
     }
 }

@@ -14,6 +14,8 @@ namespace BaseDatosTPC
 
         public string? Id_Usuario { get; set; }
 
+        public int Id_U { get; set; }
+
         public string? ID_Proveedor { get; set; }
 
         public string? Detalle { get; set; }
