@@ -23,8 +23,6 @@ namespace APIPortalTPC.Controllers
             this.IRU = IRU;
         }
 
-
-
         [HttpPost("Proveedor{id:int}")]
         public async Task<ActionResult> EnviarCorreoProveedores(int id)
         {

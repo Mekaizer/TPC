@@ -100,6 +100,8 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
+      
+
 
         /// <summary>
         /// Metodo asincrónico para modificar un objeto por ID

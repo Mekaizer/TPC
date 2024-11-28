@@ -1612,6 +1612,32 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
+    "Method": "ListaOC",
+    "RelativePath": "api/ControladorTicket/ListaOC{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.OrdenCompra",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
     "Method": "GetAll",
     "RelativePath": "api/ControladorUsuario",

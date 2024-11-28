@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -18,14 +19,16 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioTicket RT;
+        private readonly IRepositorioOrdenCompra ROC;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RT">Interface de RepositorioTicket</param>
 
-        public ControladorTicket(IRepositorioTicket RT)
+        public ControladorTicket(IRepositorioTicket RT, IRepositorioOrdenCompra ROC)
         {
             this.RT = RT;
+            this.ROC = ROC;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -149,6 +152,30 @@ namespace APIPortalTPC.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
+        }
+        [HttpGet("ListaOC{id:int}")]
+        public async Task<ActionResult<OrdenCompra>> ListaOC(int id)
+        {
+            try
+            {
+                var lista = await ROC.GetAllOC();
+                var ticket = await RT.GetTicket(id);
+                List<OrdenCompra> loc = new List<OrdenCompra>();
+                if (ticket.ID_Ticket == 0)
+                    return StatusCode(StatusCodes.Status404NotFound);
+
+                foreach (OrdenCompra OC in lista)
+                    if (OC.Id_Ticket == ticket.ID_Ticket)
+                        loc.Add(OC);
+                if(loc == null)
+
+                    return BadRequest();
+                return Ok(loc);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
     }
