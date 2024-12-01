@@ -34,25 +34,18 @@ namespace APIPortalTPC.Repositorio
         /// <param name="filePath"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Proveedores> LeerExcelProveedor(string filePath)
-    {
+        public async Task<Proveedores> LeerExcelProveedor(byte[] archivo)
+        {
         // Establecer el contexto de la licencia
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         Proveedores P = new Proveedores();
-        // Ruta al archivo Excel
-
-        // Verificar que el archivo exista
-        if (File.Exists(filePath))
-        {
-
-            // Cargar el archivo Excel
-            FileInfo fileInfo = new FileInfo(filePath);
-
-            // Usar EPPlus para leer el archivo Excel
-            using (ExcelPackage package = new ExcelPackage(fileInfo))
+        using (var memoryStream = new MemoryStream(archivo))
+        using (ExcelPackage package = new ExcelPackage(memoryStream))
             {
-                // Seleccionar la primera hoja del archivo
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+
+                {
+                    // Seleccionar la primera hoja del archivo
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
                 // Leer una celda específica (por ejemplo, B2)
 
@@ -75,10 +68,7 @@ namespace APIPortalTPC.Repositorio
             return P;
 
         }
-        else
-        {
-            throw new Exception("Error a la hora de leer el excel");
-        }
+
     }
 
         /// <summary>
@@ -86,14 +76,16 @@ namespace APIPortalTPC.Repositorio
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async Task<List<CentroCosto>> LeerExcelCeCo(string filePath)
+        public async Task<List<CentroCosto>> LeerExcelCeCo(byte[] archivo)
     {
         var centrosCostos = new List<CentroCosto>();
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        using (var package = new ExcelPackage(new FileInfo(filePath)))
-        {
-            var worksheet = package.Workbook.Worksheets[0];
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+
+            {
+                var worksheet = package.Workbook.Worksheets[0];
 
             int rowCount = worksheet.Dimension.Rows;
             for (int row = 2; row <= rowCount; row++)
@@ -125,24 +117,22 @@ namespace APIPortalTPC.Repositorio
         /// <param name="filePath"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> ActualizarOC(string filePath)
+        public async Task<string> ActualizarOC(byte[] archivo)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        if (!File.Exists(filePath))
-        {
-                throw new Exception("Error en leer los datos");
-        }
+
 
         // Variables para almacenar datos de las columnas C, G y Q
         string columnaC ;
         string columnaG ;
         string columnaQ ;
-        // Cargar el archivo Excel
-        FileInfo fileInfo = new FileInfo(filePath);
-        using (ExcelPackage package = new ExcelPackage(fileInfo))
-        {
-            ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Primera hoja del archivo
+            // Cargar el archivo Excel
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Primera hoja del archivo
 
             // Leer las columnas C, G y Q al mismo tiempo (empieza desde la fila 5)
             int row = 5;
@@ -200,13 +190,15 @@ namespace APIPortalTPC.Repositorio
         return "listo";
         }
 
-        public async Task<List<BienServicio>> LeerBienServicio(string filePath)
+        public async Task<List<BienServicio>> LeerBienServicio(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var lista = new List<BienServicio>();
             string hoja = "Hoja1"; 
-            int columna = 2; 
-            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
+            int columna = 2;
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
 
@@ -224,15 +216,18 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
     
-        public async Task<List<Proveedores>> LeerProveedores(string filePath)
+        public async Task<List<Proveedores>> LeerProveedores(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<Proveedores> lista = new List<Proveedores>();
             string hoja = "Hoja1";
 
-            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
-            {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            
+
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
 
 
                 int rowCount = worksheet.Dimension.Rows;
@@ -261,13 +256,14 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
     
-        public async Task<List<OrdenCompra>> LeerExcelOC(string filePath){
+        public async Task<List<OrdenCompra>> LeerExcelOC(byte[] archivo){
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<OrdenCompra> lista = new List<OrdenCompra>();
             string hoja = "Hoja1";
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
 
-            using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
 

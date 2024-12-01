@@ -102,7 +102,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC 
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
                 FROM dbo.Orden_de_Compra OC 
 				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
                 LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores 
@@ -123,6 +123,7 @@ namespace APIPortalTPC.Repositorio
                     oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     oc.Texto = Convert.ToString(reader["Texto"]).Trim();
                     oc.IsCiclica = Convert.ToBoolean(reader["IsCiclica"]);
+                    oc.IdP = Convert.ToInt32(reader["ID_Proveedor"]);
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
                     oc.Mon = Convert.ToString(reader["Mon"]).Trim();
@@ -166,7 +167,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC 
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
                 FROM dbo.Orden_de_Compra OC 
 				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
                 LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores  "
@@ -184,6 +185,7 @@ namespace APIPortalTPC.Repositorio
                     oc.Texto = Convert.ToString(reader["Texto"]).Trim();
                     oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
                     oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
+                    oc.IdP = Convert.ToInt32(reader["ID_Proveedor"]);
                     oc.Mon = Convert.ToString(reader["Mon"]).Trim();
                     oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
                     string Prov = Convert.ToString(reader["ID_Proveedores"]);
@@ -247,7 +249,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
                 Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
-                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = Int64.Parse(OC.Proveedor);
+                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = OC.IdP;
 
                 Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
                 Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;

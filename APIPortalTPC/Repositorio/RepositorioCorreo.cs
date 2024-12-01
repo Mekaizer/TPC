@@ -43,9 +43,9 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = C.Id_Ticket;
                 Comm.Parameters.Add("@FechaCreacion", SqlDbType.DateTime).Value = DateTime.Now;
-                Comm.Parameters.Add("@CorreosEnviados", SqlDbType.Int).Value = C.CorreosEnviados;
-                Comm.Parameters.Add("@PrimerCorreo", SqlDbType.DateTime).Value = C.PrimerCorreo;
-                Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = C.UltimoCorreo;
+                Comm.Parameters.Add("@CorreosEnviados", SqlDbType.Int).Value = 1;
+                Comm.Parameters.Add("@PrimerCorreo", SqlDbType.DateTime).Value = DateTime.Now;
+                Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@detalle", SqlDbType.VarChar, 500).Value = C.detalle;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = C.Numero_OC;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
@@ -81,7 +81,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT C.* ,U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                Comm.CommandText = @"SELECT C.* ,U.Nombre_Usuario,T.Id_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
                 FROM dbo.Correo C 
                 Inner join Ticket T on T.Id_Ticket = C.Id_Ticket 
                 Inner join Usuario U on U.Id_Usuario = T.Id_Usuario 
@@ -101,6 +101,7 @@ namespace APIPortalTPC.Repositorio
                 
                     C.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     C.Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    C.ID_Solicitante = Convert.ToInt32(reader["Id_Usuario"]);
                     C.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     C.CeCo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     C.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
@@ -137,7 +138,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT C.* ,U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                Comm.CommandText = @"SELECT C.* ,U.Nombre_Usuario,T.Id_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
                 FROM dbo.Correo C
                 Inner join Ticket T on T.Id_Ticket = C.Id_Ticket
                 Inner join Usuario U on U.Id_Usuario = T.Id_Usuario
@@ -152,6 +153,7 @@ namespace APIPortalTPC.Repositorio
                     Correo C = new();
                     C.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     C.Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    C.ID_Solicitante = Convert.ToInt32(reader["Id_Usuario"]);
                     C.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     C.CeCo = Convert.ToString(reader["NombreCeCo"]).Trim();
                     C.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);

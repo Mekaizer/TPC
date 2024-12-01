@@ -62,7 +62,7 @@ namespace APIPortalTPC.Repositorio
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
 
                     a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
-                    /*   try
+                /*try
                        {
                            a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
                        }
@@ -71,7 +71,7 @@ namespace APIPortalTPC.Repositorio
 
                            a.ArchivoDoc = [0];
                        }
-                    */
+                */
                 } 
 
 
@@ -112,16 +112,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Archivo a = new ();
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    /*  try
-                      {
-                         a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
-                      }
-                      catch (InvalidCastException)
-                      {
 
-                          a.ArchivoDoc = [0];
-                      }
-                    */
                     a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
                     lista.Add(a);
                 }
@@ -162,13 +153,12 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
                 Comm.Parameters.Add("@NombreDoc", SqlDbType.VarChar,50).Value = A.NombreDoc;
-                A.ArchivoDoc = File.ReadAllBytes(@"C:\Users\drako\Desktop\PRO4.xlsx");
                 Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary).Value = A.ArchivoDoc;
 
                 // Crear un objeto de la clase Archivo
 
 
-                // Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc; DBNull.Value;
+                Comm.Parameters.Add("@ArchivoDoc", SqlDbType.VarBinary, -1).Value = A.ArchivoDoc;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
@@ -209,7 +199,6 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = A.Id_Archivo;
                 Comm.Parameters.Add("@NombreDoc", SqlDbType.VarChar, 50).Value = A.NombreDoc;
-                A.ArchivoDoc = File.ReadAllBytes(@"C:\Users\drako\Desktop\PRO4.xlsx");
                 Comm.Parameters.Add("@ArchivoDoc",SqlDbType.VarBinary).Value = A.ArchivoDoc;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
             
@@ -227,7 +216,71 @@ namespace APIPortalTPC.Repositorio
             return A;
         }
         
-      
+        /// <summary>
+        /// Metodo que descarga el archivo asociado
+        /// </summary>
+        /// <param name="A"></param>
+        /// <returns></returns>
+        public async Task<Archivo> DescargarArchivo(int id)
+        { //Parametro para guardar el objeto a mostrar
+            Archivo a = new();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader? reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = "SELECT * FROM dbo.Archivo " +
+                    "where Id_Archivo = @Id_Archivo";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = id;
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
+                    a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
+                    try
+                    {
+                        a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
+                    }
+                    catch (InvalidCastException)
+                    {
+
+                      return null;
+                    }
+                  
+                }
+
+
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader?.Close();
+                Comm?.Dispose();
+                sql.Close();
+                sql.Dispose();
+            
+            }
+
+            return a;
+        }
+
     }
 
 }

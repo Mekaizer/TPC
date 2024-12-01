@@ -12,6 +12,7 @@
           "Dapper": "2.1.35",
           "EPPlus": "7.3.1",
           "Microsoft.AspNet.WebApi.Client": "6.0.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.SqlServer.Server": "1.0.0",
           "NPOI": "2.7.1",
           "Swashbuckle.AspNetCore": "6.4.0",
@@ -111,6 +112,12 @@
             "assemblyVersion": "6.0.0.0",
             "fileVersion": "6.0.61130.707"
           }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0",
+          "System.IO.Pipelines": "5.0.2"
         }
       },
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},
@@ -417,6 +424,7 @@
         }
       },
       "System.Formats.Asn1/8.0.0": {},
+      "System.IO.Pipelines/5.0.2": {},
       "System.Memory/4.5.5": {},
       "System.Net.Http.Json/8.0.0": {
         "dependencies": {
@@ -510,6 +518,7 @@
           "Dapper": "2.1.35",
           "EPPlus": "7.3.1",
           "Microsoft.AspNet.WebApi.Client": "6.0.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.SqlServer.Server": "1.0.0",
           "NPOI": "2.7.1",
@@ -594,6 +603,13 @@
       "sha512": "sha512-zXeWP03dTo67AoDHUzR+/urck0KFssdCKOC+dq7Nv1V2YbFh/nIg09L0/3wSvyRONEdwxGB/ssEGmPNIIhAcAw==",
       "path": "microsoft.aspnet.webapi.client/6.0.0",
       "hashPath": "microsoft.aspnet.webapi.client.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
     },
     "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
       "type": "package",
@@ -839,6 +855,13 @@
       "sha512": "sha512-AJukBuLoe3QeAF+mfaRKQb2dgyrvt340iMBHYv+VdBzCUM06IxGlvl0o/uPOS7lHnXPN6u8fFRHSHudx5aTi8w==",
       "path": "system.formats.asn1/8.0.0",
       "hashPath": "system.formats.asn1.8.0.0.nupkg.sha512"
+    },
+    "System.IO.Pipelines/5.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Iew+dfa6FFiyvWBdRmXApixRY1db+beyutpIck4SOSe0NLM8FD/7AD54MscqVLhvfSMLHO7KadjTRT7fqxOGTA==",
+      "path": "system.io.pipelines/5.0.2",
+      "hashPath": "system.io.pipelines.5.0.2.nupkg.sha512"
     },
     "System.Memory/4.5.5": {
       "type": "package",

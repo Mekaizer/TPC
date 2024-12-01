@@ -7,12 +7,12 @@ namespace APIPortalTPC.Repositorio
     /// </summary>
     public interface InterfaceExcel
     {
-        public Task<Proveedores> LeerExcelProveedor(string filePath);
-        public Task<List<Proveedores>> LeerProveedores(string filePath);
+        public Task<Proveedores> LeerExcelProveedor(byte[] archivo);
+        public Task<List<Proveedores>> LeerProveedores(byte[] archivo);
         //public Task<> LeerReporteSap(string filePath);
-        public Task<List<CentroCosto>> LeerExcelCeCo(string filePath);
-        public Task<string> ActualizarOC(string filePath);
-        public Task<List<BienServicio>> LeerBienServicio(string filePath);
+        public Task<List<CentroCosto>> LeerExcelCeCo(byte[] archivo);
+        public Task<string> ActualizarOC(byte[] archivo);
+        public Task<List<BienServicio>> LeerBienServicio(byte[] archivo);
 
 
     }

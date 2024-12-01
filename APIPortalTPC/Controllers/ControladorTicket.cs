@@ -117,7 +117,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
-
+        /// <summary>
+        /// Metodo para actualizar el estado del ticket, esto se hace revisando las ordenes de compra asociadas
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("Estado/{id:int}")]    
         public async Task<ActionResult<Ticket>> EstadoTicket(int id)
         {
@@ -135,7 +139,11 @@ namespace APIPortalTPC.Controllers
             }
             
         }
-
+        /// <summary>
+        /// Deja el estado "invisible" para usar el ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Ticket>> Eliminar(int id)
         {
@@ -154,7 +162,12 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
-        [HttpGet("ListaOC{id:int}")]
+        /// <summary>
+        /// Permite ver las ordenes de compra asociadas al ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("ListaOC/{id:int}")]
         public async Task<ActionResult<OrdenCompra>> ListaOC(int id)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using APIPortalTPC.Repositorio;
+using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
 /*
@@ -16,15 +17,17 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioUsuario RU;
         private readonly InterfaceEnviarCorreo IEC;
+        private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RU">Interface de RepositorioUsuario</param>
 
-        public ControladorUsuario(IRepositorioUsuario RU, InterfaceEnviarCorreo IEC)
+        public ControladorUsuario(IRepositorioUsuario RU, InterfaceEnviarCorreo IEC, InterfaceCrearExcel ICE)
         {
             this.IEC = IEC;
             this.RU = RU;
+            this.ICE = ICE;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -128,6 +131,15 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
 
+        }
+        [HttpGet("Imprimir")]
+        public async Task<ActionResult> GetExcel()
+        {
+
+            var lista = await RU.GetAllUsuario();
+
+            // Assuming DescargarExcel returns a byte array and a filename
+            return Ok(await ICE.DescargarExcel((List<Usuario>)lista));
         }
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Usuario>> Eliminar(int id)

@@ -65,7 +65,7 @@ namespace APIPortalTPC.Repositorio
                     Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                     Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                     Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
-
+   
                     decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                     int id = (int)idDecimal;
                     U.Id_Usuario = id;
@@ -130,6 +130,7 @@ namespace APIPortalTPC.Repositorio
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.CodigoMFA = Convert.ToInt32(reader["CodigoMFA"]);
                     U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
 
@@ -200,7 +201,7 @@ namespace APIPortalTPC.Repositorio
                     U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
                     U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
-
+                    U.CodigoMFA = Convert.ToInt32(reader["CodigoMFA"]);
                     lista.Add(U);
                 }
             }

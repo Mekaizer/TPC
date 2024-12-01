@@ -21,5 +21,7 @@ namespace BaseDatosTPC
         /// Nombre del centro de costo
         /// </summary>
         public string? Nombre { get; set; }
+
+        public bool Activado { get;set; }
     }
 }

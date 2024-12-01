@@ -130,7 +130,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="id">Id del objeto a buscar</param>
         /// <returns>Retorna el Objeto Proveedor</returns>
-        [HttpGet("BienServicio{id:int}")]
+        [HttpGet("BienServicio/{id:int}")]
         public async Task<ActionResult> GetBienServicio(int id)
         {
             {

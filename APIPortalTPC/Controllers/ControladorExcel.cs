@@ -23,19 +23,47 @@ namespace APIPortalTPC.Controllers
             this.IBS = IBS;
             this.IRP = IRP;
         }
-        
+
+        [HttpPost("Proveedores")]
+        public async Task<ActionResult> ExcelProveedores(FormDataArchivo FDA)
+        {
+            try
+            {
+                byte[] Archivo =  Subir(FDA);
+                if (Archivo == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound , "Archivo vacio!");
+                }
+
+                List<Proveedores> lista = (await Excel.LeerProveedores(Archivo));
+                foreach (Proveedores p in lista)
+                {
+                    string res = await IRP.Existe(p.Rut_Proveedor, p.ID_Bien_Servicio);
+                    if (res == "ok")
+                        await IRP.NuevoProveedor(p);
+                }
+
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+            }
+        }
+
         /// <summary>
         /// Metodo que permite leer el excel con el formato que agrega un proveedor a la base de datos
         /// </summary>
         /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> ExcelProveedor()
+        public async Task<ActionResult> ExcelProveedor(FormDataArchivo FDA)
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\PRO4.xlsx";
+                //string path = @"C:\Users\drako\Desktop\PRO4.xlsx";
+                byte[] Archivo = Subir(FDA);
 
-                return Ok(await Excel.LeerExcelProveedor(path));
+                return Ok(await Excel.LeerExcelProveedor(Archivo));
             }
             catch (Exception ex)
             {
@@ -49,14 +77,14 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("CeCo")]
-        public async Task<ActionResult> ExcelCeCo()
+        public async Task<ActionResult> ExcelCeCo(FormDataArchivo FDA)
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\cap.xlsx";
+                //string path = @"C:\Users\drako\Desktop\cap.xlsx";
+                byte[] Archivo = Subir(FDA);
 
-
-                List<CentroCosto> lc= (await Excel.LeerExcelCeCo(path));
+                List<CentroCosto> lc= (await Excel.LeerExcelCeCo(Archivo));
                 foreach(CentroCosto cc in lc)
                 {
                     string res = await IRC.Existe(cc.Codigo_Ceco);
@@ -77,14 +105,14 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("OCA")]
-        public async Task<ActionResult> ActualizarOC()
+        public async Task<ActionResult> ActualizarOC(FormDataArchivo FDA)
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
+                //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
 
-
-                return Ok(await Excel.ActualizarOC(path));
+                byte[] Archivo = Subir(FDA);
+                return Ok(await Excel.ActualizarOC(Archivo));
             
             }
             catch (Exception ex)
@@ -98,12 +126,13 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("BS")]
-        public async Task<ActionResult> ExcelBS()
+        public async Task<ActionResult> ExcelBS(FormDataArchivo FDA)
         {
             try
             {
-                string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
-                List<BienServicio> lista= (await Excel.LeerBienServicio(path));
+                byte[] Archivo = Subir(FDA);
+                //string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
+                List<BienServicio> lista= (await Excel.LeerBienServicio(Archivo));
                 foreach (BienServicio bs in lista)
                 {
                     string res = await IBS.Existe(bs.Bien_Servicio);
@@ -120,26 +149,23 @@ namespace APIPortalTPC.Controllers
 
         }
 
-        [HttpPost("Proveedores")]
-        public async Task<ActionResult> ExcelProveedores()
+        public byte[] Subir(FormDataArchivo model)
         {
-            try
+            byte[] Subido;
+            if (model.Archivo == null || model.Archivo.Length == 0)
             {
-                string path = @"C:\Users\drako\Desktop\Proveedores.xlsx";
-                List<Proveedores> lista = (await Excel.LeerProveedores(path));
-                foreach (Proveedores p in lista)
-                {
-                    string res = await IRP.Existe(p.Rut_Proveedor,p.ID_Bien_Servicio);
-                    if (res == "ok")
-                        await IRP.NuevoProveedor(p);
-                }
 
-                return Ok(true);
+                return null;
             }
-            catch (Exception ex)
+
+            using (var memoryStream = new MemoryStream())
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                model.Archivo.CopyTo(memoryStream);
+                Subido = memoryStream.ToArray();
+
             }
+
+            return (Subido);
         }
     }
 }

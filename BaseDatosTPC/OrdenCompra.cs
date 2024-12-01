@@ -47,6 +47,7 @@ namespace BaseDatosTPC
         /// Nombre del proveedor
         /// </summary>
         public string? Proveedor { get; set; }
+        public int IdP { get; set; }
         /// <summary>
         /// Codigo del material
         /// </summary>

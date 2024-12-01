@@ -4,7 +4,9 @@ using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.SS.Formula.Functions;
 using NPOI.XWPF.UserModel;
+using System.Security.Cryptography;
 
 namespace APIPortalTPC.Controllers
 {
@@ -23,11 +25,35 @@ namespace APIPortalTPC.Controllers
             this.IRU = IRU;
         }
 
-        [HttpPost("Proveedor{id:int}")]
+        [HttpPost("Proveedor")]
+        public async Task<ActionResult> EnviarVariosProveedores(ListaID LID)
+        {
+            try
+            {
+
+                var lis = LID.Lista;
+                foreach (int ID in lis) 
+                {
+                    var P = await IRP.GetProveedor(ID);
+
+                    await IEC.CorreoProveedores(P.ID_Bien_Servicio, P, LID.Asunto);
+                }
+
+
+
+                return Ok("Correos enviados con exito");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
+            }
+        }
+
+        [HttpPost("Proveedor/{id:int}")]
         public async Task<ActionResult> EnviarCorreoProveedores(int id)
         {
             try
-
             {
                 var lista = IRP.GetAllProveedoresBienServicio(id);
                 string mensaje = "Otro mensaje";
@@ -44,8 +70,6 @@ namespace APIPortalTPC.Controllers
                     {
                         return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
                     }
-
-
                 }
                 if (lista == null)
                 {
@@ -109,6 +133,31 @@ namespace APIPortalTPC.Controllers
 
 
         }
+        [HttpPost("VariosReceptores")]
+        public async Task<ActionResult> VariosReceptores(ListaID LID)
+        {
+            int[] lista = LID.Lista;
+        string subject = LID.Subject;
+            try
+            {
+                foreach (int i in lista)
+                {
+                    Usuario U = await IRU.GetUsuario(i);
+        await IEC.CorreoRecepciones(U, subject);
+    }
+                return Ok("Correos enviados con exito");
+
+}
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron liberadores ");
+            }
+
+
+
+        }
+
 
         [HttpPost("Receptores")]
         public async Task<ActionResult> EnviarCorreoReceptores()
@@ -124,28 +173,7 @@ namespace APIPortalTPC.Controllers
             return Ok("Correos enviados con exito");
         }
 
-        [HttpPost("VariosReceptores")]
-        public async Task<ActionResult> VariosReceptores(ListaID LID)
-        {
-            int[] lista = LID.Lista;
-            string subject = LID.Subject;
-            try
-            {
-                foreach (int i in lista)
-                {
-                    Usuario U = await IRU.GetUsuario(i);
-                    await IEC.CorreoRecepciones(U, subject);
-                }
-                return Ok("Correos enviados con exito");
 
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron recepcionadores ");
-            }
-
-        }
 
 
     }

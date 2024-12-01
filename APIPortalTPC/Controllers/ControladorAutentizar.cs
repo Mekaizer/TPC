@@ -41,9 +41,9 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-                ///int codigo = await RA.MFA(User.Correo_Usuario);
-                ///User.CodigoMFA = codigo;
-                ///await RU.ModificarUsuario(User);
+                //int codigo = await RA.MFA(User.Correo_Usuario);
+                //User.CodigoMFA = codigo;
+                //await RU.ModificarUsuario(User);
                 return User;
             }
             return NotFound("Usuario no activado");
@@ -65,7 +65,7 @@ namespace APIPortalTPC.Controllers
             if(U.CodigoMFA== mfa.mfa)
             {
                 U.CodigoMFA = 0;
-                //RU.ModificarUsuario(U);
+                RU.ModificarUsuario(U);
                 return U;
             }
                 
@@ -94,8 +94,10 @@ namespace APIPortalTPC.Controllers
             {
 
                 if (User.Contraseña_Usuario == User.CodigoMFA.ToString())
-                    //enviar correo con la contraseña
-
+                    User.CodigoMFA = 0;
+                    User.Activado = true;
+                    await RU.ModificarUsuario(User);
+                    //despues de esto llamas al metodo del controlador Usuario para modificar el usuario
                     return User;
             }
             return NotFound("El usuario ya esta activado");

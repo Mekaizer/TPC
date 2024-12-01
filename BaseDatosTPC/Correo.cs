@@ -15,6 +15,7 @@ namespace BaseDatosTPC
         public int Id_Correo { get; set; }
         public int Id_Ticket { get; set; }
         public string Solicitante { get; set; }
+        public int ID_Solicitante { get; set; }
         public string Proveedor { get; set; }
         public string CeCo { get; set; }
         public DateTime FechaCreacion { get; set; }

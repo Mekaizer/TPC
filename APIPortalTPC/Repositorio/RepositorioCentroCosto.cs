@@ -61,6 +61,7 @@ namespace APIPortalTPC.Repositorio
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_CeCo"]);
                     cc.Nombre = (Convert.ToString(reader["NombreCeCo"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
+                    cc.Activado = Convert.ToBoolean(reader["Activado"]);
 
                 }
             }
@@ -103,6 +104,7 @@ namespace APIPortalTPC.Repositorio
                     cc.Id_Ceco = Convert.ToInt32(reader["Id_Ceco"]);
                     cc.Nombre = (Convert.ToString(reader["NombreCeCo"])).Trim();
                     cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
+                    cc.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(cc);
                 }
             }
@@ -137,6 +139,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Centro_de_costo SET " +
                     "NombreCeCo = @NombreCeCo, " +
+                     "Activado =@Activado, " +
                     "Codigo_Ceco = @Codigo_Ceco " +
                     "WHERE Id_Ceco = @Id_Ceco";
                 Comm.CommandType = CommandType.Text;
@@ -145,7 +148,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@NombreCeCo", SqlDbType.VarChar, 50).Value = CeCo.Nombre;
                 Comm.Parameters.Add("@Codigo_Ceco", SqlDbType.VarChar, 50).Value = CeCo.Codigo_Ceco;
                 Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = CeCo.Id_Ceco;
-
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = CeCo.Activado;
                 //Comm.Parameters.Add("@Bien_Servicio", SqlDbType.VarChar, 50).Value = "Pan";
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

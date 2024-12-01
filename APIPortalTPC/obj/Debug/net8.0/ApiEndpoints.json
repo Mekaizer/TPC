@@ -83,6 +83,22 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorArchivo",
+    "Method": "Descargar",
+    "RelativePath": "api/ControladorArchivo/Descargar{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorAutentizar",
     "Method": "ValidarCorreo",
     "RelativePath": "api/ControladorAutentizar",
@@ -344,6 +360,32 @@
         "Type": "BaseDatosTPC.CentroCosto",
         "IsRequired": true
       },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.CentroCosto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCentroCosto",
+    "Method": "Eliminar",
+    "RelativePath": "api/ControladorCentroCosto/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
         "Name": "id",
         "Type": "System.Int32",
@@ -768,8 +810,24 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
+    "Method": "EnviarVariosProveedores",
+    "RelativePath": "api/ControladorEnviarCorreo/Proveedor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LID",
+        "Type": "BaseDatosTPC.ListaID",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorEnviarCorreo",
     "Method": "EnviarCorreoProveedores",
-    "RelativePath": "api/ControladorEnviarCorreo/Proveedor{id}",
+    "RelativePath": "api/ControladorEnviarCorreo/Proveedor/{id}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -826,12 +884,44 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "Subir",
+    "RelativePath": "api/ControladorExcel",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Byte[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
     "Method": "ExcelBS",
     "RelativePath": "api/ControladorExcel/BS",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -841,7 +931,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -851,7 +947,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -861,7 +963,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -871,7 +979,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -1214,7 +1328,7 @@
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorProveedores",
     "Method": "GetBienServicio",
-    "RelativePath": "api/ControladorProveedores/BienServicio{id}",
+    "RelativePath": "api/ControladorProveedores/BienServicio/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1614,7 +1728,7 @@
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
     "Method": "ListaOC",
-    "RelativePath": "api/ControladorTicket/ListaOC{id}",
+    "RelativePath": "api/ControladorTicket/ListaOC/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1745,5 +1859,15 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
+    "Method": "GetExcel",
+    "RelativePath": "api/ControladorUsuario/Imprimir",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]
