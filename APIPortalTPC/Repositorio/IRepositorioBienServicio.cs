@@ -13,5 +13,6 @@ namespace APIPortalTPC.Repositorio
         public Task<BienServicio> ModificarBien_Servicio(BienServicio bs);
         public Task<string> Existe(string BienServicio);
         public Task<BienServicio> EliminarBien_Servicio(int bs);
+        public Task<BienServicio> GetServicioNombre(string bsn);
     }
 }

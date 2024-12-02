@@ -15,157 +15,200 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioOrdenesEstadisticas IRE;
         private readonly IRepositorioBienServicio IBS;
         private readonly IRepositorioProveedores IRP;
-        public ControladorExcel(IRepositorioProveedores IRP , InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE, IRepositorioBienServicio IBS)
+        private readonly IRepositorioBienServicio IRBS;
+        public ControladorExcel(IRepositorioBienServicio IRBS,IRepositorioProveedores IRP , InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE, IRepositorioBienServicio IBS)
         {
             this.Excel = Excel;
             this.IRC = IRC;
             this.IRE = IRE;
             this.IBS = IBS;
             this.IRP = IRP;
+            this.IRBS = IRBS;
         }
 
         [HttpPost("Proveedores")]
-        public async Task<ActionResult> ExcelProveedores(FormDataArchivo FDA)
+        public async Task<ActionResult> ExcelProveedores([FromForm] IFormFile file)
         {
-            try
+            if (file == null || file.Length == 0)
             {
-                byte[] Archivo =  Subir(FDA);
-                if (Archivo == null)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound , "Archivo vacio!");
-                }
-
-                List<Proveedores> lista = (await Excel.LeerProveedores(Archivo));
-                foreach (Proveedores p in lista)
-                {
-                    string res = await IRP.Existe(p.Rut_Proveedor, p.ID_Bien_Servicio);
-                    if (res == "ok")
-                        await IRP.NuevoProveedor(p);
-                }
-
-                return Ok(true);
+                return BadRequest("Please select a file to upload.");
             }
-            catch (Exception ex)
+
+            using (var memoryStream = new MemoryStream())
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+                try
+                {
+
+                    List<Proveedores> lista = (await Excel.LeerProveedores(Archivo));
+                    foreach (Proveedores p in lista)
+                    {
+                        string res = await IRP.Existe(p.Rut_Proveedor, p.ID_Bien_Servicio);
+                        if (res == "ok")
+                            await IRP.NuevoProveedor(p);
+                    }
+
+                    return Ok(true);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
             }
         }
-
         /// <summary>
         /// Metodo que permite leer el excel con el formato que agrega un proveedor a la base de datos
         /// </summary>
         /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> ExcelProveedor(FormDataArchivo FDA)
+        public async Task<ActionResult> ExcelProveedor([FromForm]IFormFile file)
         {
-            try
+            if (file == null || file.Length == 0)
             {
-                //string path = @"C:\Users\drako\Desktop\PRO4.xlsx";
-                byte[] Archivo = Subir(FDA);
-
-                return Ok(await Excel.LeerExcelProveedor(Archivo));
+                return BadRequest("Please select a file to upload.");
             }
-            catch (Exception ex)
+
+            using (var memoryStream = new MemoryStream())
             {
-                // Manejar excepciones generales
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+                try
+                {
+
+                 Proveedores P =(await Excel.LeerExcelProveedor(Archivo));
+              
+                    string Res = await IRBS.Existe(P.ID_Bien_Servicio);
+                    BienServicio newbs = new BienServicio();
+                    newbs.Bien_Servicio = P.ID_Bien_Servicio;
+                    if (Res != "ok")
+                    {
+                        //Se crea el bien y servicio
+                        newbs = await IRBS.NuevoBienServicio(newbs);
+                    
+                    }
+                    else
+                    {
+                        newbs= await IRBS.GetServicioNombre(P.ID_Bien_Servicio);
+
+                    }
+                    P.ID_Bien_Servicio = newbs.ID_Bien_Servicio.ToString();
+                    await IRP.NuevoProveedor(P);
+                    return Ok(true);
+                }
+                catch (Exception ex)
+                {
+                    // Manejar excepciones generales
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
             }
         }
-        
-        /// <summary>
-        /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos
-        /// </summary>
-        /// <returns></returns>
+
+            /// <summary>
+            /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos
+            /// </summary>
+            /// <returns></returns>
         [HttpPost("CeCo")]
-        public async Task<ActionResult> ExcelCeCo(FormDataArchivo FDA)
+        public async Task<ActionResult> ExcelCeCo(IFormFile file)
         {
-            try
+            if (file == null || file.Length == 0)
             {
-                //string path = @"C:\Users\drako\Desktop\cap.xlsx";
-                byte[] Archivo = Subir(FDA);
+                return BadRequest("Please select a file to upload.");
+            }
 
-                List<CentroCosto> lc= (await Excel.LeerExcelCeCo(Archivo));
-                foreach(CentroCosto cc in lc)
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+                try
                 {
-                    string res = await IRC.Existe(cc.Codigo_Ceco);
-                    if (res == "ok")
-                        await IRC.Nuevo_CeCo(cc);
-                }
+                    {
+                        //string path = @"C:\Users\drako\Desktop\cap.xlsx";
 
-                return Ok(true);            
+
+                        List<CentroCosto> lc = (await Excel.LeerExcelCeCo(Archivo));
+                        foreach (CentroCosto cc in lc)
+                        {
+                            string res = await IRC.Existe(cc.Codigo_Ceco);
+                            if (res == "ok")
+                                await IRC.Nuevo_CeCo(cc);
+                        }
+
+                        return Ok(true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-            }
-          
         }
         /// <summary>
         /// Metodo que lee un archivo excel que tiene orden de compra y lo actualiza en la base de datos
         /// </summary>
         /// <returns></returns>
         [HttpPost("OCA")]
-        public async Task<ActionResult> ActualizarOC(FormDataArchivo FDA)
+        public async Task<ActionResult> ActualizarOC(IFormFile file)
         {
-            try
+            if (file == null || file.Length == 0)
             {
-                //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
-
-                byte[] Archivo = Subir(FDA);
-                return Ok(await Excel.ActualizarOC(Archivo));
-            
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                return BadRequest("Please select a file to upload.");
             }
 
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+                try
+                {
+                    //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
+
+                    return Ok(await Excel.ActualizarOC(Archivo));
+
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
+            }
         }
         /// <summary>
         /// Metodo para agregar los Bien y Servicios mediante un excel que tenga dos columnas
         /// </summary>
         /// <returns></returns>
         [HttpPost("BS")]
-        public async Task<ActionResult> ExcelBS(FormDataArchivo FDA)
+        public async Task<ActionResult> ExcelBS(IFormFile file)
         {
-            try
+            if (file == null || file.Length == 0)
             {
-                byte[] Archivo = Subir(FDA);
-                //string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
-                List<BienServicio> lista= (await Excel.LeerBienServicio(Archivo));
-                foreach (BienServicio bs in lista)
-                {
-                    string res = await IBS.Existe(bs.Bien_Servicio);
-                    if (res == "ok")
-                        await IBS.NuevoBienServicio(bs);
-                }
-
-                return Ok(true);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-            }
-
-        }
-
-        public byte[] Subir(FormDataArchivo model)
-        {
-            byte[] Subido;
-            if (model.Archivo == null || model.Archivo.Length == 0)
-            {
-
-                return null;
+                return BadRequest("Please select a file to upload.");
             }
 
             using (var memoryStream = new MemoryStream())
             {
-                model.Archivo.CopyTo(memoryStream);
-                Subido = memoryStream.ToArray();
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+                try
+                {
+                    //string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
+                    List<BienServicio> lista = (await Excel.LeerBienServicio(Archivo));
+                    foreach (BienServicio bs in lista)
+                    {
+                        string res = await IBS.Existe(bs.Bien_Servicio);
+                        if (res == "ok")
+                            await IBS.NuevoBienServicio(bs);
+                    }
+
+                    return Ok(true);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
 
             }
-
-            return (Subido);
         }
+
+      
     }
 }

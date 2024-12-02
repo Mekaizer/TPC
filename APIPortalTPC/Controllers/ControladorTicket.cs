@@ -191,5 +191,19 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
+
+        [HttpGet("Usuario{id:int}")]
+        public async Task<ActionResult> GetAllUsuario(int id)
+        {
+            try
+            {
+                return Ok(await RT.GetAllTicketUsuario(id));
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones generales
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Ticket: " + ex.Message);
+            }
+        }
     }
 }

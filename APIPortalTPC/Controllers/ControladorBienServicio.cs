@@ -62,7 +62,22 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el servicio: " + ex.Message);
             }
         }
+        [HttpGet("Nombre/{id:int}")]
+        public async Task<ActionResult> GetNombre(string nombre)
+        {
+            try
+            {
+                var resultado = await RBS.GetServicioNombre(nombre);
+                if (resultado.ID_Bien_Servicio == 0)
+                    return StatusCode(StatusCodes.Status404NotFound, "No se encontro el bien o servicio ");
 
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el servicio: " + ex.Message);
+            }
+        }
         /// <summary>
         /// Metodo asincrónico para crear nuevo objeto
         /// </summary>
@@ -146,6 +161,8 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
+   
+        
     }
 }
 

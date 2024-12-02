@@ -891,7 +891,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
+        "Name": "model",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
@@ -917,7 +917,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
+        "Name": "FDA",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
@@ -933,7 +933,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
+        "Name": "FDA",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
@@ -949,7 +949,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
+        "Name": "FDA",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
@@ -965,8 +965,33 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -981,8 +1006,33 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -1750,6 +1800,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
+    "Method": "GetAllUsuario",
+    "RelativePath": "api/ControladorTicket/Usuario{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",

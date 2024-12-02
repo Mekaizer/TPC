@@ -191,6 +191,11 @@ namespace APIPortalTPC.Repositorio
             }
             return bs;
         }
+        /// <summary>
+        /// Metodo para evitar duplicados
+        /// </summary>
+        /// <param name="BienServicio"></param>
+        /// <returns></returns>
         public async Task<string> Existe(string BienServicio)
         {
             using (SqlConnection sqlConnection = conectar())
@@ -258,5 +263,50 @@ namespace APIPortalTPC.Repositorio
             return bsmodificado;
         }
 
+        public async Task<BienServicio> GetServicioNombre(string bsn)
+        {
+            //Parametro para guardar el objeto a mostrar
+            BienServicio bs = new();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader? reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = "SELECT * FROM dbo.Bien_Servicio where Bien_Servicio = @BS";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@BS", SqlDbType.Int).Value = bsn;
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    bs.ID_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+                    bs.Bien_Servicio = (Convert.ToString(reader["Bien_Servicio"])).Trim(); ;
+                    bs.Activado = Convert.ToBoolean(reader["Activado"]);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Bien_Servicio " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader?.Close();
+                Comm?.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return bs;
+        }
     }
 }
