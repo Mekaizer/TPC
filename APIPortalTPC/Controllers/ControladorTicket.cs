@@ -192,7 +192,7 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-        [HttpGet("Usuario{id:int}")]
+        [HttpGet("Usuario/{id:int}")]
         public async Task<ActionResult> GetAllUsuario(int id)
         {
             try

@@ -1,7 +1,7 @@
 ﻿using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using OfficeOpenXml;
-
+using System.IO;
 namespace APIPortalTPC.Repositorio
 {
     public class RepositorioCrearExcel : InterfaceCrearExcel
@@ -96,10 +96,12 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[row, 4].Value = OC.Estado;
                     worksheet.Cells[row, 5].Value = OC.Detalle;
                     worksheet.Cells[row, 6].Value = OC.Solped;
-                    worksheet.Cells[row, 7].Value = OC.ID_Bien_Servicio;
+                    worksheet.Cells[row, 7].Value = OC.Bien_Servicio;
                     row++;
                 }
-                string filePath = "C:/Users/drako/Desktop/ListaCotizacion.xlsx";
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string filePath = Path.Combine(downloadsPath, "ListaCotizacion.xlsx");
+
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -134,20 +136,23 @@ namespace APIPortalTPC.Repositorio
                 int row = 2;
                 foreach (var U in LU)
                 {
-                    worksheet.Cells[1, 1].Value = U.Id_Usuario;
-                    worksheet.Cells[1, 2].Value = U.Nombre_Usuario;
-                    worksheet.Cells[1, 3].Value = U.Apellido_paterno;
-                    worksheet.Cells[1, 4].Value = U.Apellido_materno;
-                    worksheet.Cells[1, 5].Value = U.Rut_Usuario;
-                    worksheet.Cells[1, 6].Value = U.Correo_Usuario;
-                    worksheet.Cells[1, 7].Value = U.Contraseña_Usuario;
-                    worksheet.Cells[1, 8].Value = U.Activado;
-                    worksheet.Cells[1, 9].Value = U.Tipo_Liberador;
-                    worksheet.Cells[1, 10].Value = U.En_Vacaciones;
-                    worksheet.Cells[1, 11].Value = U.Admin;
+                    worksheet.Cells[row, 1].Value = U.Id_Usuario;
+                    worksheet.Cells[row, 2].Value = U.Nombre_Usuario;
+                    worksheet.Cells[row, 3].Value = U.Apellido_paterno;
+                    worksheet.Cells[row, 4].Value = U.Apellido_materno;
+                    worksheet.Cells[row, 5].Value = U.Rut_Usuario;
+                    worksheet.Cells[row, 6].Value = U.Correo_Usuario;
+                    worksheet.Cells[row, 7].Value = U.Contraseña_Usuario;
+                    worksheet.Cells[row, 8].Value = U.Activado;
+                    worksheet.Cells[row, 9].Value = U.Tipo_Liberador;
+                    worksheet.Cells[row, 10].Value = U.En_Vacaciones;
+                    worksheet.Cells[row, 11].Value = U.Admin;
                     row++;
                 }
-                string filePath = "C:/Users/drako/Desktop/ListaUsuario.xlsx";
+
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string filePath = Path.Combine(downloadsPath, "ListaUsuario.xlsx");
+
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -177,7 +182,9 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[1, 2].Value = BS.Bien_Servicio;
                     row++;
                 }
-                string filePath = "C:/Users/drako/Desktop/ListaBienServicio.xlsx";
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string filePath = Path.Combine(downloadsPath, "ListaBienServicio.xlsx");
+
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);

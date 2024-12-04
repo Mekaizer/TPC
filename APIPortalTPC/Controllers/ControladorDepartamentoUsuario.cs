@@ -1,5 +1,7 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIPortalTPC.Controllers
@@ -73,7 +75,7 @@ namespace APIPortalTPC.Controllers
                 if (A == null)
                     return BadRequest();
 
-                string res = await RDU.Existe(A.Id_Usuario, A.Id_Departamento);
+                string res = await RDU.Existe(A.Nombre_Usuario, A.Nombre_Departamento);
                 if (res == "ok")
                 {
                     DepartamentoUsuario nuevo = await RDU.Nuevo(A);
@@ -106,7 +108,7 @@ namespace APIPortalTPC.Controllers
                     return BadRequest("La Id no coincide");
 
 
-                string res = await RDU.Existe(A.Id_Usuario, A.Id_Departamento);
+                string res = await RDU.Existe(A.Nombre_Usuario, A.Nombre_Departamento);
                 if (res == "ok")
                 {
                     return await RDU.Modificar(A);

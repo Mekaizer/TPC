@@ -87,11 +87,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT ud.Id_DepartamentoUsuarios,u.Nombre_Usuario, d.Nombre " +
+                Comm.CommandText = "SELECT ud.Id_DepartamentoUsuarios,u.Nombre_Usuario, d.Nombre,u.Id_Usuario,d.Id_Departamento " +
                     "FROM dbo.DepartamentoUsuario ud " +
-                    "INNER JOIN dbo.Usuario u ON u.id_usuario = ud.id_usuario " +
-                    "INNER JOIN dbo.departamento d ON ud.id_departamento = d.id_departamento " +
-                    "where Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
+                    "INNER JOIN dbo.Usuario u ON u.Id_Usuario = ud.Id_Usuario " +
+                    "INNER JOIN dbo.Departamento d ON ud.Id_Departamento = d.Id_Departamento " +
+                    "where ud.Id_DepartamentoUsuarios = @Id_DepartamentoUsuarios";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_DepartamentoUsuarios", SqlDbType.Int).Value = id;
@@ -101,8 +101,10 @@ namespace APIPortalTPC.Repositorio
                 {
 
                     DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["Id_DepartamentoUsuarios"]);
-                    DP.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
-                    DP.Id_Departamento = Convert.ToString(reader["Nombre"]).Trim();
+                    DP.Nombre_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    DP.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    DP.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
+                    DP.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                 }
             }
             catch (SqlException ex)
@@ -134,19 +136,22 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT ud.Id_DepartamentoUsuarios, u.Nombre_Usuario, d.Nombre " +
-    "FROM dbo.DepartamentoUsuario ud " +
-    "INNER JOIN dbo.Usuario u ON u.id_usuario = ud.id_usuario " +
-    "INNER JOIN dbo.departamento d ON ud.id_departamento = d.id_departamento ";  // leer base datos 
+                Comm.CommandText = @"SELECT ud.Id_DepartamentoUsuarios, u.Nombre_Usuario, d.Nombre, u.Id_Usuario, d.Id_Departamento 
+                FROM dbo.DepartamentoUsuario ud
+                INNER JOIN dbo.Usuario u ON u.Id_Usuario = ud.Id_Usuario
+                INNER JOIN dbo.departamento d ON ud.Id_Departamento = d.Id_Departamento ";  // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
                     DepartamentoUsuario DP = new();
-                    DP.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+
                     DP.Id_DepartamentoUsuarios = Convert.ToInt32(reader["Id_DepartamentoUsuarios"]);
-                    DP.Id_Departamento = Convert.ToString(reader["Nombre"]).Trim();
+                    DP.Nombre_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    DP.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    DP.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
+                    DP.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                     lista.Add(DP);
                 }
             }

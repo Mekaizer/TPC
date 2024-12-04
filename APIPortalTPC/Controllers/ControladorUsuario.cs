@@ -17,17 +17,19 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioUsuario RU;
         private readonly InterfaceEnviarCorreo IEC;
+        private readonly IRepositorioDepartamentoUsuario IRDU;
         private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RU">Interface de RepositorioUsuario</param>
 
-        public ControladorUsuario(IRepositorioUsuario RU, InterfaceEnviarCorreo IEC, InterfaceCrearExcel ICE)
+        public ControladorUsuario(IRepositorioDepartamentoUsuario IRDU, IRepositorioUsuario RU, InterfaceEnviarCorreo IEC, InterfaceCrearExcel ICE)
         {
             this.IEC = IEC;
             this.RU = RU;
             this.ICE = ICE;
+            this.IRDU = IRDU;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -87,6 +89,10 @@ namespace APIPortalTPC.Controllers
                 if (res == "ok")
                 {
                     Usuario nuevo = await RU.NuevoUsuario(U);
+                    DepartamentoUsuario DU = new DepartamentoUsuario();
+                    DU.Id_Departamento = U.Id_Departamento;
+                    DU.Id_Usuario = U.Id_Usuario;
+                    await IRDU.Nuevo(DU);
                     nuevo = await RU.ActivarUsuario(nuevo);
                     await RU.ModificarUsuario(nuevo);
                     await IEC.CorreoUsuarioPass(nuevo);
@@ -137,7 +143,7 @@ namespace APIPortalTPC.Controllers
         {
 
             var lista = await RU.GetAllUsuario();
-
+            Console.WriteLine(lista);
             // Assuming DescargarExcel returns a byte array and a filename
             return Ok(await ICE.DescargarExcel((List<Usuario>)lista));
         }

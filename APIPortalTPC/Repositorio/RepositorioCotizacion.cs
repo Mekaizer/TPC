@@ -52,7 +52,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio 
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
                 LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio 
@@ -78,7 +78,8 @@ namespace APIPortalTPC.Repositorio
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
+                    cot.Id_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
+                    cot.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
                         cot.Solped = Convert.ToInt64(reader["Solped"]);
@@ -120,7 +121,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio  
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio, b.ID_Bien_Servicio  
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
                 LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio ";// leer base datos 
@@ -140,7 +141,9 @@ namespace APIPortalTPC.Repositorio
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    cot.ID_Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
+                    cot.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
+                    cot.Bien_Servicio = Convert.ToString(reader["Bien_Servicio"]).Trim();
+                    cot.Id_Bien_Servicio = Convert.ToInt32(reader["ID_Bien_Servicio"]);
                     if (!reader.IsDBNull(reader.GetOrdinal("Solped")))
                     {
                         cot.Solped = Convert.ToInt64(reader["Solped"]);
@@ -194,8 +197,8 @@ namespace APIPortalTPC.Repositorio
                                    "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                if (cotizacion.ID_Bien_Servicio != null)
-                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
+                if (cotizacion.Id_Bien_Servicio != null)
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.Id_Bien_Servicio;
                 else Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
                 if(cotizacion.Detalle != null)
                     Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = cotizacion.Detalle;
@@ -247,8 +250,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
-                if (cotizacion.ID_Bien_Servicio != null)
-                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.ID_Bien_Servicio;
+                if (cotizacion.Id_Bien_Servicio != null)
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.Id_Bien_Servicio;
                 else
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
 

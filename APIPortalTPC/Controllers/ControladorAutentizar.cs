@@ -12,15 +12,17 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioAutentizar RA;
         private readonly IRepositorioUsuario RU;
+        private readonly InterfaceEnviarCorreo IEC;
   
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RA">Interface de RepositorioUsuario</param>
-        public ControladorAutentizar(IRepositorioAutentizar RA, IRepositorioUsuario RU)
+        public ControladorAutentizar(InterfaceEnviarCorreo IEC, IRepositorioAutentizar RA, IRepositorioUsuario RU)
         {
             this.RA = RA;
             this.RU = RU;
+            this.IEC = IEC;
         }
         /// <summary>
         ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia, tambien añade la clave MFA para
@@ -41,9 +43,9 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-                //int codigo = await RA.MFA(User.Correo_Usuario);
-                //User.CodigoMFA = codigo;
-                //await RU.ModificarUsuario(User);
+                int codigo = await RA.MFA(User.Correo_Usuario);
+                User.CodigoMFA = codigo;
+                await RU.ModificarUsuario(User);
                 return User;
             }
             return NotFound("Usuario no activado");
@@ -104,14 +106,32 @@ namespace APIPortalTPC.Controllers
         }
 
 
+        /// <summary>
+        /// Metodo que envia un correo con la contraseña del usuario
+        /// </summary>
+        /// <param name="Correo"></param>
+        /// <returns></returns>
         [HttpPost("pass")]
-        //metodo para verificacion dos pasos
-        public async Task<IActionResult> RecuperarContraseña()
+
+        public async Task<IActionResult> RecuperarContraseña(PostRq Correo)
         {
-            //Logica: entregas el correo,
-            //retorna el usuario y mandas un correo,
-            //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
-            throw new NotImplementedException();
+            try
+            { //Logica: entregas el correo,
+              //retorna el usuario
+                Usuario U = await RU.RecuperarContraseña(Correo.correo);
+                //mandas un correo,
+                //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
+                if (U != null)
+                {
+                    await IEC.RecuperarPass(U);
+                    return Ok(U);
+                }
+                return BadRequest("No hay usuario para ese correo");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

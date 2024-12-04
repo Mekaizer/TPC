@@ -64,7 +64,7 @@ namespace APIPortalTPC.Repositorio
                         U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                         U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                         U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim(); 
-                        U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                        U.Tipo_Liberador = Convert.ToBoolean(reader["Tipo_Liberador"]);
                         U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                         U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                         U.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -106,27 +106,27 @@ namespace APIPortalTPC.Repositorio
             string fromEmail = "portaldeadq@tpc.cl"; // Cambia esto a tu correo
             string subject = "Código de Verificación - Autenticación en dos pasos";
             // Crear el cuerpo del mensaje
-
             string body = $@"
-            <html>
-            <head>
-                <style>
-                    .numero-grande {{
-                        font-size: 50px;
-                        font-weight: bold;
-                        text-align: center;
-                        color: #333;
-                    }}
-            </style>
-            </head>
-            <body>
-                <p>Estimado,</p>
-                <p>Su código de verificación es: </p>
-                <p class='numero-grande'>{codigoVerificacion}</p>
-                <p>Saludos cordiales,</p>
-                <p>Equipo de Soporte</p>
-            </body>
-            </html>";
+            <html>
+                <head>
+                    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+                    <style>
+                        .numero-grande {{
+                            font-size: 50px;
+                            font-weight: bold;
+                            text-align: center;
+                            color: #333;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <p>Estimado,</p>
+                    <p>Su código de verificación es: </p>
+                    <p class='numero-grande'>{codigoVerificacion}</p>
+                    <p>Saludos cordiales,</p>
+                    <p>Equipo de Soporte</p>
+                </body>
+            </html>";
             try
             {
                 using (MailMessage mail = new MailMessage())
@@ -135,7 +135,7 @@ namespace APIPortalTPC.Repositorio
                     mail.To.Add(correo);
                     mail.Subject = subject;
                     mail.Body = body;
-
+                    mail.IsBodyHtml = true;
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
                         smtpClient.EnableSsl = true; // Habilitar SSL si es necesario

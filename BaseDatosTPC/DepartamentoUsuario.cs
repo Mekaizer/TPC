@@ -11,8 +11,10 @@ namespace BaseDatosTPC
     {
         [Key]
         public int Id_DepartamentoUsuarios { get; set; }
-        public string? Id_Usuario { get; set; }
-        public string? Id_Departamento { get; set; }
+        public string? Nombre_Usuario { get; set; }
+        public int Id_Usuario { get; set;}
+        public string? Nombre_Departamento { get; set; }
+        public int Id_Departamento { get; set;} 
 
     }
 }

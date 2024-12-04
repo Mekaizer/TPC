@@ -202,7 +202,7 @@ namespace APIPortalTPC.Repositorio
                     Comm = sql.CreateCommand();
                     Comm.CommandText = "INSERT INTO Proveedores " +
                                        "(Rut_Proveedor, Razon_Social, Nombre_Fantasia, ID_Bien_Servicio, Direccion, Comuna, Correo_Proveedor, Telefono_Proveedor, Nombre_Representante, Email_Representante, N_Cuenta, Banco, Swift, Estado, Cargo_Representante) " +
-                                       "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante); " +
+                                       "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante) " +
                                        "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
                     Comm.CommandType = CommandType.Text;
                     Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = P.Rut_Proveedor;
@@ -233,7 +233,7 @@ namespace APIPortalTPC.Repositorio
                         Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = "";
                     else
                         Comm.Parameters.Add("@Cargo_Representante", SqlDbType.VarChar, 50).Value = P.Cargo_Representante;
-                    Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = P.Estado;
+                    Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = true;
 
                     decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                     int id = (int)idDecimal;

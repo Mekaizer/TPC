@@ -64,7 +64,7 @@ namespace APIPortalTPC.Repositorio
                     Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 100).Value = U.Correo_Usuario;
                     Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                     Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
-                    Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
+                    Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.Bit).Value = U.Tipo_Liberador;
    
                     decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                     int id = (int)idDecimal;
@@ -95,6 +95,7 @@ namespace APIPortalTPC.Repositorio
             //Parametro para guardar el objeto a mostrar
             Usuario U = new();
             List<string> listaDep = new List<string>();
+            List<int> IdListaDep = new List<int>();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -125,7 +126,7 @@ namespace APIPortalTPC.Repositorio
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToBoolean(reader["Tipo_Liberador"]));
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -137,20 +138,25 @@ namespace APIPortalTPC.Repositorio
                 }
                 reader?.Close();
                 Comm?.Dispose();
-                Comm.CommandText = "SELECT d.nombre " +
-                    "FROM Departamento d JOIN DepartamentoUsuario du ON d.Id_Departamento = du.id_departamento " +
-                    "WHERE du.id_usuario = @Id_Usuario";
+                Comm.CommandText = "SELECT d.nombre, d.Id_Departamento " +
+                    "FROM Departamento d JOIN DepartamentoUsuario du ON d.Id_Departamento = du.Id_Departamento " +
+                    "WHERE du.Id_Usuario = @Id_Usuario";
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read()) {
                     int c = 0;
                     string dep = Convert.ToString(reader["nombre"]).Trim();
+                    int idep = Convert.ToInt32(reader["Id_Departamento"]);
                 foreach (string d in listaDep)
                     if (d == dep)
                          c = 1;
-                if(c== 0)
+                    if (c == 0)
+                    {
                         listaDep.Add(dep);
+                        IdListaDep.Add(idep);
+                    }
                 }
                 U.ListaDepartamento = listaDep;
+                U.ListaIdDep = IdListaDep;
 
             }
             catch (SqlException ex)
@@ -194,7 +200,7 @@ namespace APIPortalTPC.Repositorio
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToBoolean(reader["Tipo_Liberador"]));
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -259,7 +265,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = U.Contraseña_Usuario;
-                Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.VarChar, 50).Value = U.Tipo_Liberador;
+                Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.Bit).Value = U.Tipo_Liberador;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
@@ -368,9 +374,9 @@ namespace APIPortalTPC.Repositorio
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
                     U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
-                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
-                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.Correo_Usuario = Convert.ToString(reader["Correo_Usuario"]).Trim();
+                    U.Contraseña_Usuario = Convert.ToString(reader["Contraseña_Usuario"]).Trim();
+                    U.Tipo_Liberador = Convert.ToBoolean(reader["Tipo_Liberador"]);
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -418,7 +424,7 @@ namespace APIPortalTPC.Repositorio
                     U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
                     U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = (Convert.ToString(reader["Tipo_Liberador"])).Trim();
+                    U.Tipo_Liberador = Convert.ToBoolean(reader["Tipo_Liberador"]);
                     U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
                     U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
                     U.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -530,6 +536,55 @@ namespace APIPortalTPC.Repositorio
             U.Contraseña_Usuario = pass.ToString();
             U.CodigoMFA = pass;
             return U;
+        }
+        public async Task<Usuario> RecuperarContraseña(string correo)
+        {
+            Usuario U = new ();
+            SqlConnection sql = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader? reader = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = "SELECT * FROM dbo.Usuario " +
+                   "WHERE Correo_Usuario = @correo";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@correo", SqlDbType.VarChar,500).Value = correo;
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+
+                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
+                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
+                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
+                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
+                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToBoolean(reader["Tipo_Liberador"]));
+                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
+                    U.Activado = Convert.ToBoolean(reader["Activado"]);
+                    U.Admin = Convert.ToBoolean(reader["Admin"]);
+                    U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
+                    U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
+                    U.CodigoMFA = 0;
+
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Usuario " + ex.Message);
+            }
+            finally
+            {
+                reader?.Close();
+                Comm?.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return U;
+
         }
     }
     

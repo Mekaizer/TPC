@@ -77,24 +77,14 @@ namespace APIPortalTPC.Controllers
                 {
 
                  Proveedores P =(await Excel.LeerExcelProveedor(Archivo));
-              
-                    string Res = await IRBS.Existe(P.ID_Bien_Servicio);
-                    BienServicio newbs = new BienServicio();
-                    newbs.Bien_Servicio = P.ID_Bien_Servicio;
-                    if (Res != "ok")
-                    {
-                        //Se crea el bien y servicio
-                        newbs = await IRBS.NuevoBienServicio(newbs);
-                    
-                    }
-                    else
-                    {
-                        newbs= await IRBS.GetServicioNombre(P.ID_Bien_Servicio);
-
-                    }
-                    P.ID_Bien_Servicio = newbs.ID_Bien_Servicio.ToString();
+                    P.ID_Bien_Servicio = "0";
+                    //Se crea el bien y servicio
                     await IRP.NuevoProveedor(P);
                     return Ok(true);
+
+
+               
+              
                 }
                 catch (Exception ex)
                 {
@@ -109,7 +99,7 @@ namespace APIPortalTPC.Controllers
             /// </summary>
             /// <returns></returns>
         [HttpPost("CeCo")]
-        public async Task<ActionResult> ExcelCeCo(IFormFile file)
+        public async Task<ActionResult> ExcelCeCo([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
@@ -148,7 +138,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("OCA")]
-        public async Task<ActionResult> ActualizarOC(IFormFile file)
+        public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
@@ -177,7 +167,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("BS")]
-        public async Task<ActionResult> ExcelBS(IFormFile file)
+        public async Task<ActionResult> ExcelBS([FromForm]IFormFile file)
         {
             if (file == null || file.Length == 0)
             {

@@ -8,7 +8,7 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioTicket : IRepositorioTicket
     {
-       
+
         private string Conexion;
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace APIPortalTPC.Repositorio
             }
             catch (SqlException ex)
             {
-                    throw new Exception("Error creando los datos en tabla Ticket " + ex.Message);
-                
+                throw new Exception("Error creando los datos en tabla Ticket " + ex.Message);
+
             }
             finally
             {
@@ -197,7 +197,7 @@ namespace APIPortalTPC.Repositorio
                     T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
-                    T.Activado = Convert.ToBoolean(reader["Activado"]); 
+                    T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
 
@@ -218,7 +218,7 @@ namespace APIPortalTPC.Repositorio
             }
             finally
             {
-             
+
                 reader.Close();
                 Comm.Dispose();
                 sql.Close();
@@ -308,7 +308,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id_T"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Ticket> ActualizarEstadoTicket(int  id_T)
+        public async Task<Ticket> ActualizarEstadoTicket(int id_T)
         {
             Ticket T = await GetTicket(id_T);
             List<OrdenCompra> lista = new();
@@ -377,7 +377,7 @@ namespace APIPortalTPC.Repositorio
             {
 
                 Console.WriteLine(total);
-                    Console.WriteLine(cont);
+                Console.WriteLine(cont);
                 //Se cierran los objetos 
                 reader.Close();
                 Comm.Dispose();
@@ -421,12 +421,12 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "Cancelado";
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = id_T;
-                
+
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     T = await GetTicket(id_T);
                 //permite regresar objetos de la base de datos para que se puedan leer
-                
+
             }
             catch (SqlException ex)
             {
@@ -519,5 +519,7 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
+
+
     }
 }

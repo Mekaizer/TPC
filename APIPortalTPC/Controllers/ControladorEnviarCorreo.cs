@@ -1,12 +1,8 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using NPOI.OpenXmlFormats.Dml;
-using NPOI.SS.Formula.Functions;
-using NPOI.XWPF.UserModel;
-using System.Security.Cryptography;
+
 
 namespace APIPortalTPC.Controllers
 {
@@ -18,25 +14,37 @@ namespace APIPortalTPC.Controllers
         private readonly InterfaceEnviarCorreo IEC;
         private readonly IRepositorioProveedores IRP;
         private readonly IRepositorioUsuario IRU;
-        public ControladorEnviarCorreo(IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
+        private readonly IRepositorioLiberadores IRL;
+        private readonly IRepositorioTicket IRT;
+        private readonly IRepositorioOrdenCompra IROC;
+        public ControladorEnviarCorreo(IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
         {
             this.IEC = IEC;
             this.IRP = IRP;
             this.IRU = IRU;
+            this.IRL = IRL;
+            this.IRT = IRT;
+            this.IROC = IROC;
         }
-
+        /// <summary>
+        /// Metodo para enviar a varios proveedores (enviar archivo)
+        /// </summary>
+        /// <param name="LID"></param>
+        /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> EnviarVariosProveedores(ListaID LID)
+        public async Task<ActionResult> EnviarVariosProveedores([FromForm] ListaID LID)
         {
             try
             {
 
                 var lis = LID.Lista;
+                Console.WriteLine(lis);
                 foreach (int ID in lis) 
                 {
+                    Console.WriteLine(LID.iD_Bien_Servicio);
                     var P = await IRP.GetProveedor(ID);
 
-                    await IEC.CorreoProveedores(P.ID_Bien_Servicio, P, LID.Asunto);
+                    //await IEC.CorreoProveedores(P, LID.Asunto);
                 }
 
 
@@ -49,7 +57,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
-
+        /// <summary>
+        /// Metodo para enviar a un solo proveedor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost("Proveedor/{id:int}")]
         public async Task<ActionResult> EnviarCorreoProveedores(int id)
         {
@@ -60,11 +72,10 @@ namespace APIPortalTPC.Controllers
                 //   return Ok(await lista);
                 foreach (var P in await lista)
                 {
-                    string? productos = P.ID_Bien_Servicio;
 
                     if (P.ID_Bien_Servicio.ToString() != null)
                     {
-                        await IEC.CorreoProveedores(productos, P, mensaje);
+                        await IEC.CorreoProveedores(P, mensaje);
                     }
                     else
                     {
@@ -85,11 +96,15 @@ namespace APIPortalTPC.Controllers
             }
 
         }
+        /// <summary>
+        /// Metodo que envia correo al liberador del correo
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("Liberadores")]
         public async Task<ActionResult> EnviarCorreoLiberadores()
         {
             string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
-            var lista = await IRU.GetAllUsuariosLiberadores();
+         /*   var[] lista = await IRU.GetAllUsuariosLiberadores();
             foreach (var U in lista)
 
                 await IEC.CorreoLiberador(U, subject);
@@ -99,12 +114,12 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound, "no existen liberadores pendientes!!! :D ");
             }
-
+         */
             return Ok("Correos enviados con exito");
 
         }
         /// <summary>
-        /// Metodo que recibe una lista con los ID de los Usuarios, para luego enviarles a sus correos que deben hacer liberaciones
+        /// Metodo que recibe una lista con los ID de los Usuarios, para luego enviarles a sus correos que deben hacer liberaciones (no hay tabla)
         /// </summary>
         /// <param name="lista"></param>
         /// <returns></returns>
@@ -116,35 +131,62 @@ namespace APIPortalTPC.Controllers
             string subject = LID.Subject;
             try
             {
-                foreach (int i in lista)
+                Usuario U = await IRU.GetUsuario(lista[0]);
+              
+                List<int> ldep = U.ListaIdDep;
+         
+                foreach (int dep in ldep)
                 {
-                    Usuario U = await IRU.GetUsuario(i);
+                    Liberadores L = await IRL.GetDep(dep);
+                    U = await IRU.GetUsuario(L.Id_Usuario);
                     await IEC.CorreoLiberador(U, subject);
+                    Console.Write("Enviado Usuario " + U.Nombre_Completo);
                 }
+
+
                 return Ok("Correos enviados con exito");
 
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron liberadores ");
+                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron liberadores "+ex);
             }
 
 
 
         }
+        
+
+
+        /// <summary>
+        /// Solicitantes con tabla
+        /// </summary>
+        /// <param name="LID"></param>
+        /// <returns></returns>
         [HttpPost("VariosReceptores")]
         public async Task<ActionResult> VariosReceptores(ListaID LID)
         {
             int[] lista = LID.Lista;
-        string subject = LID.Subject;
+        string subject = "TPC Confirmación de recepción";
             try
             {
                 foreach (int i in lista)
                 {
                     Usuario U = await IRU.GetUsuario(i);
-        await IEC.CorreoRecepciones(U, subject);
-    }
+                    var listaT = await IRT.GetAllTicketUsuario(i);
+                    //sacar los ticket del usuario
+                    foreach (Ticket T in (List<Ticket>)listaT)
+                    {
+                        Console.WriteLine(T.ID_Ticket);
+                        int id_T = T.ID_Ticket;
+                        var listaOC = await IROC.OCPendientes(id_T);
+              
+                        //tengo las OC del ticket del Usuario
+                        //await IEC.CorreoRecepciones(U, subject,(List<OrdenCompra>)listaOC,id_T);
+                    }
+
+                }
                 return Ok("Correos enviados con exito");
 
 }
@@ -159,19 +201,7 @@ namespace APIPortalTPC.Controllers
         }
 
 
-        [HttpPost("Receptores")]
-        public async Task<ActionResult> EnviarCorreoReceptores()
-        {
-            string subject = "TPC Confirmación recepción";
-            var lista = await IRU.GetAllUsuario();
-            foreach (var U in lista)
-                await IEC.CorreoRecepciones(U, subject);
 
-            if (lista == null)
-                return StatusCode(StatusCodes.Status404NotFound, "No hay problemas de recepción");
-
-            return Ok("Correos enviados con exito");
-        }
 
 
 
