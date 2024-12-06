@@ -520,6 +520,64 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+        public async Task<IEnumerable<int>> TicketConOCPendientes(int id_U)
+        {
+            List<int> lista = new List<int>();
+            SqlConnection sql = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = @"SELECT T.*,U.Nombre_Usuario, OC.Numero_OC  , p.Nombre_Fantasia, OE.Nombre
+                FROM dbo.Ticket T
+                INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario 
+                INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores 
+                Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket 
+                LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE 
+                where T.Id_Usuario = @Id and OC.Estado_OC = @Estado and OC.Recepcion = @activado "; // leer base datos 
+                Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@Id", SqlDbType.Int).Value = id_U;
+                Comm.Parameters.Add("@Estado", SqlDbType.Bit).Value = true;
+                Comm.Parameters.Add("@activado", SqlDbType.Bit).Value = false;
+                reader = await Comm.ExecuteReaderAsync();
 
+                while (reader.Read())
+                {
+                    Ticket T = new();
+                    T.Estado = Convert.ToString(reader["Estado"]).Trim();
+                    T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
+                    T.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    T.ID_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
+                    T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
+                    T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
+                    T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
+                    T.Activado = Convert.ToBoolean(reader["Activado"]);
+                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+                    T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
+                   if(!lista.Contains(T.ID_Ticket))
+                        lista.Add(T.ID_Ticket);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Ticket " + ex.Message);
+            }
+            finally
+            {
+
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+
+            return lista;
+        }
     }
 }

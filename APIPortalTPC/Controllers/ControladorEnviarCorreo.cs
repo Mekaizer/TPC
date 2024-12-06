@@ -32,17 +32,18 @@ namespace APIPortalTPC.Controllers
         /// <param name="LID"></param>
         /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> EnviarVariosProveedores([FromForm] ListaID LID)
+        public async Task<ActionResult> EnviarVariosProveedores([FromForm] FormDataArchivo LID)
         {
             try
             {
 
                 var lis = LID.Lista;
                 Console.WriteLine(lis);
-                foreach (int ID in lis) 
+                foreach (int ID in lis)
                 {
-                    Console.WriteLine(LID.iD_Bien_Servicio);
-                    var P = await IRP.GetProveedor(ID);
+                    Console.WriteLine(LID.Asunto);
+                    Console.WriteLine(ID);
+                    Console.WriteLine(LID.Mensaje);
 
                     //await IEC.CorreoProveedores(P, LID.Asunto);
                 }
@@ -131,17 +132,30 @@ namespace APIPortalTPC.Controllers
             string subject = LID.Subject;
             try
             {
-                Usuario U = await IRU.GetUsuario(lista[0]);
-              
-                List<int> ldep = U.ListaIdDep;
-         
-                foreach (int dep in ldep)
-                {
-                    Liberadores L = await IRL.GetDep(dep);
-                    U = await IRU.GetUsuario(L.Id_Usuario);
-                    await IEC.CorreoLiberador(U, subject);
-                    Console.Write("Enviado Usuario " + U.Nombre_Completo);
+                foreach(int i in lista) {
+                    Usuario U = await IRU.GetUsuario(i);
+                    bool enviado = false;
+                    List<int> ldep = U.ListaIdDep;
+
+                    foreach (int dep in ldep)
+                    {
+                        Liberadores L = await IRL.GetDep(dep);
+                        U = await IRU.GetUsuario(L.Id_Usuario);
+                        Console.WriteLine(L.Id_Departamento);
+                        //await IEC.CorreoLiberador(U, subject);
+                        enviado = true;
+                    }
+                    if (enviado)
+                    {
+                        Liberadores lib = await IRL.Get(9);
+                        Console.WriteLine(lib.Id_Usuario);
+                        U = await IRU.GetUsuario(lib.Id_Usuario);
+                        Console.WriteLine(U.Correo_Usuario + " Usuario " + U.Nombre_Completo);
+                        //await IEC.CorreoLiberador(U, subject);
+
+                    }
                 }
+
 
 
                 return Ok("Correos enviados con exito");
@@ -160,7 +174,7 @@ namespace APIPortalTPC.Controllers
 
 
         /// <summary>
-        /// Solicitantes con tabla
+        /// Solicitantes para confirmar que tienen OC pendientes de recepcionar!
         /// </summary>
         /// <param name="LID"></param>
         /// <returns></returns>
@@ -168,28 +182,32 @@ namespace APIPortalTPC.Controllers
         public async Task<ActionResult> VariosReceptores(ListaID LID)
         {
             int[] lista = LID.Lista;
+          
         string subject = "TPC Confirmación de recepción";
             try
             {
                 foreach (int i in lista)
                 {
+
+                    List<int> Id_LT = new List<int>();
                     Usuario U = await IRU.GetUsuario(i);
-                    var listaT = await IRT.GetAllTicketUsuario(i);
-                    //sacar los ticket del usuario
-                    foreach (Ticket T in (List<Ticket>)listaT)
+                    if (U.Activado)
                     {
-                        Console.WriteLine(T.ID_Ticket);
-                        int id_T = T.ID_Ticket;
-                        var listaOC = await IROC.OCPendientes(id_T);
-              
-                        //tengo las OC del ticket del Usuario
-                        //await IEC.CorreoRecepciones(U, subject,(List<OrdenCompra>)listaOC,id_T);
+                        int id = U.Id_Usuario;
+                        var list = await IRT.TicketConOCPendientes(id);
+                        Id_LT = (List<int>)list;
+                        if (Id_LT.Count != 0)
+                        {
+                            Console.WriteLine(U.Correo_Usuario);
+                            //await IEC.CorreoRecepciones(U, subject, Id_LT);
+                        }
                     }
+
 
                 }
                 return Ok("Correos enviados con exito");
 
-}
+            }
             catch (Exception ex)
             {
 

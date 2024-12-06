@@ -186,8 +186,8 @@
     "Parameters": [
       {
         "Name": "Correo",
-        "Type": "BaseDatosTPC.PostRq",
-        "IsRequired": true
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -844,13 +844,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Lista",
-        "Type": "System.Int32[]",
-        "IsRequired": false
-      },
-      {
-        "Name": "Subject",
-        "Type": "System.String",
+        "Name": "Archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       },
       {
@@ -859,8 +854,18 @@
         "IsRequired": false
       },
       {
-        "Name": "iD_Bien_Servicio",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Name": "Mensaje",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Lista",
+        "Type": "System.Int32[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "id_Bien_Servicio",
+        "Type": "System.Int32",
         "IsRequired": false
       }
     ],

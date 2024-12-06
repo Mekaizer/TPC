@@ -11,5 +11,6 @@ namespace APIPortalTPC.Repositorio
         public Task<Ticket> ActualizarEstadoTicket(int id_T);
         public Task<Ticket> EliminarTicket(int id_T);
         public Task<IEnumerable<Ticket>> GetAllTicketUsuario(int id);
+        public Task<IEnumerable<int>> TicketConOCPendientes(int id_U);
     }
 }

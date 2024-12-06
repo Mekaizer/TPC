@@ -2,15 +2,16 @@
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
+
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
- * **/
+ */
 namespace APIPortalTPC.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 
     public class ControladorUsuario : ControllerBase
     {

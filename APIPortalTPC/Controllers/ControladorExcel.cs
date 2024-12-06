@@ -95,7 +95,7 @@ namespace APIPortalTPC.Controllers
         }
 
             /// <summary>
-            /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos
+            /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos, tambien añade las ordenes estadisticas!!!
             /// </summary>
             /// <returns></returns>
         [HttpPost("CeCo")]
@@ -114,6 +114,11 @@ namespace APIPortalTPC.Controllers
                 {
                     {
                         //string path = @"C:\Users\drako\Desktop\cap.xlsx";
+                        var original = (await IRC.GetAllCeCo());
+                        foreach (CentroCosto c in original)
+                        {
+                            await IRC.EliminarCeCo(c.Id_Ceco);
+                        }
 
 
                         List<CentroCosto> lc = (await Excel.LeerExcelCeCo(Archivo));
@@ -122,6 +127,12 @@ namespace APIPortalTPC.Controllers
                             string res = await IRC.Existe(cc.Codigo_Ceco);
                             if (res == "ok")
                                 await IRC.Nuevo_CeCo(cc);
+
+                            else
+                            {
+                                cc.Activado = true;
+                                await IRC.ModificarCeCo(cc);
+                            }
                         }
 
                         return Ok(true);

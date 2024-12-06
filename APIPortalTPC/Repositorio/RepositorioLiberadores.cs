@@ -42,7 +42,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Liberadores " +
                                     "(Id_Usuario,Id_Departamento) " +
-                                    "VALUES (@Id_Usuario,@Id_Departamento); " +
+                                    "VALUES (@Id_Usuario,@Id_Departamento) " +
                                     "SELECT SCOPE_IDENTITY() AS Id_Liberador";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = L.Id_Usuario;
@@ -66,7 +66,7 @@ namespace APIPortalTPC.Repositorio
         /// <summary>
         /// Metodo que permite conseguir un objeto usando su llave foranea
         /// </summary>
-        /// <param name="id">Id del objeto DepartamentoUsuario a buscar</param>
+        /// <param name="id">Id del objeto Liberadores a buscar</param>
         /// <returns>Retorna el objeto Relacion cuya Id se pide</returns>
         /// <exception cref="Exception"></exception>
         public async Task<Liberadores> Get(int id)
@@ -87,7 +87,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , d.Nombre,d.Id_Departamento " +
+                Comm.CommandText = "SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , U.Correo_Usuario, d.Nombre,d.Id_Departamento " +
                     "FROM dbo.Liberadores L " +
                     "INNER JOIN dbo.Usuario u ON u.Id_Usuario = L.Id_Usuario " +
                     "INNER JOIN dbo.Departamento d ON L.Id_Departamento = d.Id_Departamento " +
@@ -105,6 +105,7 @@ namespace APIPortalTPC.Repositorio
                     L.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
                     L.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                     L.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
+                    L.Correo = Convert.ToString(reader["Usuario_Correo"]);
                 }
             }
             catch (SqlException ex)
@@ -136,7 +137,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , d.Nombre,d.Id_Departamento
+                Comm.CommandText = @"SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , d.Nombre,d.Id_Departamento, U.Correo_Usuario 
                 FROM dbo.Liberadores L
                 INNER JOIN dbo.Usuario u ON u.Id_Usuario = L.Id_Usuario
                 INNER JOIN dbo.Departamento d ON L.Id_Departamento = d.Id_Departamento ";  // leer base datos 
@@ -152,6 +153,7 @@ namespace APIPortalTPC.Repositorio
                     L.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
                     L.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                     L.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
+                    L.Correo = Convert.ToString(reader["Usuario_Correo"]);
                     lista.Add(L);
                 }
             }
@@ -230,7 +232,7 @@ namespace APIPortalTPC.Repositorio
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT Top 1 1 FROM dbo.Liberador WHERE Id_Usuario = @Id_Usuario and Id_Departamento = @Id_Departamento";
+                    command.CommandText = "SELECT Top 1 1 FROM dbo.Liberadores WHERE Id_Usuario = @Id_Usuario and Id_Departamento = @Id_Departamento";
                     command.Parameters.AddWithValue("@Id_Usuario", Usuario);
                     command.Parameters.AddWithValue("@Id_Departamento", dep);
                     SqlDataReader reader = await command.ExecuteReaderAsync();

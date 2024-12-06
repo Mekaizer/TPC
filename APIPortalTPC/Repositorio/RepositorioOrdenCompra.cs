@@ -317,62 +317,6 @@ namespace APIPortalTPC.Repositorio
             }
             return ocmod;
         }
-        public async Task<IEnumerable<OrdenCompra>> OCPendientes(int Id_Ticket)
-        {
-            List<OrdenCompra> lista = new List<OrdenCompra>();
-            SqlConnection sql = conectar();
-            SqlCommand? Comm = null;
-            SqlDataReader reader = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT U.Nombre_Usuario , T.ID_Ticket, OE.Nombre, OC.* 
-                FROM dbo.Ticket T 
-                INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario 
-                INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores 
-                Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket 
-                LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE 
-                where T.ID_Ticket = @Id_U and OC.Recepcion = @Recepcion  ";               // leer base datos 
-                Comm.CommandType = CommandType.Text;
-
-                Comm.Parameters.Add("@Id_U", SqlDbType.Int).Value = Id_Ticket;
-                Comm.Parameters.Add("@Recepcion", SqlDbType.Bit).Value = false;
-                reader = await Comm.ExecuteReaderAsync();
-
-                while (reader.Read())
-                {
-                    OrdenCompra oc = new();
-                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
-                    oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
-                    oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
-                    oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
-                    oc.Texto = Convert.ToString(reader["Texto"]).Trim();
-                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
-                    oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
-                    oc.IdP = Convert.ToInt32(reader["ID_Proveedor"]);
-                    oc.Mon = Convert.ToString(reader["Mon"]).Trim();
-                    oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
-                    oc.Proveedor = Convert.ToString(reader["ID_Proveedores"]);
-                    oc.Material = Convert.ToInt32(reader["Material"]);
-                    oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
-                    oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
-                    oc.Recepcion = false;
-                    lista.Add(oc);
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error cargando los datos tabla Cotización " + ex.Message);
-            }
-            finally
-            {
-                reader.Close();
-                Comm.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return lista;
-        }
+       
     }
 }

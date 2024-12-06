@@ -15,5 +15,6 @@ namespace BaseDatosTPC
         public string Nombre_Usuario { get; set; }
         public int Id_Departamento { get; set; }
         public string Nombre_Departamento { get; set; }
+        public string? Correo { get; set; }
     }
 }

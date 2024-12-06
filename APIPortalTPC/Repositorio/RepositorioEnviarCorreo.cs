@@ -1,8 +1,8 @@
 ﻿
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
-using NPOI.SS.Formula.Functions;
 using System.Net.Mail;
+using System.Text;
 
 
 
@@ -151,7 +151,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="subject"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> CorreoRecepciones(Usuario U, string subject,List<OrdenCompra> loc, int Id_Ticket)
+        public async Task<string> CorreoRecepciones(Usuario U, string subject, List<int> Id_Ticket)
         {
             //al solicitante no fue recepcionada, no se sabe el estado, parcialmente y cuando no hay respuesta
             // Configuración del servidor SMTP
@@ -162,8 +162,14 @@ namespace APIPortalTPC.Repositorio
             // Pedir al usuario que ingrese el asunto del correo    
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
+            StringBuilder sb = new StringBuilder();
 
-            string htmlBody = @"<html>
+            string resultado = "";
+            foreach (int numero in Id_Ticket)
+            {
+                resultado += $"N° Ticket: {numero} \n\n\n";
+            }
+            string htmlBody = $@"<html>
                 <body>
                     <div style='background-color: #002060; color: white; padding: 10px; text-align: center;'>
                         <h1>Portal de Adquisiciones - TPC</h1>
@@ -172,31 +178,8 @@ namespace APIPortalTPC.Repositorio
                         <p>Estimado(a):</p>
                         <p>Por favor, confirmar recepción de la siguiente Orden de Compra:</p>
                         <ul>
-                            <li><strong>N° ticket:</strong> 15376</li>
-                            <li><strong>Orden de compra N°:</strong> 4700508073</li>
-                        </ul>
-                        <table border='1' style='border-collapse: collapse; width: 100%; text-align: left;'>
-                            <thead>
-                                <tr style='background-color: #f2f2f2;'>
-                                    <th>Pos</th>
-                                    <th>Cantidad</th>
-                                    <th>Mon</th>
-                                    <th>Prc.neto</th>
-                                    <th>Proveedor</th>
-                                    <th>Material</th>
-                                    <th>Fecha</th>
-                                    <th>Texto breve</th>
-                                    <th>Valor neto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @foreach(var item in lista)
-                            <tr>
-                            <tr>@item.</tr>
-                            </tr>
-                            </tbody>
-                        </table>
-                                         
+                            <li><strong> {resultado} </strong> </li>
+                        </ul>                                         
                     </div>
                     <div style='background-color: #002060; color: white; padding: 10px; text-align: center;'>
                         <p>© 2024 Portal de Adquisiciones TPC. Todos los derechos reservados.</p>

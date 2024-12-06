@@ -43,8 +43,8 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-                int codigo = await RA.MFA(User.Correo_Usuario);
-                User.CodigoMFA = codigo;
+                //int codigo = await RA.MFA(User.Correo_Usuario);
+                //User.CodigoMFA = codigo;
                 await RU.ModificarUsuario(User);
                 return User;
             }
@@ -113,12 +113,12 @@ namespace APIPortalTPC.Controllers
         /// <returns></returns>
         [HttpPost("pass")]
 
-        public async Task<IActionResult> RecuperarContraseña(PostRq Correo)
+        public async Task<IActionResult> RecuperarContraseña(string Correo)
         {
             try
             { //Logica: entregas el correo,
               //retorna el usuario
-                Usuario U = await RU.RecuperarContraseña(Correo.correo);
+                Usuario U = await RU.RecuperarContraseña(Correo);
                 //mandas un correo,
                 //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
                 if (U != null)
