@@ -38,8 +38,8 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> NuevoUsuario(Usuario U)
         {
-            U.Rut_Usuario= U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", ""); ;
-            if (!CalcularDigitoVerificador(U.Rut_Usuario))
+            string rut= U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper(); 
+            if (!CalcularDigitoVerificador(rut))
             {
                 throw new Exception("Error de Rut ");
             }
@@ -59,7 +59,7 @@ namespace APIPortalTPC.Repositorio
                     Comm.CommandType = CommandType.Text;
                     Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
                     Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
-                    Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar, 50).Value = U.Rut_Usuario;
+                    Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar, 50).Value = RutNormalizado(rut);
                     Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                     Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 100).Value = U.Correo_Usuario;
                     Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
@@ -233,9 +233,9 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> ModificarUsuario(Usuario U)
         {
-            U.Rut_Usuario = U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", ""); 
+            string rut = U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper(); 
 
-            if (!CalcularDigitoVerificador(U.Rut_Usuario))
+            if (!CalcularDigitoVerificador(rut))
                 throw new Exception("Error de Rut ");
             Usuario? Umod = null;
             SqlConnection sqlConexion = conectar();
@@ -261,7 +261,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
                 Comm.Parameters.Add("@Apellido_Paterno", SqlDbType.VarChar, 50).Value = U.Apellido_paterno;
-                Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar,50).Value = U.Rut_Usuario;
+                Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar,50).Value = RutNormalizado(rut);
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
                 Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = U.Contraseña_Usuario;
@@ -309,7 +309,8 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         public async Task<string> Existe(string rut, string correo)
         {
-            rut=rut.Replace(".", "").Replace("-", "").Replace(" ", "");
+            rut=rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+            rut = RutNormalizado(rut);
             if (!CalcularDigitoVerificador(rut))
             {
                 return "El rut no es valido";
@@ -446,47 +447,7 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        /// <summary>
-        /// Metodo para asegurar que el rut sea valido
-        /// </summary>
-        /// <param name="rut"></param>
-        /// <returns></returns>
-        public bool CalcularDigitoVerificador(string rut)
-        {
-            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "");
 
-            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
-
-            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
-
-            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
-                return false;
-            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
-            {
-                return false;
-            }
-            int suma = 0;
-            int multiplicador = 2;
-
-            // Iterar sobre los dígitos del RUT de derecha a izquierda
-            for (int i = rutSinDV.Length - 1; i >= 0; i--)
-            {
-                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
-                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
-            }
-
-            int resto = 11 - (suma % 11);
-
-            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
-            if (resto == 11)
-            {
-                return digito.Equals("0");
-            }
-
-            else if (resto == 10) return digito.Equals("K");
-            else return digito.Equals(resto.ToString());
-        }
-    
     /// <summary>
     /// Metodo que busca por Id el Usuario para "eliminarlo"
     /// </summary>
@@ -528,7 +489,12 @@ namespace APIPortalTPC.Repositorio
             }
             return Umod;
         }
-    
+        
+        /// <summary>
+        /// Metodo que permite que el Usuario pueda registarse en la platora
+        /// </summary>
+        /// <param name="U"></param>
+        /// <returns></returns>
         public async Task<Usuario> ActivarUsuario(Usuario U)
         {
             Random random = new Random();
@@ -537,6 +503,12 @@ namespace APIPortalTPC.Repositorio
             U.CodigoMFA = pass;
             return U;
         }
+        /// <summary>
+        /// Metodo que retorna la contraseña del usuario que puso su correo
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Usuario> RecuperarContraseña(string correo)
         {
             Usuario U = new ();
@@ -548,10 +520,11 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "SELECT * FROM dbo.Usuario " +
-                   "WHERE Correo_Usuario = @correo";
+                   "WHERE Correo_Usuario = @correo and Activado = @bool";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@correo", SqlDbType.VarChar,500).Value = correo;
+                Comm.Parameters.Add("@correo", SqlDbType.VarChar, 500).Value = correo;
+                Comm.Parameters.Add("@bool", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
@@ -586,8 +559,64 @@ namespace APIPortalTPC.Repositorio
             return U;
 
         }
-    }
-    
 
-    
+
+        /// <summary>
+        /// Metodo para asegurar que el rut sea valido
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public bool CalcularDigitoVerificador(string rut)
+        {
+            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+
+            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
+
+            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
+
+            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
+                return false;
+            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
+            {
+                return false;
+            }
+            int suma = 0;
+            int multiplicador = 2;
+
+            // Iterar sobre los dígitos del RUT de derecha a izquierda
+            for (int i = rutSinDV.Length - 1; i >= 0; i--)
+            {
+                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
+                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
+            }
+
+            int resto = 11 - (suma % 11);
+
+            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
+            if (resto == 11)
+            {
+                return digito.Equals("0");
+            }
+
+            else if (resto == 10) return digito.Equals("K");
+            else return digito.Equals(resto.ToString());
+        }
+        /// <summary>
+        /// Metodo para normalizar los rut
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public string RutNormalizado(string rut)
+        {
+            string cuerpo = rut.Substring(0, rut.Length - 1);
+            char dv = rut[rut.Length - 1];
+
+            string rutFormateado = string.Join(".", cuerpo.Reverse().Chunk(3).Reverse());
+            rut = rutFormateado + dv;
+            return rut;
+        }
+    }
+
+
+
 }    

@@ -118,7 +118,8 @@ namespace APIPortalTPC.Controllers
             }
         }
         /// <summary>
-        /// Metodo para actualizar el estado del ticket, esto se hace revisando las ordenes de compra asociadas
+        /// Metodo para actualizar el estado del ticket, esto se hace revisando las ordenes de compra asociadas, luego se debe 
+        /// actualizar las Ordenes de compra si Estado ticket es OC Recepcionada
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -127,9 +128,18 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-                var Ticket= await RT.ActualizarEstadoTicket(id);
-                if (Ticket.ID_Ticket != 0)
+                var Ticket = await RT.ActualizarEstadoTicket(id);
+                if (Ticket.ID_Ticket != 0 && Ticket.Estado.Equals("OC Recepcionada")) 
+                {
+                    var OC= await ROC.GetAllOCTicket(Ticket.ID_Ticket);
+                    foreach(OrdenCompra cambia in OC)
+                    {
+                        await ROC.ModificarOC(cambia);
+                    }
                     return Ticket;
+                }
+
+              
                 else
                     return NotFound("Ticket no encontrado");
             }

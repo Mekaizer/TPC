@@ -32,27 +32,29 @@ namespace APIPortalTPC.Controllers
         /// <param name="LID"></param>
         /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> EnviarVariosProveedores([FromForm] FormDataArchivo LID)
+        public async Task<ActionResult> EnviarVariosProveedores([FromForm] FormData formData)
         {
             try
             {
+                // Acceder a los datos del formulario
+           
+      
+            var lis = formData.Lista;
+                     Console.WriteLine(lis);
+                     foreach (int ID in lis)
+                     {
+                         Console.WriteLine(formData.Asunto);
+                         Console.WriteLine(ID);
+                         Console.WriteLine(formData.Mensaje);
 
-                var lis = LID.Lista;
-                Console.WriteLine(lis);
-                foreach (int ID in lis)
-                {
-                    Console.WriteLine(LID.Asunto);
-                    Console.WriteLine(ID);
-                    Console.WriteLine(LID.Mensaje);
-
-                    //await IEC.CorreoProveedores(P, LID.Asunto);
+                    //await IEC.CorreoProveedores(P, formData.Asunto);
                 }
 
 
 
                 return Ok("Correos enviados con exito");
-
-            }
+        
+                }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
@@ -105,17 +107,20 @@ namespace APIPortalTPC.Controllers
         public async Task<ActionResult> EnviarCorreoLiberadores()
         {
             string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
-         /*   var[] lista = await IRU.GetAllUsuariosLiberadores();
+            var lista = await IRL.GetAll();
             foreach (var U in lista)
-
-                await IEC.CorreoLiberador(U, subject);
+            {
+                Usuario User = await IRU.GetUsuario(U.Id_Usuario);
+                await IEC.CorreoLiberador(User, subject);
+            }
+          
 
 
             if (lista == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound, "no existen liberadores pendientes!!! :D ");
             }
-         */
+       
             return Ok("Correos enviados con exito");
 
         }
@@ -141,21 +146,20 @@ namespace APIPortalTPC.Controllers
                     {
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        Console.WriteLine(L.Id_Departamento);
                         //await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
                     {
                         Liberadores lib = await IRL.Get(9);
-                        Console.WriteLine(lib.Id_Usuario);
+                  
                         U = await IRU.GetUsuario(lib.Id_Usuario);
                         Console.WriteLine(U.Correo_Usuario + " Usuario " + U.Nombre_Completo);
                         //await IEC.CorreoLiberador(U, subject);
 
                     }
                 }
-
+                //cambiar estado ticket!!!
 
 
                 return Ok("Correos enviados con exito");
@@ -198,7 +202,7 @@ namespace APIPortalTPC.Controllers
                         Id_LT = (List<int>)list;
                         if (Id_LT.Count != 0)
                         {
-                            Console.WriteLine(U.Correo_Usuario);
+                 
                             //await IEC.CorreoRecepciones(U, subject, Id_LT);
                         }
                     }

@@ -7,7 +7,7 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioCotizacion : IRepositorioCotizacion
     {
-       
+
         private readonly string Conexion;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace APIPortalTPC.Repositorio
         /// <returns>La conexión</returns>
         private SqlConnection conectar()
         {
-            
+
             return new SqlConnection(Conexion);
         }
 
@@ -134,7 +134,7 @@ namespace APIPortalTPC.Repositorio
                     {
                         //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                         ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
-                        Id_Solicitante= Convert.ToString(reader["Nombre_Usuario"]).Trim(),
+                        Id_Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim(),
                     };
 
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
@@ -200,7 +200,7 @@ namespace APIPortalTPC.Repositorio
                 if (cotizacion.Id_Bien_Servicio != null)
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.Id_Bien_Servicio;
                 else Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
-                if(cotizacion.Detalle != null)
+                if (cotizacion.Detalle != null)
                     Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = cotizacion.Detalle;
                 else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = "";
                 if (cotizacion.Solped != null)
@@ -255,7 +255,7 @@ namespace APIPortalTPC.Repositorio
                 else
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
 
-                if(cotizacion.Detalle != null)
+                if (cotizacion.Detalle != null)
                     Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
                 else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = "Sin detalle";
 
@@ -263,7 +263,8 @@ namespace APIPortalTPC.Repositorio
                 {
                     Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = cotizacion.Solped;
                 }
-                else {
+                else
+                {
                     Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = 0;
                 }
 
@@ -301,7 +302,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Cotizacion SET " +
                                    "Estado = @Estado, " +
-                                   "Activado = @Activado "+
+                                   "Activado = @Activado " +
                                    "WHERE ID_Cotizacion = @ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "Cancelado";
@@ -327,6 +328,7 @@ namespace APIPortalTPC.Repositorio
             }
             return cotmod;
         }
-    }
-}
 
+    }
+
+}

@@ -317,6 +317,67 @@ namespace APIPortalTPC.Repositorio
             }
             return ocmod;
         }
-       
+
+        public async Task<IEnumerable<OrdenCompra>> GetAllOCTicket(int id_T)
+        {
+            List<OrdenCompra> lista = new List<OrdenCompra>();
+            SqlConnection sql = conectar();
+            SqlCommand? Comm = null;
+            SqlDataReader reader = null;
+            try
+            {
+                sql.Open();
+                Comm = sql.CreateCommand();
+                Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
+                FROM dbo.Orden_de_Compra OC 
+				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
+                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores
+                where OC.Id_Ticket = @Ticket "
+;               // leer base datos 
+                Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@Ticket", SqlDbType.Int).Value = id_T;
+                reader = await Comm.ExecuteReaderAsync();
+
+                while (reader.Read())
+                {
+                    OrdenCompra oc = new();
+                    oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
+                    oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
+                    oc.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+                    oc.Texto = Convert.ToString(reader["Texto"]).Trim();
+                    oc.posicion = Convert.ToString(reader["Posicion"]).Trim();
+                    oc.Cantidad = Convert.ToInt32(reader["Cantidad"]);
+                    oc.IdP = Convert.ToInt32(reader["ID_Proveedor"]);
+                    oc.Mon = Convert.ToString(reader["Mon"]).Trim();
+                    oc.PrcNeto = Convert.ToDecimal(reader["PrcNeto"]);
+                    string Prov = Convert.ToString(reader["ID_Proveedores"]);
+                    Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    oc.Proveedor = Prov;
+                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
+                    oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
+                    oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
+
+                    lista.Add(oc);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Cotización " + ex.Message);
+            }
+            finally
+            {
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return lista;
+        }
+
+
+
     }
 }

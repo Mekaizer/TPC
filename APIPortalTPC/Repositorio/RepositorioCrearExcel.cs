@@ -1,6 +1,7 @@
 ﻿using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using OfficeOpenXml;
+using System.Diagnostics;
 using System.IO;
 namespace APIPortalTPC.Repositorio
 {
@@ -59,13 +60,14 @@ namespace APIPortalTPC.Repositorio
                         worksheet.Cells[row, 13].Value = "No";
                     row++;
                 }
-                string filePath = "C:/Users/drako/Desktop/ListaOrdenCompras.xlsx";
+                DateTime ahora = DateTime.Now;
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaOrdenCompras_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);
                 package.SaveAs(fileInfo);
+                //Process.Start(new ProcessStartInfo(filePath));
 
-               
             }
             return "Archivo Excel guardado ";
         }
@@ -99,8 +101,9 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[row, 7].Value = OC.Bien_Servicio;
                     row++;
                 }
-                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string filePath = Path.Combine(downloadsPath, "ListaCotizacion.xlsx");
+
+                DateTime ahora = DateTime.Now;
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaCotizaciones_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
 
 
                 // Guardar el archivo en la ruta especificada
@@ -150,8 +153,9 @@ namespace APIPortalTPC.Repositorio
                     row++;
                 }
 
-                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string filePath = Path.Combine(downloadsPath, "ListaUsuario.xlsx");
+                DateTime ahora = DateTime.Now;
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaUsuario_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
+
 
 
                 // Guardar el archivo en la ruta especificada
@@ -182,8 +186,10 @@ namespace APIPortalTPC.Repositorio
                     worksheet.Cells[1, 2].Value = BS.Bien_Servicio;
                     row++;
                 }
-                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string filePath = Path.Combine(downloadsPath, "ListaBienServicio.xlsx");
+
+                DateTime ahora = DateTime.Now;
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaBienServicio_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
+
 
 
                 // Guardar el archivo en la ruta especificada

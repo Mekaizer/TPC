@@ -104,11 +104,14 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Proveedores> ModificarProveedor(Proveedores P)
         {
-            if (!CalcularDigitoVerificador(P.Rut_Proveedor))
+            string rut = P.Rut_Proveedor.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+            if (!CalcularDigitoVerificador(rut))
             {
                 throw new Exception("Error de Rut ");
             }
-            else { 
+            else {
+
+             rut = RutNormalizado(rut);
             Proveedores Pmod = null;
             SqlConnection sqlConexion = conectar();
             SqlCommand? Comm = null;
@@ -135,7 +138,7 @@ namespace APIPortalTPC.Repositorio
                     "Swift = @Swift " +
                     "WHERE ID_Proveedores = @ID_Proveedores";
                 Comm.CommandType = CommandType.Text;
-                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 500).Value = P.Rut_Proveedor;
+                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 500).Value = rut;
                     Comm.Parameters.Add("@Razon_social", SqlDbType.VarChar, 500).Value = P.Razon_Social;
                     Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 500).Value = P.Nombre_Fantasia;
 
@@ -187,13 +190,17 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Proveedores> NuevoProveedor(Proveedores P)
         {
-            if (!CalcularDigitoVerificador(P.Rut_Proveedor))
+            string rut = P.Rut_Proveedor;
+            rut = rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+    
+            if (!CalcularDigitoVerificador(rut))
             {
                 throw new Exception("Error de Rut ");
             
             }
             else
             {
+                rut = RutNormalizado(rut);
                 SqlConnection sql = conectar();
                 SqlCommand? Comm = null;
                 try
@@ -205,7 +212,7 @@ namespace APIPortalTPC.Repositorio
                                        "VALUES (@Rut_Proveedor, @Razon_Social, @Nombre_Fantasia, @ID_Bien_Servicio, @Direccion, @Comuna, @Correo_Proveedor, @Telefono_Proveedor, @Nombre_Representante, @Email_Representante, @N_Cuenta, @Banco, @Swift, @Estado,@Cargo_Representante) " +
                                        "SELECT SCOPE_IDENTITY() AS ID_Proveedores";
                     Comm.CommandType = CommandType.Text;
-                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = P.Rut_Proveedor;
+                    Comm.Parameters.Add("@Rut_Proveedor", SqlDbType.VarChar, 50).Value = rut;
                     Comm.Parameters.Add("@Razon_Social", SqlDbType.VarChar, 50).Value = P.Razon_Social;
                     Comm.Parameters.Add("@Nombre_Fantasia", SqlDbType.VarChar, 50).Value = P.Razon_Social;
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = P.ID_Bien_Servicio;
@@ -261,6 +268,8 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         public async Task<string> Existe(string rut,string bs)
         {
+            rut = rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+            rut = RutNormalizado(rut);
             if (!CalcularDigitoVerificador(rut))
             {
                 return "Rut no valido";
@@ -276,7 +285,7 @@ namespace APIPortalTPC.Repositorio
                         command.Connection = sqlConnection;
                         command.CommandText = "SELECT TOP 1 1 FROM dbo.Proveedores WHERE Rut_Proveedor = @rut and ID_Bien_Servicio = @bs";
                         command.Parameters.AddWithValue("@bs", valuebs); 
-                        command.Parameters.AddWithValue("@rut", rut);
+                        command.Parameters.AddWithValue("@rut", RutNormalizado(rut));
                         SqlDataReader reader = await command.ExecuteReaderAsync();
                         if (reader.HasRows)
                         {
@@ -416,46 +425,7 @@ namespace APIPortalTPC.Repositorio
         }
 
 
-        /// <summary>
-        /// Metodo para asegurar que el rut sea valido
-        /// </summary>
-        /// <param name="rut"></param>
-        /// <returns></returns>
-        public bool CalcularDigitoVerificador(string rut)
-        {
-            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "");
-
-            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
-
-            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
-
-            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
-                return false;
-            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
-            {
-                return false;
-            }
-            int suma = 0;
-            int multiplicador = 2;
-
-            // Iterar sobre los dígitos del RUT de derecha a izquierda
-            for (int i = rutSinDV.Length - 1; i >= 0; i--)
-            {
-                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
-                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
-            }
-
-            int resto = 11 - (suma % 11);
-
-            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
-            if (resto == 11)
-            {
-                return digito.Equals("0");
-            }
-
-            else if (resto == 10) return digito.Equals("K");
-            else return digito.Equals(resto.ToString());
-        }
+   
         /// <summary>
         /// Metodo que "elimina" al proveedor, con confundir con Estado
         /// </summary>
@@ -501,5 +471,64 @@ namespace APIPortalTPC.Repositorio
         }
         return Pmod;
     }
+
+
+
+        /// <summary>
+        /// Metodo para asegurar que el rut sea valido
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public bool CalcularDigitoVerificador(string rut)
+        {
+            string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+
+            string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
+
+            rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
+
+            if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
+                return false;
+            else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
+            {
+                return false;
+            }
+            int suma = 0;
+            int multiplicador = 2;
+
+            // Iterar sobre los dígitos del RUT de derecha a izquierda
+            for (int i = rutSinDV.Length - 1; i >= 0; i--)
+            {
+                suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
+                multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
+            }
+
+            int resto = 11 - (suma % 11);
+
+            // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
+            if (resto == 11)
+            {
+                return digito.Equals("0");
+            }
+
+            else if (resto == 10) return digito.Equals("K");
+            else return digito.Equals(resto.ToString());
         }
+        /// <summary>
+        /// Metodo para normalizar los rut
+        /// </summary>
+        /// <param name="rut"></param>
+        /// <returns></returns>
+        public string RutNormalizado(string rut)
+        {
+            string cuerpo = rut.Substring(0, rut.Length - 1);
+            char dv = rut[rut.Length - 1];
+
+            string rutFormateado = string.Join(".", cuerpo.Reverse().Chunk(3).Reverse());
+            rut = rutFormateado + dv;
+            return rut;
+        }
+
+
+    }
 }

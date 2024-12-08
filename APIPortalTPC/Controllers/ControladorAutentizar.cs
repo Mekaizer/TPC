@@ -45,7 +45,7 @@ namespace APIPortalTPC.Controllers
             {
                 //int codigo = await RA.MFA(User.Correo_Usuario);
                 //User.CodigoMFA = codigo;
-                await RU.ModificarUsuario(User);
+                //await RU.ModificarUsuario(User);
                 return User;
             }
             return NotFound("Usuario no activado");
@@ -113,17 +113,17 @@ namespace APIPortalTPC.Controllers
         /// <returns></returns>
         [HttpPost("pass")]
 
-        public async Task<IActionResult> RecuperarContraseña(string Correo)
+        public async Task<IActionResult> RecuperarContraseña(PostRq Correo)
         {
             try
             { //Logica: entregas el correo,
               //retorna el usuario
-                Usuario U = await RU.RecuperarContraseña(Correo);
+                Usuario U = await RU.RecuperarContraseña(Correo.correo);
                 //mandas un correo,
                 //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
                 if (U != null)
                 {
-                    await IEC.RecuperarPass(U);
+                    //await IEC.RecuperarPass(U);
                     return Ok(U);
                 }
                 return BadRequest("No hay usuario para ese correo");

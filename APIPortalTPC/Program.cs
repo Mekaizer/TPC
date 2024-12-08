@@ -2,6 +2,7 @@
 using APIPortalTPC.Datos;
 using APIPortalTPC.Repositorio;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 IConfiguration Configuration;
@@ -47,8 +48,15 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
+/* Certificado SSL
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.ConfigureHttpsDefaults(options =>
+    {
+        options.ServerCertificate = new X509Certificate2("ruta/a/tu/certificado.pfx", "tu_contraseña");
+    });
+});
+*/
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
