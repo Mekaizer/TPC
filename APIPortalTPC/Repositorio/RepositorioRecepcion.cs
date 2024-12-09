@@ -83,7 +83,15 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT C.*  FROM dbo.Recepcion C 
+                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                FROM dbo.Recepcion R
+                inner join dbo.Correo C on R.Id_Correo = C.Id_Correo  
+                inner join dbo.Ticket T on C.Id_Ticket = T.ID_Ticket 
+                inner join dbo.Usuario U on U.Id_Usuario = T.Id_Usuario 
+                inner join dbo.Proveedores P on P.ID_Proveedores = T.ID_Proveedor
+                inner join dbo.Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica
+                inner join dbo.Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco
+                inner join dbo.Orden_de_Compra OC on OC.Id_Ticket = T.ID_Ticket
                 where C.Id_Recepcion = @Id_Recepcion ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -100,6 +108,11 @@ namespace APIPortalTPC.Repositorio
                     R.FechaRespuesta = reader["FechaRespuesta"] is DBNull ? (DateTime?)null : (DateTime)reader["FechaRespuesta"];
                     R.Respuesta = Convert.ToString(reader["Respuesta"]).Trim();
                     R.Comentarios = Convert.ToString(reader["Comentarios"]).Trim();
+                    R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
+                    R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    R.Usuario= Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                 }
             }
             catch (SqlException ex)
@@ -126,7 +139,15 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT *  FROM dbo.Recepcion"; 
+                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                FROM dbo.Recepcion R
+                inner join dbo.Correo C on R.Id_Correo = C.Id_Correo  
+                inner join dbo.Ticket T on C.Id_Ticket = T.ID_Ticket 
+                inner join dbo.Usuario U on U.Id_Usuario = T.Id_Usuario 
+                inner join dbo.Proveedores P on P.ID_Proveedores = T.ID_Proveedor
+                inner join dbo.Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica
+                inner join dbo.Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco
+                inner join dbo.Orden_de_Compra OC on OC.Id_Ticket = T.ID_Ticket ";
                 // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
@@ -140,6 +161,11 @@ namespace APIPortalTPC.Repositorio
                     R.FechaRespuesta = reader["FechaRespuesta"] is DBNull ? (DateTime?)null : (DateTime)reader["FechaRespuesta"];
                     R.Respuesta = Convert.ToString(reader["Respuesta"]).Trim();
                     R.Comentarios = Convert.ToString(reader["Comentarios"]).Trim();
+                    R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
+                    R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    R.Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     lista.Add(R);
                 }
             }

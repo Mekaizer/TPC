@@ -2,7 +2,6 @@
 using APIPortalTPC.Datos;
 using APIPortalTPC.Repositorio;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 IConfiguration Configuration;
@@ -59,10 +58,6 @@ builder.Services.Configure<KestrelServerOptions>(options =>
 */
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
 
 app.UseCors("NuevaPolitica");
 

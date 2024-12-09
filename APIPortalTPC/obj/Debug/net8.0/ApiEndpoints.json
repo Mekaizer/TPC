@@ -844,18 +844,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Archivo",
+        "Name": "File",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      },
-      {
-        "Name": "Lista",
-        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "Asunto",
-        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -864,8 +854,18 @@
         "IsRequired": false
       },
       {
-        "Name": "id_Bien_Servicio",
+        "Name": "bien_servicio",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "asunto",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Proveedor",
+        "Type": "System.Int32[]",
         "IsRequired": false
       }
     ],
@@ -879,6 +879,31 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Mensaje",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "bien_servicio",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "asunto",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Proveedor",
+        "Type": "System.Int32[]",
+        "IsRequired": false
+      },
       {
         "Name": "id",
         "Type": "System.Int32",

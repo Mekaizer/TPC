@@ -521,12 +521,24 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         public string RutNormalizado(string rut)
         {
-            string cuerpo = rut.Substring(0, rut.Length - 1);
-            char dv = rut[rut.Length - 1];
+            string rutInvertido = new string(rut.Reverse().ToArray());
 
-            string rutFormateado = string.Join(".", cuerpo.Reverse().Chunk(3).Reverse());
-            rut = rutFormateado + dv;
-            return rut;
+            // Insertar puntos cada 3 dígitos
+            string rutFormateado = "";
+            for (int i = 0; i < rutInvertido.Length; i++)
+            {
+                rutFormateado += rutInvertido[i];
+                if (i % 3 == 0 && i != 0)
+                {
+                    rutFormateado += ".";
+                }
+            }
+
+            // Invertir nuevamente y agregar el guión
+            rutFormateado = new string(rutFormateado.Reverse().ToArray());
+            rutFormateado = rutFormateado.Insert(rutFormateado.Length - 1, "-");
+
+            return rutFormateado;
         }
 
 

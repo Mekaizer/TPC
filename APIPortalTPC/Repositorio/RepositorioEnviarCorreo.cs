@@ -25,7 +25,7 @@ namespace APIPortalTPC.Repositorio
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
             string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            //string archivo = @"C:\Users\drako\Desktop\PRO4.xlsx"; //Direccion del archivo a enviar
+            //string archivo = @"C:\\Desktop\PRO4.xlsx"; //Direccion del archivo a enviar
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = P.Correo_Proveedor;
 
@@ -98,21 +98,15 @@ namespace APIPortalTPC.Repositorio
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML sobre la liberación urgente
-            string htmlBody = $@"
-            <html>
-            <head></head>
-            <body>
-                <p>Estimado/a {U.Nombre_Usuario},</p>
-                <p>Junto con saludar, nos dirigimos a usted para confirar recepción de la sigientes Ordenes de Compra</p>
-                <p>N° Ticket: {U.Id_Usuario}</p>
-               
-                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo. Para enviar su cotización o cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
-                <p>Agradecemos su pronta colaboración.</p>
-                <p>Saludos cordiales,</p>
-                <p>Equipo de Adquisiciones<br/>
-                <strong>Terminal Puerto de Coquimbo</strong></p>
-            </body>
-        </html>";
+            string htmlBody = @"
+              <html>
+                      <p>Por favor, proceda con la liberación lo antes posible para evitar retrasos en el proceso de adquisiciones.</p>
+                      <p>Agradecemos su pronta colaboración.</p>
+                      <p>Saludos cordiales,</p>
+                      <p>Equipo de Adquisiciones<br/>
+                      <strong>Terminal Puerto de Coquimbo</strong></p>
+                  </body>
+              </html>";
             try
             {
                 // Crear el mensaje de correo
@@ -223,7 +217,7 @@ namespace APIPortalTPC.Repositorio
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "liberaciones@tpc.cl"; // Cambia esto por la dirección del remitente
+            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             //Nombre del mensaje

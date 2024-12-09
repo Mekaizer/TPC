@@ -62,7 +62,7 @@ namespace APIPortalTPC.Repositorio
                     a.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
 
                     a.NombreDoc = Convert.ToString(reader["NombreDoc"]);
-                /*try
+                try
                        {
                            a.ArchivoDoc = (byte[])(reader["ArchivoDoc"]);
                        }
@@ -71,7 +71,7 @@ namespace APIPortalTPC.Repositorio
 
                            a.ArchivoDoc = [0];
                        }
-                */
+  
                 } 
 
 

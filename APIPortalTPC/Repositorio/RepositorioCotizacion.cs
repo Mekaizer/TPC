@@ -244,7 +244,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO " +
                     "Cotizacion (Id_Solicitante,Fecha_Creacion_Cotizacion,Estado,ID_Bien_Servicio,Detalle,Solped) " +
-                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@ID_Bien_Servicio,@Detalle,@Solped); " +
+                    "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@ID_Bien_Servicio,@Detalle,@Solped) " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
@@ -253,11 +253,11 @@ namespace APIPortalTPC.Repositorio
                 if (cotizacion.Id_Bien_Servicio != null)
                     Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = cotizacion.Id_Bien_Servicio;
                 else
-                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = DBNull.Value;
+                    Comm.Parameters.Add("@ID_Bien_Servicio", SqlDbType.Int).Value = 0;
 
                 if (cotizacion.Detalle != null)
-                    Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = cotizacion.Detalle;
-                else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = "Sin detalle";
+                    Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = cotizacion.Detalle;
+                else Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 500).Value = "Sin detalle";
 
                 if (cotizacion.Solped != null)
                 {

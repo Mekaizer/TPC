@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Data;
 using ClasesBaseDatosTPC;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 
 namespace APIPortalTPC.Repositorio
@@ -606,14 +607,42 @@ namespace APIPortalTPC.Repositorio
         /// </summary>
         /// <param name="rut"></param>
         /// <returns></returns>
-        public string RutNormalizado(string rut)
-        {
-            string cuerpo = rut.Substring(0, rut.Length - 1);
-            char dv = rut[rut.Length - 1];
 
-            string rutFormateado = string.Join(".", cuerpo.Reverse().Chunk(3).Reverse());
-            rut = rutFormateado + dv;
-            return rut;
+      public string RutNormalizado(string rut)
+        {
+            string rutInvertido = new string(rut.Reverse().ToArray());
+
+            // Insertar puntos cada 3 dígitos
+            string rutFormateado = "";
+            for (int i = 0; i < rutInvertido.Length; i++)
+            {
+                rutFormateado += rutInvertido[i];
+                if (i % 3 == 0 && i != 0)
+                {
+                    rutFormateado += ".";
+                }
+            }
+
+            // Invertir nuevamente y agregar el guión
+            rutFormateado = new string(rutFormateado.Reverse().ToArray());
+            rutFormateado = rutFormateado.Insert(rutFormateado.Length - 1, "-");
+
+            return rutFormateado;
+        }
+
+        /// <summary>
+        /// Metodo que transforma la contraseña a hashing
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="salt"></param>
+        /// <returns></returns>
+        private static byte[] CrearHash(string pass, byte[] salt)
+        {
+            using (var pbkdf2 = new Rfc2898DeriveBytes(pass, salt, 10000))
+            {
+                byte[] hash = pbkdf2.GetBytes(20); // 20 bytes para SHA-256
+                return hash;
+            }
         }
     }
 

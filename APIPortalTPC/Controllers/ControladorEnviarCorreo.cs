@@ -32,25 +32,22 @@ namespace APIPortalTPC.Controllers
         /// <param name="LID"></param>
         /// <returns></returns>
         [HttpPost("Proveedor")]
-        public async Task<ActionResult> EnviarVariosProveedores([FromForm] FormData formData)
+        public async Task<IActionResult> EnviarVariosProveedores([FromForm] FormData formData)
         {
             try
             {
-                // Acceder a los datos del formulario
-           
+           /*
       
             var lis = formData.Lista;
                      Console.WriteLine(lis);
                      foreach (int ID in lis)
                      {
-                         Console.WriteLine(formData.Asunto);
-                         Console.WriteLine(ID);
-                         Console.WriteLine(formData.Mensaje);
+        
 
                     //await IEC.CorreoProveedores(P, formData.Asunto);
                 }
 
-
+*/
 
                 return Ok("Correos enviados con exito");
         
@@ -66,37 +63,61 @@ namespace APIPortalTPC.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost("Proveedor/{id:int}")]
-        public async Task<ActionResult> EnviarCorreoProveedores(int id)
+        public async Task<ActionResult> EnviarCorreoProveedores([FromForm] FormData formData, int id)
         {
             try
             {
-                var lista = IRP.GetAllProveedoresBienServicio(id);
-                string mensaje = "Otro mensaje";
-                //   return Ok(await lista);
-                foreach (var P in await lista)
+                /*
+
+                var lis = formData.Lista;
+                Console.WriteLine(lis);
+                foreach (int ID in lis)
                 {
 
-                    if (P.ID_Bien_Servicio.ToString() != null)
-                    {
-                        await IEC.CorreoProveedores(P, mensaje);
-                    }
-                    else
-                    {
-                        return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
-                    }
+
+                    //await IEC.CorreoProveedores(P, formData.Asunto);
                 }
-                if (lista == null)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound, "no existen proveedores con el bien servicio ");
-                }
+                */
+
 
                 return Ok("Correos enviados con exito");
+
             }
             catch (Exception ex)
             {
-                // Manejar excepciones generales
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
+            /*
+             *   try
+              {
+                  var lista = IRP.GetAllProveedoresBienServicio(id);
+                  string mensaje = "Otro mensaje";
+                  //   return Ok(await lista);
+                  foreach (var P in await lista)
+                  {
+
+                      if (P.ID_Bien_Servicio.ToString() != null)
+                      {
+                          await IEC.CorreoProveedores(P, mensaje);
+                      }
+                      else
+                      {
+                          return StatusCode(StatusCodes.Status500InternalServerError, "Error al revisar lista");
+                      }
+                  }
+                  if (lista == null)
+                  {
+                      return StatusCode(StatusCodes.Status404NotFound, "no existen proveedores con el bien servicio ");
+                  }
+
+                  return Ok("Correos enviados con exito");
+              }
+              catch (Exception ex)
+              {
+                  // Manejar excepciones generales
+                  return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+              }
+             */
 
         }
         /// <summary>
@@ -134,7 +155,7 @@ namespace APIPortalTPC.Controllers
         public async Task<ActionResult> VariosLiberadores(ListaID LID)
         {
             int[] lista = LID.Lista;
-            string subject = LID.Subject;
+            string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
             try
             {
                 foreach(int i in lista) {
@@ -146,7 +167,7 @@ namespace APIPortalTPC.Controllers
                     {
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        //await IEC.CorreoLiberador(U, subject);
+                        await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
@@ -155,7 +176,7 @@ namespace APIPortalTPC.Controllers
                   
                         U = await IRU.GetUsuario(lib.Id_Usuario);
                         Console.WriteLine(U.Correo_Usuario + " Usuario " + U.Nombre_Completo);
-                        //await IEC.CorreoLiberador(U, subject);
+                        await IEC.CorreoLiberador(U, subject);
 
                     }
                 }
@@ -203,7 +224,7 @@ namespace APIPortalTPC.Controllers
                         if (Id_LT.Count != 0)
                         {
                  
-                            //await IEC.CorreoRecepciones(U, subject, Id_LT);
+                            await IEC.CorreoRecepciones(U, subject, Id_LT);
                         }
                     }
 
