@@ -318,6 +318,13 @@ namespace APIPortalTPC.Repositorio
             return ocmod;
         }
 
+        
+        /// <summary>
+        /// Obtienes todos las OC de un ticket
+        /// </summary>
+        /// <param name="id_T"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<OrdenCompra>> GetAllOCTicket(int id_T)
         {
             List<OrdenCompra> lista = new List<OrdenCompra>();

@@ -443,6 +443,12 @@ namespace APIPortalTPC.Repositorio
             return T;
         }
 
+        /// <summary>
+        /// Obtienes todos los ticked de un Usuario por su Id_Usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<Ticket>> GetAllTicketUsuario(int id)
         {
 
@@ -520,6 +526,12 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+        /// <summary>
+        /// Obtienes todos los tickets que tengan al menos una OC pendiente
+        /// </summary>
+        /// <param name="id_U"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<int>> TicketConOCPendientes(int id_U)
         {
             List<int> lista = new List<int>();

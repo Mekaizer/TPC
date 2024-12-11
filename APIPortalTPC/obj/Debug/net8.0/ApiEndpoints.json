@@ -844,27 +844,27 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "File",
+        "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       },
       {
-        "Name": "Mensaje",
+        "Name": "Asunto",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "bien_servicio",
+        "Name": "iD_Bien_Servicio",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "asunto",
+        "Name": "subject",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Proveedor",
+        "Name": "Lista",
         "Type": "System.Int32[]",
         "IsRequired": false
       }
@@ -880,27 +880,27 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "File",
+        "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       },
       {
-        "Name": "Mensaje",
+        "Name": "Asunto",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "bien_servicio",
+        "Name": "iD_Bien_Servicio",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "asunto",
+        "Name": "subject",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Proveedor",
+        "Name": "Lista",
         "Type": "System.Int32[]",
         "IsRequired": false
       },

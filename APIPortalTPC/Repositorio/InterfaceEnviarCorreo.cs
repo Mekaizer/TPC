@@ -8,7 +8,7 @@ namespace APIPortalTPC.Repositorio
     /// </summary>
     public interface InterfaceEnviarCorreo
     {
-        public Task<string> CorreoProveedores(Proveedores P, string subject);
+        public Task<string> CorreoProveedores(Proveedores P, FormData formData);
         public Task<string> CorreoLiberador(Usuario U, string subject);
         public Task<string> CorreoRecepciones(Usuario U, string subject,List<int> Id_Ticket);
         public Task<string> CorreoUsuarioPass(Usuario U);

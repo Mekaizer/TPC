@@ -35,6 +35,11 @@ builder.Services.AddSingleton(sqlConfig);
 //metodo para cerrar la sesion si el usuario no hace nada
 builder.Services.AddAuthentication();
 builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.ToString());
+});
 
 
 builder.Services.AddCors(options =>
@@ -57,7 +62,15 @@ builder.Services.Configure<KestrelServerOptions>(options =>
 });
 */
 var app = builder.Build();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseCors("NuevaPolitica");
 

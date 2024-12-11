@@ -6,11 +6,11 @@ namespace BaseDatosTPC
 {
     public class FormData
     {
-        public IFormFile File { get; set; }
-        public string Mensaje   { get; set; }
-        public int bien_servicio { get; set; }
-        public string asunto { get; set; }
-        public int[] Proveedor { get; set; }
+        public IFormFile file { get; set; }
+        public string Asunto { get; set; }
+        public int iD_Bien_Servicio { get; set; }
+        public string subject { get; set; }
+        public int[] Lista { get; set; }
 
     }
 }

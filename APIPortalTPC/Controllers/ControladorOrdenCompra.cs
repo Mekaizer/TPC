@@ -122,7 +122,9 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Orden de compra con = {id} no encontrado");
 
-                return await ROC.ModificarOC(OC);
+                await ROC.ModificarOC(OC);
+                
+                return Ok("Cambios realizados");
             }
             catch (Exception ex)
             {

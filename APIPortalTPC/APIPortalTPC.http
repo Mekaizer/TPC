@@ -1,6 +1,7 @@
-@APIPortalTPC_HostAddress = https://localhost:5237
+@APIPortalTPC_HostAddress = http:// 10.100.37.106:1981
 
-GET {{APIPortalTPC_HostAddress}}/weatherforecast/
+
+GET {{APIPortalTPC_HostAddress}}/
 Accept: application/json
 ###http://localhost:5237
 ###QA  10.100.37.106

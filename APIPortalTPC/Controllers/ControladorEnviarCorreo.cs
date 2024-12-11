@@ -36,18 +36,17 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-           /*
+     
       
             var lis = formData.Lista;
                      Console.WriteLine(lis);
                      foreach (int ID in lis)
                      {
         
-
-                    //await IEC.CorreoProveedores(P, formData.Asunto);
+                    Proveedores P = await IRP.GetProveedor(ID);
+                    //await IEC.CorreoProveedores(P, formData);
                 }
 
-*/
 
                 return Ok("Correos enviados con exito");
         

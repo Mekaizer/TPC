@@ -19,7 +19,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="subject"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> CorreoProveedores(Proveedores P, string subject)
+        public async Task<string> CorreoProveedores(Proveedores P, FormData formData)
         {
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
@@ -28,7 +28,7 @@ namespace APIPortalTPC.Repositorio
             //string archivo = @"C:\\Desktop\PRO4.xlsx"; //Direccion del archivo a enviar
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = P.Correo_Proveedor;
-
+            string subject = formData.Asunto;
 
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
             string htmlBody = $@"
