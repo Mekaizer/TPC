@@ -3,6 +3,7 @@ using BaseDatosTPC;
 using System.Data.SqlClient;
 using System.Data;
 using OfficeOpenXml;
+using System.Globalization;
 
 
 
@@ -62,7 +63,7 @@ namespace APIPortalTPC.Repositorio
                 if (worksheet.Cells["C57"].Value != null) P.N_Cuenta = worksheet.Cells["C57"].Value.ToString();  // NUMERO DE CUENTA CELDA C57
                 P.Banco = worksheet.Cells["C51"].Text;  // BANCO CELDA C51
                 P.Swift = worksheet.Cells["C55"].Text;  // SWIFT 1 CELDA C55
-                P.ID_Bien_Servicio = "1";
+                P.ID_Bien_Servicio = "0";
             }
 
             return P;
@@ -156,21 +157,24 @@ namespace APIPortalTPC.Repositorio
                     {
                         sqlConexion.Open();
                         Comm = sqlConexion.CreateCommand();
-                        Comm.CommandText = "UPDATE dbo.Ticket SET " +
-                            "Estado =@Estado," +
-                            "Fecha_OC_Liberada = @Fecha_OC_Liberada " +
+                        Comm.CommandText = "UPDATE dbo.Ticket SET  " +
+                            
+                            "Fecha_OC_Liberada = @Fecha_OC_Liberada, " +
+                            "Estado = @E " +
                             "WHERE Numero_OC = @Numero_OC";
                         Comm.CommandType = CommandType.Text;
                         reader = await Comm.ExecuteReaderAsync();
                         while (reader.Read())
                         {
                             Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = int.Parse(columnaC);
-                            Comm.Parameters.Add("@Estado", SqlDbType.Int).Value = columnaQ;
+                            
                             if (columnaQ == "Liberación concluida")
                             {
                                 Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.Int).Value = hoy;
+                                columnaQ ="Liberacion concluida";
 
                             }
+                            Comm.Parameters.Add("@E", SqlDbType.VarChar, 500).Value = columnaQ;
                         }
                     }
                     catch(Exception ex) { 
@@ -281,7 +285,10 @@ namespace APIPortalTPC.Repositorio
                     OC.PrcNeto= Convert.ToInt32(worksheet.Cells[row, 7].Value?.ToString());
                     OC.Proveedor=worksheet.Cells[row, 18].Value?.ToString();
                     OC.Texto=worksheet.Cells[row, 19].Value?.ToString();
-                    //OC.Fecha_Recepcion = worksheet.Cells[row, 21].Value?.ToString();
+                    string fechastring = worksheet.Cells[row, 21].Value?.ToString();
+                    DateTime fecha = DateTime.ParseExact(fechastring, "dd.MM.yyyy",CultureInfo.InvariantCulture);
+                    DateTime fecha1 = DateTime.ParseExact(fecha.ToString("yyyy-MM-dd"), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    OC.Fecha_Recepcion = fecha1;
                     OC.Material = Convert.ToInt32(worksheet.Cells[row, 22].Value?.ToString());
                     OC.ValorNeto = Convert.ToInt32(worksheet.Cells[row, 23].Value?.ToString());
                 }

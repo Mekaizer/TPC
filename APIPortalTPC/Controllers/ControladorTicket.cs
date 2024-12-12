@@ -192,8 +192,8 @@ namespace APIPortalTPC.Controllers
                     if (OC.Id_Ticket == ticket.ID_Ticket)
                         loc.Add(OC);
                 if(loc == null)
-
                     return BadRequest();
+
                 return Ok(loc);
             }
             catch (Exception ex)
@@ -202,6 +202,11 @@ namespace APIPortalTPC.Controllers
             }
         }
 
+        /// <summary>
+        /// Muestra los ticket del usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("Usuario/{id:int}")]
         public async Task<ActionResult> GetAllUsuario(int id)
         {

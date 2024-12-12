@@ -17,14 +17,20 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioLiberadores IRL;
         private readonly IRepositorioTicket IRT;
         private readonly IRepositorioOrdenCompra IROC;
-        public ControladorEnviarCorreo(IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
+        private readonly IRepositorioArchivo IRA;
+        private readonly IRepositorioRelacion IRR;
+        private readonly IRepositorioCotizacion IRC;
+        public ControladorEnviarCorreo(IRepositorioCotizacion IRC,IRepositorioRelacion IRR,IRepositorioArchivo IRA,IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
         {
             this.IEC = IEC;
             this.IRP = IRP;
             this.IRU = IRU;
             this.IRL = IRL;
+            this.IRA = IRA;
             this.IRT = IRT;
             this.IROC = IROC;
+            this.IRR = IRR;
+            this.IRC = IRC;
         }
         /// <summary>
         /// Metodo para enviar a varios proveedores (enviar archivo)
@@ -36,21 +42,44 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-     
-      
-            var lis = formData.Lista;
+
+                var lis = Array.ConvertAll<string, int>(formData.Proveedor.Split(','), Convert.ToInt32);
+    
                      Console.WriteLine(lis);
                      foreach (int ID in lis)
                      {
-        
-                    Proveedores P = await IRP.GetProveedor(ID);
+                         Console.WriteLine(ID);
+                        Proveedores P = await IRP.GetProveedor(ID);
+                        Console.WriteLine(P.Nombre_Fantasia);
                     //await IEC.CorreoProveedores(P, formData);
+    
                 }
 
+                //procede a guardar el correo
+                if (formData.file == null || formData.file.Length == 0)
+                {
+                    return Ok("Correos enviados con exito"); // no se guarda archivo
+                }
 
+                using (var memoryStream = new MemoryStream())
+                {
+                    await formData.file.CopyToAsync(memoryStream);
+                    Archivo A = new Archivo();
+                    A.ArchivoDoc = memoryStream.ToArray();
+                    A.NombreDoc =formData.file.Name;
+                    A = await IRA.NuevoArchivo(A);
+                    //pedimos la cotizacion
+                    Cotizacion Cot = await IRC.GetCotizacion(formData.Id_Cotizacion);
+                    Cot.Estado = " Enviado";
+                    Relacion R = new Relacion();
+                    R.Id_Cotizacion=(formData.Id_Cotizacion);
+                    R.Id_Archivo = A.Id_Archivo;
+                    await IRR.NuevaRelacion(R);
+
+                }
                 return Ok("Correos enviados con exito");
-        
-                }
+
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
@@ -131,7 +160,7 @@ namespace APIPortalTPC.Controllers
             foreach (var U in lista)
             {
                 Usuario User = await IRU.GetUsuario(U.Id_Usuario);
-                await IEC.CorreoLiberador(User, subject);
+                //await IEC.CorreoLiberador(User, subject);
             }
           
 
@@ -153,6 +182,8 @@ namespace APIPortalTPC.Controllers
         [HttpPost("VariosLiberadores")]
         public async Task<ActionResult> VariosLiberadores(ListaID LID)
         {
+      
+       
             int[] lista = LID.Lista;
             string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
             try
@@ -161,26 +192,33 @@ namespace APIPortalTPC.Controllers
                     Usuario U = await IRU.GetUsuario(i);
                     bool enviado = false;
                     List<int> ldep = U.ListaIdDep;
-
+                    int idT = 0;
                     foreach (int dep in ldep)
                     {
+
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        await IEC.CorreoLiberador(U, subject);
+                        //await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
                     {
                         Liberadores lib = await IRL.Get(9);
-                  
+                    
                         U = await IRU.GetUsuario(lib.Id_Usuario);
-                        Console.WriteLine(U.Correo_Usuario + " Usuario " + U.Nombre_Completo);
-                        await IEC.CorreoLiberador(U, subject);
+                        //await IEC.CorreoLiberador(U, subject);
+                        //cambiar estado ticket!!!
+                        Ticket T = await IRT.GetTicket(1);
 
+              
+
+                        T.Estado = "OC Enviada";
+                        await IRT.ModificarTicket(T);
+                        Console.WriteLine(T.Estado);
+                    
                     }
                 }
-                //cambiar estado ticket!!!
-
+         
 
                 return Ok("Correos enviados con exito");
 

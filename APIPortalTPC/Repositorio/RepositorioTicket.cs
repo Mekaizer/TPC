@@ -130,6 +130,7 @@ namespace APIPortalTPC.Repositorio
                     T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
+                    T.N_OE = Convert.ToInt32(reader["Id_OE"]);
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
@@ -200,6 +201,7 @@ namespace APIPortalTPC.Repositorio
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
                     T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
+                    T.N_OE = Convert.ToInt32(reader["Id_OE"]);
 
                     int cont = 0;
                     foreach (Ticket ticket in lista)
@@ -277,7 +279,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
 
-                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.Id_OE;
+                Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.N_OE;
 
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
@@ -351,7 +353,7 @@ namespace APIPortalTPC.Repositorio
 
                 }
                 if (cont == 0)
-                    T.Estado = "Espera de liberación";
+                    T.Estado = "Espera de liberacion";
 
                 else if (cont == total)
                     T.Estado = "OC Recepcionada";
@@ -419,7 +421,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
-                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "Cancelado";
+                Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = "OC Cancelada";
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = id_T;
 
                 reader = await Comm.ExecuteReaderAsync();
@@ -527,7 +529,7 @@ namespace APIPortalTPC.Repositorio
         }
 
         /// <summary>
-        /// Obtienes todos los tickets que tengan al menos una OC pendiente
+        /// Obtienes todos los id_tickets que tengan al menos una OC pendiente
         /// </summary>
         /// <param name="id_U"></param>
         /// <returns></returns>
@@ -591,5 +593,8 @@ namespace APIPortalTPC.Repositorio
 
             return lista;
         }
+    
+        
+    
     }
 }

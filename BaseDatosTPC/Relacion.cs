@@ -21,10 +21,10 @@ namespace BaseDatosTPC
         /// <summary>
         /// Identificador del Ticket asociado
         /// </summary>
-        public int? Id_Responsable1 { get; set; }
+        public int? Id_Cotizacion { get; set; }
         /// <summary>
         /// Identificador de la cotizacion
         /// </summary>
-        public int? Id_Responsable2 { get; set; }
+
     }
 }

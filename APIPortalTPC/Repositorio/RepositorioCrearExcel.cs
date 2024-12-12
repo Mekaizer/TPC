@@ -61,7 +61,7 @@ namespace APIPortalTPC.Repositorio
                     row++;
                 }
                 DateTime ahora = DateTime.Now;
-                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaOrdenCompras_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\ListaCotizaciones_" + ahora.ToString("dd /MM/yyyy HH/mm/ss") + ".xlsx";
 
                 // Guardar el archivo en la ruta especificada
                 FileInfo fileInfo = new FileInfo(filePath);

@@ -59,12 +59,12 @@ namespace APIPortalTPC.Repositorio
                     mail.Subject = subject;
                     mail.Body = htmlBody;
                     mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
-                    /*if (File.Exists(archivo))
+                    if (formData.file != null)
                     {
-                        mail.Attachments.Add(new Attachment(archivo));
+                        mail.Attachments.Add(new Attachment(formData.file.OpenReadStream(), formData.file.FileName));
 
                     }
-                    */
+                    
                     // Configurar el cliente SMTP
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {

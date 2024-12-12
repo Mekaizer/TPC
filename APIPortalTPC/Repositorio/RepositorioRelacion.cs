@@ -41,13 +41,12 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Relacion " +
-                    "(Id_Archivo,Id_Responsable1,Id_Responsable2) " +
-                    "VALUES (@Id_Archivo,@Id_Responsable1,@Id_Responsable2); " +
+                    "(Id_Archivo,Id_Cotizacion) " +
+                    "VALUES (@Id_Archivo,@Id_Cotizacion); " +
                     "SELECT SCOPE_IDENTITY() AS Id_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
-                Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
+                Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = R.Id_Cotizacion;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 int id = (int)idDecimal;
                 R.Id_Relacion = id;
@@ -99,8 +98,7 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Responsable1 = reader["Id_Responsable1"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable1"]);
-                    R.Id_Responsable2 = reader["Id_Responsable2"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable2"]);
+                    R.Id_Cotizacion = reader["Id_Cotizacion"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Cotizacion"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                 }
             }
@@ -141,8 +139,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     Relacion R = new();
                     R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Responsable1 = reader["Id_Responsable1"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable1"]);
-                    R.Id_Responsable2 = reader["Id_Responsable2"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Responsable2"]);
+                    R.Id_Cotizacion = reader["Id_Cotizacion"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Cotizacion"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                     lista.Add(R);
                 }
@@ -179,21 +176,15 @@ namespace APIPortalTPC.Repositorio
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Relacion SET " +
                     "Id_Archivo = @Id_Archivo, " +
-                    "Id_Responsable1 = @Id_Responsable1, " +
-                    "Id_Responsable2 = @Id_Responsable2 " +
+                    "Id_Cotizacion = @Id_Cotizacion " +
                     "WHERE ID_Relacion = @ID_Relacion";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                if (R.Id_Responsable1.HasValue)
-                    Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = R.Id_Responsable1;
+                if (R.Id_Cotizacion.HasValue)
+                    Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = R.Id_Cotizacion;
                 else
-                    Comm.Parameters.Add("@Id_Responsable1", SqlDbType.Int).Value = DBNull.Value;
-
-                if (R.Id_Responsable2.HasValue)
-                    Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = R.Id_Responsable2;
-                else
-                    Comm.Parameters.Add("@Id_Responsable2", SqlDbType.Int).Value = DBNull.Value;
+                    Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = DBNull.Value;
 
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

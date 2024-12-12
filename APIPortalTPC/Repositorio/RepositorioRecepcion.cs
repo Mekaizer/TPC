@@ -83,7 +83,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo, OC-Numero_OC
                 FROM dbo.Recepcion R
                 inner join dbo.Correo C on R.Id_Correo = C.Id_Correo  
                 inner join dbo.Ticket T on C.Id_Ticket = T.ID_Ticket 
@@ -139,7 +139,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo, OC.Numero_OC
                 FROM dbo.Recepcion R
                 inner join dbo.Correo C on R.Id_Correo = C.Id_Correo  
                 inner join dbo.Ticket T on C.Id_Ticket = T.ID_Ticket 

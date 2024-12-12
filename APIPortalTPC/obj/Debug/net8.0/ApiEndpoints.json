@@ -859,13 +859,18 @@
         "IsRequired": false
       },
       {
-        "Name": "subject",
+        "Name": "Mensaje",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Lista",
-        "Type": "System.Int32[]",
+        "Name": "Proveedor",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_Cotizacion",
+        "Type": "System.Int32",
         "IsRequired": false
       }
     ],
@@ -895,13 +900,18 @@
         "IsRequired": false
       },
       {
-        "Name": "subject",
+        "Name": "Mensaje",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Lista",
-        "Type": "System.Int32[]",
+        "Name": "Proveedor",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_Cotizacion",
+        "Type": "System.Int32",
         "IsRequired": false
       },
       {
@@ -1030,6 +1040,47 @@
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
     "Method": "ActualizarOC",
     "RelativePath": "api/ControladorExcel/OCA",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
+    "Method": "ExcelPos",
+    "RelativePath": "api/ControladorExcel/Pos",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

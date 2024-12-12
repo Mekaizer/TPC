@@ -16,7 +16,9 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioBienServicio IBS;
         private readonly IRepositorioProveedores IRP;
         private readonly IRepositorioBienServicio IRBS;
-        public ControladorExcel(IRepositorioBienServicio IRBS,IRepositorioProveedores IRP , InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE, IRepositorioBienServicio IBS)
+        private readonly IRepositorioOrdenCompra IROC;
+        private readonly IRepositorioTicket IRT;
+        public ControladorExcel(IRepositorioTicket IRT,IRepositorioOrdenCompra IROC,IRepositorioBienServicio IRBS,IRepositorioProveedores IRP , InterfaceExcel Excel, IRepositorioCentroCosto IRC, IRepositorioOrdenesEstadisticas IRE, IRepositorioBienServicio IBS)
         {
             this.Excel = Excel;
             this.IRC = IRC;
@@ -24,6 +26,8 @@ namespace APIPortalTPC.Controllers
             this.IBS = IBS;
             this.IRP = IRP;
             this.IRBS = IRBS;
+            this.IROC = IROC;
+            this.IRT = IRT;
         }
 
         [HttpPost("Proveedores")]
@@ -207,6 +211,47 @@ namespace APIPortalTPC.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
                 }
 
+            }
+        }
+        /// <summary>
+        /// Añade las ordenes de compra a los tickets,
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost("Pos")]
+        public async Task<ActionResult> ExcelPos([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please select a file to upload.");
+            }
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                byte[] Archivo = memoryStream.ToArray();
+
+                try
+                {
+                    //string path = @"C:\Desktop\BienServicio.xlsx";
+                    List<OrdenCompra> lista = (await Excel.LeerExcelOC(Archivo));
+                    foreach (OrdenCompra OC in lista)
+                    {
+                        Ticket T = await IRT.GetTicket((int)OC.Id_Ticket);
+                        bool cont = true;
+                        T.Estado = "Espera liberacion";
+                        await IRT.ModificarTicket(T);
+                        await IROC.NuevoOC(OC);
+
+
+
+                    }
+
+                    return Ok(true);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+                }
             }
         }
 

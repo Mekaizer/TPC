@@ -18,15 +18,17 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioOrdenCompra ROC;
         private readonly InterfaceCrearExcel ICE;
+        private readonly IRepositorioTicket RT;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="ROC">Interface de RepositorioOrdenCompra</param>
 
-        public ControladorOrdenCompra(IRepositorioOrdenCompra ROC, InterfaceCrearExcel ICE)
+        public ControladorOrdenCompra(IRepositorioTicket RT,IRepositorioOrdenCompra ROC, InterfaceCrearExcel ICE)
         {
             this.ROC = ROC;
             this.ICE = ICE;
+            this.RT = RT;
         }
         /// <summary>
         /// 
@@ -122,8 +124,12 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Orden de compra con = {id} no encontrado");
 
-                await ROC.ModificarOC(OC);
-                
+                OC =await ROC.ModificarOC(OC);
+                //int id_T = (int)OC.Id_Ticket;
+                //aprovecha de modificar los tickets!!!
+                //Ticket t = await RT.GetTicket(id_T);
+
+
                 return Ok("Cambios realizados");
             }
             catch (Exception ex)

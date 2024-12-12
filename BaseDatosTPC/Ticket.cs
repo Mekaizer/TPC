@@ -23,6 +23,7 @@ namespace BaseDatosTPC
         public int? Solped { get; set; }
         
         public string? Id_OE { get; set; }
+        public int N_OE { get; set; }
       
         public int Numero_OC { get; set; }
         public DateTime? Fecha_OC_Recepcionada { get; set; }
