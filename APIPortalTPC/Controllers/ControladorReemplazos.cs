@@ -1,5 +1,6 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
+using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp.Processing;
@@ -18,14 +19,16 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioReemplazos RR;
+        private readonly IRepositorioUsuario RU;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RR">Interface de RepositorioReemplazos</param>
 
-        public ControladorReemplazos(IRepositorioReemplazos RR)
+        public ControladorReemplazos(IRepositorioReemplazos RR, IRepositorioUsuario RU)
         {
             this.RR = RR;
+            this.RU = RU;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -113,6 +116,33 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
+        }
+
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Reemplazos>> FinRemplazo(Reemplazos R)
+        {
+            try
+            {
+                //sacar a ambos usuarios
+
+                //luego desactivar Reemplazo
+                R.Valido = false;
+                Usuario U = await RU.GetUsuario(R.Id_Usuario_Vacaciones);
+                if (U != null)
+                {
+                    await RU.ModificarUsuario(U);
+                    R= await RR.ModificarReemplazos(R);
+                    return Ok(R);
+                }
+                return BadRequest("No se modifico");
+            }   
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos " + ex.Message);
+            }
+
+
         }
     }
 }

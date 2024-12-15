@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BaseDatosTPC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bcb27cbbbd4598caca448c3885bca563d95e666a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca0d8034e7e576303bb6af66216facb4c8dd9fe5")]
 [assembly: System.Reflection.AssemblyProductAttribute("BaseDatosTPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BaseDatosTPC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -12,5 +12,6 @@ namespace APIPortalTPC.Repositorio
         public Task<Usuario> EliminarUsuario(int U);
         public Task<Usuario> ActivarUsuario(Usuario U);
         public Task<Usuario> RecuperarContraseña(string correo);
+        Task<Usuario> GetUsuario(string? id_Usuario_Vacaciones);
     }
 }

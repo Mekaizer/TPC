@@ -3,10 +3,34 @@
   "WorkspaceRootPath": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\PortalAdquisicionTPC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorreemplazos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\reemplazos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioreemplazos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorproveedores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\listaid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\formdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\controllers\\controladorenviarcorreo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79CA1C67-EA68-4168-807B-18CE364730A6}|..\\APIPortalTPC\\APIPortalTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\apiportaltpc\\repositorio\\repositorioexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CE2FAFFA-0955-4CFC-A19E-830E2AD1FBD6}|..\\BaseDatosTPC\\BaseDatosTPC.csproj|c:\\users\\drako\\documents\\github\\tpc\\basedatostpc\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -19,24 +43,138 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{26341fe2-71dd-46fd-bb1b-2e51a92a0d64}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RepositorioReemplazos.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioReemplazos.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioReemplazos.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioReemplazos.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioReemplazos.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAAAG8AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T16:53:54.041Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Reemplazos.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Reemplazos.cs",
+              "RelativeDocumentMoniker": "..\\BaseDatosTPC\\Reemplazos.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Reemplazos.cs",
+              "RelativeToolTip": "..\\BaseDatosTPC\\Reemplazos.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAqwAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T16:53:45.58Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ControladorReemplazos.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorReemplazos.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAQwIkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T03:19:22.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ControladorProveedores.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorProveedores.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAmwJYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T03:14:39.392Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ControladorTicket.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorTicket.cs",
+              "ViewState": "AgIAANkAAAAAAAAAAAAYwOkAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T03:08:46.5Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ControladorExcel.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorExcel.cs",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAmwOEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T03:07:50.276Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RepositorioExcel.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
+              "RelativeDocumentMoniker": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
+              "RelativeToolTip": "..\\APIPortalTPC\\Repositorio\\RepositorioExcel.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T01:09:19.366Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FormData.cs",
+              "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\FormData.cs",
+              "RelativeDocumentMoniker": "..\\BaseDatosTPC\\FormData.cs",
+              "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\FormData.cs",
+              "RelativeToolTip": "..\\BaseDatosTPC\\FormData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T00:36:20.217Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ListaID.cs",
               "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\ListaID.cs",
               "RelativeDocumentMoniker": "..\\BaseDatosTPC\\ListaID.cs",
               "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\ListaID.cs",
               "RelativeToolTip": "..\\BaseDatosTPC\\ListaID.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T00:35:49.484Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T00:35:49.484Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 10,
               "Title": "Usuario.cs",
               "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\BaseDatosTPC\\Usuario.cs",
               "RelativeDocumentMoniker": "..\\BaseDatosTPC\\Usuario.cs",
@@ -44,21 +182,19 @@
               "RelativeToolTip": "..\\BaseDatosTPC\\Usuario.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T23:08:10.612Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T23:08:10.612Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "ControladorEnviarCorreo.cs",
               "DocumentMoniker": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
               "RelativeDocumentMoniker": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
               "ToolTip": "C:\\Users\\drako\\Documents\\GitHub\\TPC\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
               "RelativeToolTip": "..\\APIPortalTPC\\Controllers\\ControladorEnviarCorreo.cs",
-              "ViewState": "AgIAAJ8AAAAAAAAAAAD4v6UAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAK0AAAAAAAAAAAAWwKUAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T22:43:44.103Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T22:43:44.103Z"
             }
           ]
         }
