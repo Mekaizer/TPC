@@ -143,6 +143,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
             }
         }
+        /// <summary>
+        /// Metodo que elimina el bien y servicio... eliminar en este caso es quitar la posibilidad de que se use
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<BienServicio>> Eliminar(int id)
         {

@@ -2,6 +2,7 @@
 using APIPortalTPC.Datos;
 using System.Data.SqlClient;
 using System.Data;
+using NPOI.SS.Formula.Functions;
 namespace APIPortalTPC.Repositorio
 {
     public class RepositorioArchivo : IRepositorioArchivo
@@ -201,7 +202,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@NombreDoc", SqlDbType.VarChar, 50).Value = A.NombreDoc;
                 Comm.Parameters.Add("@ArchivoDoc",SqlDbType.VarBinary).Value = A.ArchivoDoc;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
-            
+        
+               A.Id_Archivo = (int)idDecimal;
             }
             catch (SqlException ex)
             {

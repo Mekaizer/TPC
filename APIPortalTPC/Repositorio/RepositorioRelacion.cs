@@ -181,11 +181,9 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = R.Id_Relacion;
                 Comm.Parameters.Add("@Id_Archivo", SqlDbType.Int).Value = R.Id_Archivo;
-                if (R.Id_Cotizacion.HasValue)
-                    Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = R.Id_Cotizacion;
-                else
-                    Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = DBNull.Value;
-
+        
+                Comm.Parameters.Add("@Id_Cotizacion", SqlDbType.Int).Value = R.Id_Cotizacion;
+         
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Rmod = await GetRelacion(Convert.ToInt32(reader["ID_Relacion"]));

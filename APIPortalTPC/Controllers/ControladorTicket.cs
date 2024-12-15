@@ -129,18 +129,22 @@ namespace APIPortalTPC.Controllers
             try
             {
                 var Ticket = await RT.ActualizarEstadoTicket(id);
-                if (Ticket.ID_Ticket != 0 && Ticket.Estado.Equals("OC Recepcionada")) 
+                if (Ticket.ID_Ticket != 0) 
                 {
-                    var OC= await ROC.GetAllOCTicket(Ticket.ID_Ticket);
-                    foreach(OrdenCompra cambia in OC)
+                    if ( Ticket.Estado.Equals("OC Parcial") || Ticket.Estado.Equals("OC Recepcionada") || Ticket.Estado.Equals("Espera de liberacion", StringComparison.OrdinalIgnoreCase))
                     {
-                        await ROC.ModificarOC(cambia);
+                        var OC = await ROC.GetAllOCTicket(Ticket.ID_Ticket);
+                        foreach (OrdenCompra cambia in OC)
+                        {
+                            Console.Write(cambia.Id_Orden_Compra);
+                            await ROC.ModificarOC(cambia);
+                        }
+                        return Ticket;
                     }
-                    return Ticket;
+ 
                 }
 
-              
-                else
+      
                     return NotFound("Ticket no encontrado");
             }
             catch(Exception ex) 
@@ -220,5 +224,36 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el Ticket: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Dado un Id_Ticket, modifica todos las ordens de compras asociadas y cambia el estado a OC Recepcionada
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        [HttpGet("RecepcionTotal")]
+        public async Task<ActionResult> RecepcionTotal(int id)
+        {
+            try
+            {
+                var ListaOC = await ROC.GetAllOCTicket(id);
+                Ticket T = await RT.GetTicket(id);
+                T.Estado = "OC Recepcionada";
+                foreach(OrdenCompra OC in ListaOC)
+                {
+                    //Pasar estado a true
+                    OC.Recepcion = true;
+                    await ROC.ModificarOC(OC);
+                }
+
+                return Ok(await RT.ModificarTicket(T));
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones generales
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error : " + ex.Message);
+            }
+        }
+    
     }
 }

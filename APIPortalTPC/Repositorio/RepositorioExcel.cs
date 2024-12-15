@@ -128,6 +128,7 @@ namespace APIPortalTPC.Repositorio
         string columnaC ;
         string columnaG ;
         string columnaQ ;
+            DateTime hoy = (DateTime.Today);
             // Cargar el archivo Excel
             using (var memoryStream = new MemoryStream(archivo))
             using (ExcelPackage package = new ExcelPackage(memoryStream))
@@ -147,7 +148,7 @@ namespace APIPortalTPC.Repositorio
 
                     // Agregar el valor de la columna Q (Denominación StatLib) o una cadena vacía si es nulo
                     columnaQ = worksheet.Cells[row, 17].Text ?? string.Empty;
-                    DateTime hoy = (DateTime.Today);
+             
                     row++;
 
                     SqlConnection sqlConexion = conectar();
@@ -174,6 +175,8 @@ namespace APIPortalTPC.Repositorio
                                 columnaQ ="Liberacion concluida";
 
                             }
+                            else
+                                Comm.Parameters.Add("@Fecha_OC_Liberada", SqlDbType.Int).Value = DBNull.Value;
                             Comm.Parameters.Add("@E", SqlDbType.VarChar, 500).Value = columnaQ;
                         }
                     }
@@ -264,7 +267,7 @@ namespace APIPortalTPC.Repositorio
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<OrdenCompra> lista = new List<OrdenCompra>();
-            string hoja = "Hoja1";
+            string hoja = "Worksheet";
             using (var memoryStream = new MemoryStream(archivo))
             using (ExcelPackage package = new ExcelPackage(memoryStream))
 
@@ -279,7 +282,7 @@ namespace APIPortalTPC.Repositorio
 
                     OrdenCompra OC = new OrdenCompra();
                     OC.posicion = worksheet.Cells[row, 2].Value?.ToString();
-                    OC.Id_Orden_Compra = Convert.ToInt32(worksheet.Cells[row, 3].Value?.ToString());
+                    OC.Numero_OC = Convert.ToInt32(worksheet.Cells[row, 3].Value?.ToString());
                     OC.Cantidad=Convert.ToInt32(worksheet.Cells[row, 4].Value?.ToString());
                     OC.Mon=worksheet.Cells[row, 6].Value?.ToString();
                     OC.PrcNeto= Convert.ToInt32(worksheet.Cells[row, 7].Value?.ToString());
@@ -291,6 +294,7 @@ namespace APIPortalTPC.Repositorio
                     OC.Fecha_Recepcion = fecha1;
                     OC.Material = Convert.ToInt32(worksheet.Cells[row, 22].Value?.ToString());
                     OC.ValorNeto = Convert.ToInt32(worksheet.Cells[row, 23].Value?.ToString());
+                    lista.Add(OC);
                 }
             }
             return lista;

@@ -30,6 +30,11 @@ namespace APIPortalTPC.Controllers
             this.IRT = IRT;
         }
 
+        /// <summary>
+        /// Metodo interno para transpasar los Provedores de una base a otra
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost("Proveedores")]
         public async Task<ActionResult> ExcelProveedores([FromForm] IFormFile file)
         {
@@ -218,7 +223,7 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost("Pos")]
+        [HttpPost("poss")]
         public async Task<ActionResult> ExcelPos([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)

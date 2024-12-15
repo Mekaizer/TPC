@@ -63,7 +63,12 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
-
+        /// <summary>
+        /// Modifiiicel correo por ID
+        /// </summary>
+        /// <param name="C"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Correo>> Modificar(Correo C, int id)
         {

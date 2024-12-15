@@ -130,7 +130,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos");
             }
         }
-
+        /// <summary>
+        /// metodo que cambia el estado del Centro de costo activado a falso para que no sea usable
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<CentroCosto>> Eliminar(int id)
         {

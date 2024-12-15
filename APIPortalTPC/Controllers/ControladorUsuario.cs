@@ -1,7 +1,9 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
@@ -19,17 +21,15 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioUsuario RU;
         private readonly InterfaceEnviarCorreo IEC;
         private readonly IRepositorioDepartamentoUsuario IRDU;
-        private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RU">Interface de RepositorioUsuario</param>
 
-        public ControladorUsuario(IRepositorioDepartamentoUsuario IRDU, IRepositorioUsuario RU, InterfaceEnviarCorreo IEC, InterfaceCrearExcel ICE)
+        public ControladorUsuario(IRepositorioDepartamentoUsuario IRDU, IRepositorioUsuario RU, InterfaceEnviarCorreo IEC)
         {
             this.IEC = IEC;
             this.RU = RU;
-            this.ICE = ICE;
             this.IRDU = IRDU;
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace APIPortalTPC.Controllers
                     await IRDU.Nuevo(DU);
                     nuevo = await RU.ActivarUsuario(nuevo);
                     await RU.ModificarUsuario(nuevo);
-                    await IEC.CorreoUsuarioPass(nuevo);
+                    //await IEC.CorreoUsuarioPass(nuevo);
                     return nuevo;
                 }
                 else
@@ -139,34 +139,90 @@ namespace APIPortalTPC.Controllers
             }
 
         }
-        [HttpGet("Imprimir")]
-        public async Task<ActionResult> GetExcel()
-        {
 
-            var lista = await RU.GetAllUsuario();
-            Console.WriteLine(lista);
-            // Assuming DescargarExcel returns a byte array and a filename
-            return Ok(await ICE.DescargarExcel((List<Usuario>)lista));
-        }
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Usuario>> Eliminar(int id)
+        /// <summary>
+        /// Metodo que descarga un archivo Excel que tiene a todos los Usuarios
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Imprimir")]
+        public async Task<IActionResult> DescargarExcel()
         {
             try
             {
-                var u = RU.GetUsuario(id);
-                if (u == null)
+                var LU = await RU.GetAllUsuario();
+                // Crear un nuevo archivo Excel
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var memoryStream = new MemoryStream();
+                using (ExcelPackage package = new ExcelPackage())
                 {
-                    return NotFound("No se encontro el Usuario");
-                }
-                return Ok(await RU.EliminarUsuario(id));
 
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaUsuario");
+
+                    // Encabezado
+                    worksheet.Cells[1, 1].Value = "ID Usuario";
+                    worksheet.Cells[1, 2].Value = "Nombre Usuario";
+                    worksheet.Cells[1, 3].Value = "Apellido Paterno";
+                    worksheet.Cells[1, 4].Value = "Apellido Materno";
+                    worksheet.Cells[1, 5].Value = "Rut";
+                    worksheet.Cells[1, 6].Value = "Correo Usuario";
+                    worksheet.Cells[1, 7].Value = "Contraseña Usuario";
+                    worksheet.Cells[1, 8].Value = "Activado";
+                    worksheet.Cells[1, 9].Value = "Liberador";
+                    worksheet.Cells[1, 10].Value = "En vacaciones";
+                    worksheet.Cells[1, 11].Value = "Admin";
+                    int row = 2;
+                    foreach (var U in LU)
+                    {
+                        worksheet.Cells[row, 1].Value = U.Id_Usuario;
+                        worksheet.Cells[row, 2].Value = U.Nombre_Usuario;
+                        worksheet.Cells[row, 3].Value = U.Apellido_paterno;
+                        worksheet.Cells[row, 4].Value = U.Apellido_materno;
+                        worksheet.Cells[row, 5].Value = U.Rut_Usuario;
+                        worksheet.Cells[row, 6].Value = U.Correo_Usuario;
+                        worksheet.Cells[row, 7].Value = U.Contraseña_Usuario;
+                        worksheet.Cells[row, 8].Value = U.Activado;
+                        if (U.Activado == true)
+                            worksheet.Cells[row, 8].Value = "Si";
+                        else
+                            worksheet.Cells[row, 8].Value = "No";
+
+                        worksheet.Cells[row, 9].Value = U.Tipo_Liberador;
+                        if (U.Tipo_Liberador == true)
+                            worksheet.Cells[row, 9].Value = "Si";
+                        else
+                            worksheet.Cells[row, 9].Value = "No";
+                        worksheet.Cells[row, 10].Value = U.En_Vacaciones;
+                        if (U.En_Vacaciones == true)
+                            worksheet.Cells[row, 10].Value = "Si";
+                        else
+                            worksheet.Cells[row, 10].Value = "No";
+
+                        worksheet.Cells[row, 11].Value = U.Admin;
+                        if (U.Activado == true)
+                            worksheet.Cells[row, 11].Value = "Si";
+                        else
+                            worksheet.Cells[row, 11].Value = "No";
+                        row++;
+                    }
+
+
+
+                    package.SaveAs(memoryStream);
+                    memoryStream.Position = 0;
+
+                }
+                var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                var fileName = "ListaUsuario_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mmss") + ".xlsx";
+                return File(memoryStream, contentType, fileName, true);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
+
+
         }
-    
+
 
     }
 }

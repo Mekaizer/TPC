@@ -1,6 +1,7 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using Microsoft. AspNetCore.Mvc;
+using OfficeOpenXml;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -16,29 +17,70 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioCotizacion RC;
-        private readonly InterfaceCrearExcel ICE;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RC">Interface de RepositorioCotizacion</param>
 
-        public ControladorCotizacion(IRepositorioCotizacion RC, InterfaceCrearExcel ICE)
+        public ControladorCotizacion(IRepositorioCotizacion RC)
         {
             this.RC = RC;
-            this.ICE = ICE;
         }
         /// <summary>
-        /// 
+        /// Metodo que descarga en un Excel todas las cotizaciones
         /// </summary>
         /// <returns></returns>
         [HttpGet("Imprimir")]
-        public async Task<ActionResult> GetExcel()
+        public async Task<IActionResult> DescargarExcel()
         {
+            try
+            {
+                var LRC = await RC.GetAllCotizacion();
+                // Crear un nuevo archivo Excel
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var memoryStream = new MemoryStream();
+                using (ExcelPackage package = new ExcelPackage())
+                {
+                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaCotizacion");
 
-            var lista = await RC.GetAllCotizacion();
+                    // Encabezado
+                    worksheet.Cells[1, 1].Value = "ID Cotizacion";
+                    worksheet.Cells[1, 2].Value = "Solicitante";
+                    worksheet.Cells[1, 3].Value = "Fecha de Creacion de la cotizacion";
+                    worksheet.Cells[1, 4].Value = "Estado";
+                    worksheet.Cells[1, 5].Value = "Detalle";
+                    worksheet.Cells[1, 6].Value = "Solped";
+                    worksheet.Cells[1, 7].Value = "Bien y/o servicio";
+                    int row = 2;
+                    foreach (var OC in LRC)
+                    {
+                        worksheet.Cells[row, 1].Value = OC.ID_Cotizacion;
+                        worksheet.Cells[row, 2].Value = OC.Id_Solicitante;
+                        worksheet.Cells[row, 3].Value = OC.Fecha_Creacion_Cotizacion;
+                        worksheet.Cells[row, 3].Style.Numberformat.Format = "yyyy-MM-dd";
+                        worksheet.Cells[row, 4].Value = OC.Estado;
+                        worksheet.Cells[row, 5].Value = OC.Detalle;
+                        worksheet.Cells[row, 6].Value = OC.Solped;
+                        worksheet.Cells[row, 7].Value = OC.Bien_Servicio;
+                        row++;
+                    }
 
-            // Assuming DescargarExcel returns a byte array and a filename
-            return Ok(await ICE.DescargarExcel((List<Cotizacion>)lista));
+
+
+                    package.SaveAs(memoryStream);
+                    memoryStream.Position = 0;
+
+                }
+                var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                var fileName = "ListaCotizaciones_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mmss") + ".xlsx";
+                return File(memoryStream, contentType, fileName, true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
+            }
+
+
         }
 
         /// <summary>

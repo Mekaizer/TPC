@@ -23,7 +23,6 @@ builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 builder.Services.AddScoped<IRepositorioDepartamentoUsuario, RepositorioDepartamentoUsuario>();
 builder.Services.AddScoped<InterfaceExcel, RepositorioExcel>();
 builder.Services.AddScoped<InterfaceEnviarCorreo, RepositorioEnviarCorreo>();
-builder.Services.AddScoped<InterfaceCrearExcel, RepositorioCrearExcel>();
 builder.Services.AddScoped<IRepositorioCorreo,RepositorioCorreo>();
 builder.Services.AddScoped<IRepositorioRecepcion, RepositorioRecepcion>();
 builder.Services.AddScoped<IRepositorioLiberadores, RepositorioLiberadores>();
@@ -73,7 +72,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseCors("NuevaPolitica");
-
 
 
 app.UseHttpsRedirection();

@@ -67,7 +67,7 @@ namespace APIPortalTPC.Controllers
         /// <param name="A">Objeto del tipo de Archivo</param>
         /// <returns>Retorna el objeto creado</returns>
         [HttpPost]
-        [HttpPost]
+
         public async Task<ActionResult<DepartamentoUsuario>> Nuevo(DepartamentoUsuario A)
         {
             try
