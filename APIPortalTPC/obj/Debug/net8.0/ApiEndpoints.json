@@ -1747,6 +1747,37 @@
     ]
   },
   {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorReemplazos",
+    "Method": "FinRemplazo",
+    "RelativePath": "api/ControladorReemplazos/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "R",
+        "Type": "BaseDatosTPC.Reemplazos",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Reemplazos",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "APIPortalTPC.Controllers.ControladorRelacion",
     "Method": "GetAll",
     "RelativePath": "api/ControladorRelacion",

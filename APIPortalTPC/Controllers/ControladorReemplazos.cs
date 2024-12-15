@@ -128,7 +128,8 @@ namespace APIPortalTPC.Controllers
 
                 //luego desactivar Reemplazo
                 R.Valido = false;
-                Usuario U = await RU.GetUsuario(R.Id_Usuario_Vacaciones);
+                int idU = Int32.Parse(R.Id_Usuario_Vacaciones);
+                Usuario U = await RU.GetUsuario(idU);
                 if (U != null)
                 {
                     await RU.ModificarUsuario(U);

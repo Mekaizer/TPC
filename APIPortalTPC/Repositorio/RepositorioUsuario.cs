@@ -91,7 +91,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="id"></param>
         /// <returns>Retorna el Usuario buscado por la Id dada</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Usuario> GetUsuario(int id)
+        public async Task<Usuario> GetUsuario(int? id)
         {
             //Parametro para guardar el objeto a mostrar
             Usuario U = new();
