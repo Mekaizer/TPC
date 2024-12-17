@@ -100,8 +100,11 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "SELECT D.*, U.Nombre_Usuario " +
                     "FROM dbo.Departamento D " +
-                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario "; // leer base datos"; 
+                    "INNER JOIN dbo.Usuario U ON D.Encargado = U.Id_Usuario " +
+                    "where D.Activado = @A"; // leer base datos"; 
                 Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
@@ -258,7 +261,7 @@ namespace APIPortalTPC.Repositorio
                     "Activado = @Activado " +
                     "WHERE Id_Departamento = @Id_Departamento";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Descripcion", SqlDbType.Bit).Value = false;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
                 Comm.Parameters.Add("@Id_Departamento", SqlDbType.Int).Value = D;
                 
                 reader = await Comm.ExecuteReaderAsync();

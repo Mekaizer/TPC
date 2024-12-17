@@ -20,15 +20,17 @@ namespace APIPortalTPC.Controllers
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioTicket RT;
         private readonly IRepositorioOrdenCompra ROC;
+        private readonly IRepositorioCorreo IRC;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RT">Interface de RepositorioTicket</param>
 
-        public ControladorTicket(IRepositorioTicket RT, IRepositorioOrdenCompra ROC)
+        public ControladorTicket(IRepositorioCorreo IRC,IRepositorioTicket RT, IRepositorioOrdenCompra ROC)
         {
             this.RT = RT;
             this.ROC = ROC;
+            this.IRC = IRC;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -110,6 +112,7 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Centro de Costo con = {id} no encontrado");
 
+                Console.WriteLine(T.Id_OE);
                 return await RT.ModificarTicket(T);
             }
             catch (Exception ex)
@@ -231,7 +234,7 @@ namespace APIPortalTPC.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
 
-        [HttpGet("RecepcionTotal")]
+        [HttpPost("RecepcionTotal/{id:int}")]
         public async Task<ActionResult> RecepcionTotal(int id)
         {
             try
@@ -245,8 +248,17 @@ namespace APIPortalTPC.Controllers
                     OC.Recepcion = true;
                     await ROC.ModificarOC(OC);
                 }
-
-                return Ok(await RT.ModificarTicket(T));
+                await RT.ModificarTicket(T);
+                //crear el objeto Correo
+                Correo C = new Correo();
+                C.Id_Ticket = T.ID_Ticket;
+                C.Numero_OC = T.Numero_OC;
+                C.Proveedor = T.ID_Proveedor;
+                C.CeCo = T.Id_OE;
+                C.CorreosEnviados = 0;
+                C.detalle = T.Detalle;
+                await IRC.NuevoCorreo(C);
+                return Ok("Recepcionado con exito");
             }
             catch (Exception ex)
             {

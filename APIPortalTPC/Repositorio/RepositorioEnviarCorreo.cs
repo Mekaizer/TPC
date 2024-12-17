@@ -29,7 +29,7 @@ namespace APIPortalTPC.Repositorio
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = P.Correo_Proveedor;
             string subject = formData.Asunto;
-
+            Console.WriteLine(formData.Mensaje);
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
             string htmlBody = $@"
             <html>
@@ -40,6 +40,7 @@ namespace APIPortalTPC.Repositorio
                 <ul>
                     <li>{P.ID_Bien_Servicio}</li> 
                 </ul>
+                <p> {formData.Mensaje} </p>
                 <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo. Para enviar su cotización o cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
                 <p>Agradecemos su pronta colaboración.</p>
                 <p>Saludos cordiales,</p>
@@ -163,18 +164,20 @@ namespace APIPortalTPC.Repositorio
             {
                 resultado += $"N° Ticket: {numero} \n\n\n";
             }
-            string htmlBody = $@"<html>
+            string htmlBody = $@"
+            <html>
+
                 <body>
                     <div style='background-color: #002060; color: white; padding: 10px; text-align: center;'>
                         <h1>Portal de Adquisiciones - TPC</h1>
                     </div>
                     <div style='padding: 20px; font-family: Arial, sans-serif;'>
                         <p>Estimado(a):</p>
-                        <p>Por favor, confirmar recepción de la siguiente Orden de Compra:</p>
-                        <ul>
-                            <li><strong> {resultado} </strong> </li>
-                        </ul>                                         
-                    </div>
+                        <p>Por favor, confirmar recepción del siguiente Ticket:</p>
+                            {Id_Ticket[0]}
+                            <table>
+
+                        </div>
                     <div style='background-color: #002060; color: white; padding: 10px; text-align: center;'>
                         <p>© 2024 Portal de Adquisiciones TPC. Todos los derechos reservados.</p>
                     </div>

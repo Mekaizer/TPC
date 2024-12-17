@@ -42,8 +42,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Orden_de_Compra " +
-                    "(Numero_OC,Posicion,Id_Ticket,Texto,Cantidad,Mon,PrcNeto,Proveedor,Material,ValorNeto,Recepcion) " +
-                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket,@Texto,@Cantidad,@Mon,@PrcNeto,@Proveedor,@Material,@ValorNeto,@Recepcion) " +
+                    "(Numero_OC,Posicion,Id_Ticket,Texto,Cantidad,Mon,PrcNeto,Material,ValorNeto,Recepcion) " +
+                    "VALUES (@Numero_OC,@Posicion,@Id_Ticket,@Texto,@Cantidad,@Mon,@PrcNeto,@Material,@ValorNeto,@Recepcion) " +
                     "SELECT SCOPE_IDENTITY() AS Id_Orden_Compra";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = OC.Numero_OC;
@@ -56,8 +56,6 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar,100).Value = OC.Mon;
                 Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
-                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = OC.Proveedor;
-
                 Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
                 Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
                 Comm.Parameters.Add("@Recepcion", SqlDbType.Bit).Value = OC.Recepcion;
@@ -105,7 +103,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
                 FROM dbo.Orden_de_Compra OC 
 				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
-                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores 
+                LEFT OUTER JOIN dbo.Proveedores P ON  T.ID_Proveedor  = P.ID_Proveedores 
                 where OC.Id_Orden_Compra = @Id_Orden_Compra
                ";
                 Comm.CommandType = CommandType.Text;
@@ -170,14 +168,17 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
                 FROM dbo.Orden_de_Compra OC 
 				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
-                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores  "
+                LEFT OUTER JOIN dbo.Proveedores P ON  T.ID_Proveedor  = P.ID_Proveedores  
+                Where OC.Estado_OC = @A"
 ;               // leer base datos 
                 Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
                     OrdenCompra oc = new();
+
                     oc.Id_Orden_Compra = Convert.ToInt32(reader["Id_Orden_Compra"]);
                     oc.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
                     oc.Fecha_Recepcion = Convert.ToDateTime(reader["Fecha_Creacion_OC"]);
@@ -236,7 +237,7 @@ namespace APIPortalTPC.Repositorio
                                    "Cantidad = @Cantidad, " +
                                    "Mon=@Mon, " +
                                    "PrcNeto=@PrcNeto, " +
-                                   "Proveedor=@Proveedor, " +
+
                                    "Material= @Material, " +
                                    "ValorNeto=@ValorNeto, " +
                                    "Recepcion=@Recepcion " +
@@ -249,7 +250,6 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
                 Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
-                Comm.Parameters.Add("@Proveedor", SqlDbType.Int).Value = OC.IdP;
 
                 Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
                 Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
@@ -338,7 +338,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = @"SELECT OC.*, P.ID_Proveedores, P.Nombre_Fantasia  , T.Fecha_Creacion_OC ,T.ID_Proveedor
                 FROM dbo.Orden_de_Compra OC 
 				Left Outer join dbo.Ticket T ON T.ID_Ticket = OC.Id_Ticket 
-                LEFT OUTER JOIN dbo.Proveedores P ON OC.Proveedor = P.ID_Proveedores
+                LEFT OUTER JOIN dbo.Proveedores P ON T.ID_Proveedor = P.ID_Proveedores
                 where OC.Id_Ticket = @Ticket "
 ;               // leer base datos 
                 Comm.CommandType = CommandType.Text;

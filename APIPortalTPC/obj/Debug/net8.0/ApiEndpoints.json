@@ -860,7 +860,7 @@
       },
       {
         "Name": "Id_Cotizacion",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -1755,13 +1755,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "R",
-        "Type": "BaseDatosTPC.Reemplazos",
-        "IsRequired": true
-      },
-      {
         "Name": "id",
-        "Type": "",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -2024,15 +2019,15 @@
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
     "Method": "RecepcionTotal",
-    "RelativePath": "api/ControladorTicket/RecepcionTotal",
-    "HttpMethod": "GET",
+    "RelativePath": "api/ControladorTicket/RecepcionTotal/{id}",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

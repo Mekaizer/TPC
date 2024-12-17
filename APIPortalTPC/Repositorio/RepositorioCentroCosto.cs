@@ -94,8 +94,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Centro_de_costo"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.Centro_de_costo where Activado = @A"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())

@@ -78,7 +78,6 @@ namespace APIPortalTPC.Repositorio
                     P.N_Cuenta = Convert.ToString(reader["N_Cuenta"]);
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
-                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                 }
             }
@@ -342,7 +341,6 @@ namespace APIPortalTPC.Repositorio
                     P.Banco = (Convert.ToString(reader["Banco"])).Trim();
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
-                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(P);
                 }
             }
@@ -406,7 +404,6 @@ namespace APIPortalTPC.Repositorio
                     P.Swift = (Convert.ToString(reader["Swift"])).Trim();
                     P.ID_Proveedores = Convert.ToInt32(reader["ID_Proveedores"]);
                     P.Cargo_Representante = Convert.ToString(reader["Cargo_Representante"]).Trim();
-                    P.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(P);
                 }
             }

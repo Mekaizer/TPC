@@ -92,8 +92,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = "SELECT * FROM dbo.Bien_Servicio"; // leer base datos 
+                Comm.CommandText = "SELECT * FROM dbo.Bien_Servicio where Activado = @A"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
                 //acontinuacion se procede a pasar los datos a una clase y luego se guardan en una lista
                 while (reader.Read())

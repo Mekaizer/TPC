@@ -221,5 +221,76 @@ namespace APIPortalTPC.Repositorio
             }
             return Cmod;
         }
+        /// <summary>
+        /// Se obtiene el Correo por el id Ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Correo> GetCorreoPorTicket(int id)
+        {
+            //Parametro para guardar el objeto a mostrar
+            Correo C = new();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = @"SELECT C.* ,U.Nombre_Usuario,T.Id_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo
+                FROM dbo.Correo C 
+                Inner join Ticket T on T.Id_Ticket = C.Id_Ticket 
+                Inner join Usuario U on U.Id_Usuario = T.Id_Usuario 
+                Inner join Proveedores P on P.Id_Proveedores = T.Id_Proveedor 
+                Inner join Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica 
+                Inner join Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco 
+                where C.Id_Ticket = @T ";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@T", SqlDbType.Int).Value = id;
+
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
+
+                    C.Id_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+                    C.Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    C.ID_Solicitante = Convert.ToInt32(reader["Id_Usuario"]);
+                    C.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    C.CeCo = Convert.ToString(reader["NombreCeCo"]).Trim();
+                    C.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
+                    C.CorreosEnviados = Convert.ToInt32(reader["CorreosEnviados"]);
+                    C.PrimerCorreo = Convert.ToDateTime(reader["PrimerCorreo"]);
+                    C.UltimoCorreo = Convert.ToDateTime(reader["UltimoCorreo"]);
+                    C.detalle = Convert.ToString(reader["detalle"]).Trim();
+                    C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
+                    C.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Correo " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return C;
+        }
+
     }
 }

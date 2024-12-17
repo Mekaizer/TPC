@@ -127,7 +127,7 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
+                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.N_OE = Convert.ToInt32(reader["Id_OE"]);
@@ -195,7 +195,7 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
+                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
                     T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -255,7 +255,8 @@ namespace APIPortalTPC.Repositorio
                     "Fecha_OC_Enviada = ISNULL(@Fecha_OC_Enviada, Fecha_OC_Enviada), " +
                     "Fecha_OC_Liberada = ISNULL(@Fecha_OC_Liberada, Fecha_OC_Liberada), " +
                     "Detalle = @Detalle," +
-                    "Id_OE = @Id_OE " +
+                    "Id_OE = @Id_OE, " +
+                    "N_OC = @N_OC " +
                     "WHERE ID_Ticket = @ID_Ticket";
                 Comm.CommandType = CommandType.Text;
 
@@ -280,6 +281,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
 
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.N_OE;
+
+                Comm.Parameters.Add("@N_OC", SqlDbType.Int).Value = T.Numero_OC;
 
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
@@ -594,8 +597,83 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+        public async Task<Ticket> GetTicketOC(int id)
+        {
+            //Parametro para guardar el objeto a mostrar
+            List<Ticket> lista = new List<Ticket>();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText =
+                    "SELECT T.*,U.Nombre_Usuario , p.Nombre_Fantasia, OE.Nombre, OC.Numero_OC " +
+                    "FROM dbo.Ticket T " +
+                    "INNER JOIN dbo.Usuario U on U.Id_Usuario = T.Id_Usuario " +
+                    "INNER JOIN dbo.Proveedores p ON T.ID_Proveedor = p.ID_Proveedores " +
+                    "Left JOIN dbo.Orden_de_Compra OC ON T.ID_Ticket = OC.Id_Ticket " +
+                    "LEFT JOIN dbo.Ordenes_Estadisticas OE  On OE.Id_Orden_Estadistica = T.Id_OE " +
+                    "where T.N_OC = @OC";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@OC", SqlDbType.Int).Value = id;
 
-     
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    Ticket T = new();
+                    T.Estado = Convert.ToString(reader["Estado"]).Trim();
+                    T.Fecha_Creacion_OC = (DateTime)reader["Fecha_Creacion_OC"];
+                    T.Id_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    T.ID_Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    T.Fecha_OC_Recepcionada = reader["Fecha_OC_Recepcionada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Recepcionada"];
+                    T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
+                    T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
+                    T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
+                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
+                    T.N_OE = Convert.ToInt32(reader["Id_OE"]);
+                    T.Activado = Convert.ToBoolean(reader["Activado"]);
+                    T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
+                    T.Id_U = Convert.ToInt32(reader["Id_Usuario"]);
+
+                    int cont = 0;
+                    foreach (Ticket ticket in lista)
+                        if (ticket.ID_Ticket == T.ID_Ticket)
+                            cont = 1;
+
+                    if (cont == 0)
+                    {
+                        lista.Add(T);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Ticket " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return lista[0];
+        }
+
 
     }
 }

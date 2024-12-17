@@ -75,7 +75,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<Reemplazos> GetReemplazo(int id)
         {
             //Parametro para guardar el objeto a mostrar
-            Reemplazos R = new();
+            Reemplazos Rem = new();
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -90,26 +90,28 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT Re.*, U.Nombre_Usuario AS U_Vacaciones, U1.Nombre_Usuario AS U_Reemplazo  " +
-                    "FROM dbo.Reemplazos Re " +
-                    "INNER JOIN Usuario U on U.Id_Usuario = Re.Id_Usuario_Vacaciones " +
-                    "INNER JOIN Usuario U1 on U1.Id_Usuario = Re.Id_Usuario_Vacaciones" +
-                    "where RE.ID_Reemplazos = @ID_Reemplazos";
+                Comm.CommandText = "SELECT R.*, U.Nombre_Usuario AS U_Vacaciones, U1.Nombre_Usuario AS U_Reemplazo  " +
+                    "FROM dbo.Reemplazos R " +
+                    "INNER JOIN Usuario U on U.Id_Usuario = R.Id_Usuario_Vacaciones " +
+                    "INNER JOIN Usuario U1 on U1.Id_Usuario = R.Id_Usuario_Reemplazante " +
+                    "where R.ID_Reemplazos = @ID";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@ID", SqlDbType.Int).Value = id;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    Reemplazos Rem = new();
+                
                     Rem.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
                     Rem.Id_Usuario_Vacaciones = Convert.ToString(reader["U_Vacaciones"]).Trim();
                     Rem.Id_Usuario_Reemplazante = Convert.ToString(reader["U_Reemplazo"]).Trim();
                     Rem.Comentario = Convert.ToString(reader["Comentario"]).Trim();
                     Rem.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
                     Rem.Valido = Convert.ToBoolean(reader["Valido"]);
+                    Rem.N_IdV = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
+                    Rem.N_IdR = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
 
                 }
             }
@@ -125,7 +127,7 @@ namespace APIPortalTPC.Repositorio
                 sql.Close();
                 sql.Dispose();
             }
-            return R;
+            return Rem;
         }
         /// <summary>
         /// Metodo que retorna una lista con los objeto
@@ -145,8 +147,11 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "SELECT R.*, U.Nombre_Usuario AS U_Vacaciones, U1.Nombre_Usuario AS U_Reemplazo  " +
                     "FROM dbo.Reemplazos R " +
                     "INNER JOIN Usuario U on U.Id_Usuario = R.Id_Usuario_Vacaciones " +
-                    "INNER JOIN Usuario U1 on U1.Id_Usuario = R.Id_Usuario_Vacaciones"; // leer base datos 
+                    "INNER JOIN Usuario U1 on U1.Id_Usuario = R.Id_Usuario_Reemplazante " +
+                    "Where R.Valido = @A"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
+
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
@@ -201,8 +206,8 @@ namespace APIPortalTPC.Repositorio
                     "WHERE ID_Reemplazos = @ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = R.ID_Reemplazos;
-                Comm.Parameters.Add("@Id_Usuario_Vacaciones", SqlDbType.Int).Value = R.Id_Usuario_Vacaciones;
-                Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.Id_Usuario_Reemplazante;
+                Comm.Parameters.Add("@Id_Usuario_Vacaciones", SqlDbType.Int).Value = R.N_IdV;
+                Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.N_IdR;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
                 Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;

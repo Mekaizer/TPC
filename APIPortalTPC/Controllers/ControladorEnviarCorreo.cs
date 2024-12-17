@@ -20,7 +20,8 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioArchivo IRA;
         private readonly IRepositorioRelacion IRR;
         private readonly IRepositorioCotizacion IRC;
-        public ControladorEnviarCorreo(IRepositorioCotizacion IRC,IRepositorioRelacion IRR,IRepositorioArchivo IRA,IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
+        private readonly IRepositorioCorreo IRCo;
+        public ControladorEnviarCorreo(IRepositorioCorreo IRCo, IRepositorioCotizacion IRC,IRepositorioRelacion IRR,IRepositorioArchivo IRA,IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
         {
             this.IEC = IEC;
             this.IRP = IRP;
@@ -31,6 +32,7 @@ namespace APIPortalTPC.Controllers
             this.IROC = IROC;
             this.IRR = IRR;
             this.IRC = IRC;
+            this.IRCo = IRCo;
         }
         /// <summary>
         /// Metodo para enviar a varios proveedores (enviar archivo) las cotizaciones
@@ -53,7 +55,7 @@ namespace APIPortalTPC.Controllers
      
      
                    //
-                   //await IEC.CorreoProveedores(P, formData);
+                   await IEC.CorreoProveedores(P, formData);
     
                      }
 
@@ -73,7 +75,8 @@ namespace APIPortalTPC.Controllers
                     A.NombreDoc =formData.file.Name;
                     A = await IRA.NuevoArchivo(A);
                     //pedimos la cotizacion
-                    Cotizacion Cot = await IRC.GetCotizacion(11);//formData.Id_Cotizacion
+                    int idCotizacion = Int32.Parse(formData.Id_Cotizacion);
+                    Cotizacion Cot = await IRC.GetCotizacion(idCotizacion);//formData.Id_Cotizacion
                     Cot.Estado = " Enviado";
                     Relacion R = new Relacion();
                     R.Id_Cotizacion=(Cot.ID_Cotizacion);
@@ -107,11 +110,19 @@ namespace APIPortalTPC.Controllers
       
        
             int[] lista = LID.Lista;
+            Console.WriteLine(lista[0]);
             string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
             try
             {
-                foreach(int i in lista) {
-                    Usuario U = await IRU.GetUsuario(i);
+                foreach(int id in lista)
+                {
+                    //cambiar estado ticket!!!
+                    Ticket T = await IRT.GetTicket(id);
+                    T.Estado = "OC Enviada";
+                    await IRT.ModificarTicket(T);
+                    Console.WriteLine(T.Estado);
+
+                    Usuario U = await IRU.GetUsuario(T.ID_Ticket);
                     bool enviado = false;
                     List<int> ldep = U.ListaIdDep;
                     int idT = 0;
@@ -120,24 +131,15 @@ namespace APIPortalTPC.Controllers
 
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        //await IEC.CorreoLiberador(U, subject);
+                        await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
                     {
                         Liberadores lib = await IRL.Get(9);
-                    
-                        U = await IRU.GetUsuario(lib.Id_Usuario);
-                       // await IEC.CorreoLiberador(U, subject);
-                        //cambiar estado ticket!!!
-                        Ticket T = await IRT.GetTicket(1);
+                        await IEC.CorreoLiberador(U, subject);
+            
 
-              
-
-                        T.Estado = "OC Enviada";
-                        await IRT.ModificarTicket(T);
-                        Console.WriteLine(T.Estado);
-                    
                     }
                 }
          
@@ -174,18 +176,25 @@ namespace APIPortalTPC.Controllers
                 {
                     //se saca la lista con los ID de OC relacionadas al ticket del usuario
                     List<int> Id_LT = new List<int>();
-                    Usuario U = await IRU.GetUsuario(i);
+
+                    Ticket T = await IRT.GetTicket(i);
+                    Correo C = await IRCo.GetCorreoPorTicket(T.ID_Ticket) ;
+                    Usuario U = await IRU.GetUsuario(T.Id_U);
                     if (U.Activado)
                     {
                         int id = U.Id_Usuario;
                         var list = await IRT.TicketConOCPendientes(id);
                         Id_LT = (List<int>)list;
-                        if (Id_LT.Count != 0)
-                        {
-                 
-                            //await IEC.CorreoRecepciones(U, subject, Id_LT);
-                        }
-                        //cambiar estado ticket
+
+
+                            Console.WriteLine(U.Nombre_Completo);
+                            await IEC.CorreoRecepciones(U, subject, Id_LT);
+
+                            //cambiar estado ticket
+                            C.CorreosEnviados += 1;
+    
+                            C = await IRCo.ModificarCorreo(C);
+               
                    
                     }
 

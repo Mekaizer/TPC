@@ -160,20 +160,12 @@ namespace APIPortalTPC.Controllers
         [HttpPost("OCA")]
         public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
         {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Please select a file to upload.");
-            }
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                byte[] Archivo = memoryStream.ToArray();
-                try
+  
+       try
                 {
                     //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
 
-                    return Ok(await Excel.ActualizarOC(Archivo));
+                    return Ok();
 
                 }
                 catch (Exception ex)
@@ -219,47 +211,36 @@ namespace APIPortalTPC.Controllers
             }
         }
         /// <summary>
-        /// Añade las ordenes de compra a los tickets,
+        /// Asocia la orden de compra a los tickets
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("poss")]
         public async Task<ActionResult> ExcelPos([FromForm] IFormFile file)
         {
-            if (file == null || file.Length == 0)
+
+
+            try
             {
-                return BadRequest("Please select a file to upload.");
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(memoryStream);
+                    byte[] Archivo = memoryStream.ToArray();
+                    
+                    return Ok(await Excel.LeerExcelOC(Archivo));
+
+
+                }
+
             }
-            using (var memoryStream = new MemoryStream())
+
+            catch (Exception ex)
             {
-                await file.CopyToAsync(memoryStream);
-                byte[] Archivo = memoryStream.ToArray();
-
-                try
-                {
-                    //string path = @"C:\Desktop\BienServicio.xlsx";
-                    List<OrdenCompra> lista = (await Excel.LeerExcelOC(Archivo));
-                    foreach (OrdenCompra OC in lista)
-                    {
-                        Ticket T = await IRT.GetTicket((int)OC.Id_Ticket);
-                        bool cont = true;
-                        T.Estado = "Espera liberacion";
-                        await IRT.ModificarTicket(T);
-                        await IROC.NuevoOC(OC);
-
-
-
-                    }
-
-                    return Ok(true);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-                }
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+            }
             }
         }
 
       
     }
-}
+

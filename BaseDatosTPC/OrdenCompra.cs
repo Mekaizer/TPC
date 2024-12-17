@@ -27,7 +27,7 @@ namespace BaseDatosTPC
         /// </summary>
         public DateTime? Fecha_Recepcion { get; set; }
         public string? Texto { get; set; }
-        public bool IsCiclica { get; set; }
+        public bool? IsCiclica { get; set; }
 
         /// <summary>
         /// Orden de posicionamiento entre varias ordenes de compras relacionadas
@@ -36,7 +36,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Cantidad de materiales
         /// </summary>
-        public int Cantidad {get; set;}
+        public int? Cantidad {get; set;}
         /// <summary>
         /// Tipo de moneda
         /// </summary>
@@ -47,7 +47,7 @@ namespace BaseDatosTPC
         /// Nombre del proveedor
         /// </summary>
         public string? Proveedor { get; set; }
-        public int IdP { get; set; }
+        public int? IdP { get; set; }
         /// <summary>
         /// Codigo del material
         /// </summary>
@@ -59,8 +59,8 @@ namespace BaseDatosTPC
         /// <summary>
         /// Es para ver si fue recepcionado la orden de compra
         /// </summary>
-        public bool Recepcion { get; set; }
-        public bool Estado_OC { get; set; }
+        public bool? Recepcion { get; set; }
+        public bool? Estado_OC { get; set; }
 
     }
 }

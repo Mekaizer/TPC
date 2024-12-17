@@ -93,10 +93,11 @@ namespace APIPortalTPC.Repositorio
                     "FROM dbo.Ordenes_estadisticas OE " +
                     "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco " +
 
-                    "where OE.Id_Orden_Estadistica = @Id_Orden_Estadistica";
+                    "where OE.Id_Orden_Estadistica = @Id_Orden_Estadistica and OE.Activado =@A";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
 
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();

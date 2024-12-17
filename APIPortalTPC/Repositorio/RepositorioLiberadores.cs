@@ -154,6 +154,7 @@ namespace APIPortalTPC.Repositorio
                     L.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                     L.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                     L.Correo = Convert.ToString(reader["Correo_Usuario"]);
+                    
                     lista.Add(L);
                 }
             }

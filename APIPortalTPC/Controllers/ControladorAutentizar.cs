@@ -43,9 +43,9 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-                //int codigo = await RA.MFA(User.Correo_Usuario);
+               // int codigo = await RA.MFA(User.Correo_Usuario);
                // User.CodigoMFA = codigo;
-                //await RU.ModificarUsuario(User);
+               // await RU.ModificarUsuario(User);
                 return User;
             }
             return NotFound("Usuario no activado");
