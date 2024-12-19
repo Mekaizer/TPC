@@ -92,7 +92,7 @@ namespace APIPortalTPC.Repositorio
                 inner join dbo.Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica
                 inner join dbo.Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco
                 inner join dbo.Orden_de_Compra OC on OC.Id_Ticket = T.ID_Ticket
-                where C.Id_Recepcion = @Id_Recepcion ";
+                where R.Id_Recepcion = @Id_Recepcion ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
                 Comm.Parameters.Add("@Id_Recepcion", SqlDbType.Int).Value = id;
@@ -223,6 +223,96 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return Rmod;
+        }
+        public async Task<Recepcion> GetRecepcionPorCorreo(int id)
+        {
+            //Parametro para guardar el objeto a mostrar
+            Recepcion R = new();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = @"SELECT  R.*, T.ID_Ticket, T.Id_OE, U.Nombre_Usuario, P.Nombre_Fantasia, CeCo.NombreCeCo, OC-Numero_OC
+                FROM dbo.Recepcion R
+                inner join dbo.Correo C on R.Id_Correo = C.Id_Correo  
+                inner join dbo.Ticket T on C.Id_Ticket = T.ID_Ticket 
+                inner join dbo.Usuario U on U.Id_Usuario = T.Id_Usuario 
+                inner join dbo.Proveedores P on P.ID_Proveedores = T.ID_Proveedor
+                inner join dbo.Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica
+                inner join dbo.Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco
+                inner join dbo.Orden_de_Compra OC on OC.Id_Ticket = T.ID_Ticket
+                where R.Id_Correo = @Id_Correo ";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@Id_Correo", SqlDbType.Int).Value = id;
+
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
+                    R.Id_Recepcion = Convert.ToInt32(reader["Id_Recepcion"]);
+                    R.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
+                    R.FechaEnvio = Convert.ToDateTime(reader["FechaEnvio"]);
+                    R.FechaRespuesta = reader["FechaRespuesta"] is DBNull ? (DateTime?)null : (DateTime)reader["FechaRespuesta"];
+                    R.Respuesta = Convert.ToString(reader["Respuesta"]).Trim();
+                    R.Comentarios = Convert.ToString(reader["Comentarios"]).Trim();
+                    R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
+                    R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
+                    R.Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
+                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Recepcion " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return R;
+        }
+        public async Task<string> Existe(int id_correo)
+        {
+
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Recepcion WHERE Id_Recepcion = @R";
+                    command.Parameters.AddWithValue("@R", id_correo);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        return "Existe Correo!";
+                    }
+                    reader.Close();
+
+                 
+                        reader.Close();
+                        return "ok";
+                  
+                }
+            }
         }
     }
 }

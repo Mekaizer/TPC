@@ -87,25 +87,28 @@ namespace APIPortalTPC.Repositorio
             var centrosCostos = new List<CentroCosto>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+
             using (var memoryStream = new MemoryStream(archivo))
             using (ExcelPackage package = new ExcelPackage(memoryStream))
 
             {
-                var worksheet = package.Workbook.Worksheets[0];
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == "Hoja1") ??
+                         package.Workbook.Worksheets.FirstOrDefault();
 
+ 
                 int rowCount = worksheet.Dimension.Rows;
                 for (int row = 2; row <= rowCount; row++)
                 {
                     string Namea = "";
-                    if (worksheet.Cells[row, 2].Value is string)
+                    if (worksheet.Cells[row, 4].Value is string)
                     {
-                        Namea = worksheet.Cells[row, 2].Value.ToString();
+                        Namea = worksheet.Cells[row, 4].Value.ToString();
 
                     }
 
                     var centroCosto = new CentroCosto
                     {
-                        Codigo_Ceco = worksheet.Cells[row, 1].Value.ToString(),
+                        Codigo_Ceco = worksheet.Cells[row, 2].Value.ToString(),
 
                         Nombre = Namea
                     };
@@ -116,7 +119,47 @@ namespace APIPortalTPC.Repositorio
             return centrosCostos;
         }
 
+        /// <summary>
+        /// Metodo que lee el excel con los centros de costo para ser añadidos a una lista de objeto CentroCosto
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public async Task<List<OrdenesEstadisticas>> LeerExcel(byte[] archivo)
+        {
+            var LOE = new List<OrdenesEstadisticas>();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+
+            using (var memoryStream = new MemoryStream(archivo))
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+
+            {
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == "Hoja1") ??
+                         package.Workbook.Worksheets.FirstOrDefault();
+
+
+                int rowCount = worksheet.Dimension.Rows;
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    string Namea = "";
+                    if (worksheet.Cells[row, 3].Value is string)
+                    {
+                        Namea = worksheet.Cells[row, 3].Value.ToString();
+
+                    }
+
+                    var OE = new OrdenesEstadisticas
+                    {
+                        Codigo_OE = worksheet.Cells[row, 2].Value.ToString(),
+                        Id_Centro_de_Costo = worksheet.Cells[row, 2].Value.ToString(),
+                        Nombre = Namea
+                    };
+
+                    LOE.Add(OE);
+                }
+            }
+            return LOE;
+        }
         /// <summary>
         /// Metodo que lee el excel de ordenes de compras y actualiza la base de datos para cambiar los procesos
         /// </summary>
@@ -127,11 +170,11 @@ namespace APIPortalTPC.Repositorio
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+            
 
-
-            // Variables para almacenar datos de las columnas C, G y Q
+            // Variables para almacenar datos de las columnas C y Q
             string columnaC;
-            string columnaG;
+
             string columnaQ;
             DateTime hoy = (DateTime.Today);
             // Cargar el archivo Excel
@@ -142,21 +185,27 @@ namespace APIPortalTPC.Repositorio
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Primera hoja del archivo
 
                 // Leer las columnas C, G y Q al mismo tiempo (empieza desde la fila 5)
-                int row = 6;
-                while (worksheet.Cells[row, 3].Value != null || worksheet.Cells[row, 17].Value != null || worksheet.Cells[row, 7].Value != null) // Columnas C (3) y Q (17)
-                {
-                    // Agregar el valor de la columna C (Documentos) o una cadena vacía si es nulo
-                    columnaC = worksheet.Cells[row, 3].Value.ToString() ?? string.Empty;
 
-                    //Agregar el valor de la columna G (Nombre de) o una cadena nula si es vacía si es nulo
-                    columnaG = worksheet.Cells[row, 7].Text ?? string.Empty;
+
+
+                    int rowCount = worksheet.Dimension.Rows;
+                for (int row = 6; row <= rowCount; row++)
+                {
+                 
+                    if (worksheet.Cells[row, 3].Value != null || worksheet.Cells[row, 17].Value != null)
+                    {
+                        // Agregar el valor de la columna C (Documentos) o una cadena vacía si es nulo
+                        columnaC = worksheet.Cells[row, 3].Value.ToString() ?? string.Empty;
+
 
                     // Agregar el valor de la columna Q (Denominación StatLib) o una cadena vacía si es nulo
                     columnaQ = worksheet.Cells[row, 17].Text ?? string.Empty;
 
-                    row++;
 
-                    SqlConnection sqlConexion = conectar();
+
+                        Console.WriteLine(columnaC);
+
+                        SqlConnection sqlConexion = conectar();
                     SqlCommand? Comm = null;
                     SqlDataReader reader = null;
                     try
@@ -182,7 +231,7 @@ namespace APIPortalTPC.Repositorio
 
 
             
-                        Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = int.Parse(columnaC);
+                        Comm.Parameters.Add("@ID_Ticket", SqlDbType.BigInt).Value = int.Parse(columnaC);
 
                         reader = await Comm.ExecuteReaderAsync();
 
@@ -199,6 +248,7 @@ namespace APIPortalTPC.Repositorio
                         sqlConexion.Dispose();
                     }
 
+                }
                 }
             }
 

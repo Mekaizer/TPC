@@ -21,7 +21,8 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioRelacion IRR;
         private readonly IRepositorioCotizacion IRC;
         private readonly IRepositorioCorreo IRCo;
-        public ControladorEnviarCorreo(IRepositorioCorreo IRCo, IRepositorioCotizacion IRC,IRepositorioRelacion IRR,IRepositorioArchivo IRA,IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP)
+        private readonly IRepositorioRecepcion IRRe;
+        public ControladorEnviarCorreo(IRepositorioCorreo IRCo, IRepositorioCotizacion IRC,IRepositorioRelacion IRR,IRepositorioArchivo IRA,IRepositorioOrdenCompra IROC, IRepositorioTicket IRT,IRepositorioLiberadores IRL, IRepositorioUsuario IRU, InterfaceEnviarCorreo IEC, IRepositorioProveedores IRP, IRepositorioRecepcion IRRe)
         {
             this.IEC = IEC;
             this.IRP = IRP;
@@ -33,6 +34,7 @@ namespace APIPortalTPC.Controllers
             this.IRR = IRR;
             this.IRC = IRC;
             this.IRCo = IRCo;
+            this.IRRe = IRRe;
         }
         /// <summary>
         /// Metodo para enviar a varios proveedores (enviar archivo) las cotizaciones
@@ -50,12 +52,12 @@ namespace APIPortalTPC.Controllers
      
                      foreach (int ID in lis)
                      {
-          
                     Proveedores P = await IRP.GetProveedor(ID);
-     
-     
+
+            
+
                    //
-                   await IEC.CorreoProveedores(P, formData);
+                   //await IEC.CorreoProveedores(P, formData);
     
                      }
 
@@ -110,7 +112,6 @@ namespace APIPortalTPC.Controllers
       
        
             int[] lista = LID.Lista;
-            Console.WriteLine(lista[0]);
             string subject = "Recordatorio Urgente: Liberación de Órdenes de Compra Pendientes";
             try
             {
@@ -131,13 +132,13 @@ namespace APIPortalTPC.Controllers
 
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        await IEC.CorreoLiberador(U, subject);
+                        //await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
                     {
                         Liberadores lib = await IRL.Get(9);
-                        await IEC.CorreoLiberador(U, subject);
+                        //await IEC.CorreoLiberador(U, subject);
             
 
                     }
@@ -168,38 +169,54 @@ namespace APIPortalTPC.Controllers
         public async Task<ActionResult> VariosReceptores(ListaID LID)
         {
             int[] lista = LID.Lista;
-            
         string subject = "TPC Confirmación de recepción";
             try
             {
                 foreach (int i in lista)
                 {
+          
                     //se saca la lista con los ID de OC relacionadas al ticket del usuario
-                    List<int> Id_LT = new List<int>();
+         
 
                     Ticket T = await IRT.GetTicket(i);
                     Correo C = await IRCo.GetCorreoPorTicket(T.ID_Ticket) ;
+                    Console.WriteLine(T.Id_U);
                     Usuario U = await IRU.GetUsuario(T.Id_U);
                     if (U.Activado)
                     {
-                        int id = U.Id_Usuario;
-                        var list = await IRT.TicketConOCPendientes(id);
-                        Id_LT = (List<int>)list;
+                    int id = U.Id_Usuario;
+                        //await IEC.CorreoRecepciones(U, subject, (int)T.ID_Ticket);
+                        //cambiar estado ticket
+                        C.CorreosEnviados += 1;
+                        C.UltimoCorreo = DateTime.Now;
+                        string res = await IRRe.Existe(C.Id_Correo);
+                        Correo newC = await IRCo.ModificarCorreo(C);
+         
+                        //si existe recepcion
+                        //buscar si esta en recepcion
+
+                        if (res=="ok")
+                        {
+                            //se crea el nuevo Recepcion
+                            Recepcion newR = new Recepcion();
+                            newR.Id_Correo = C.Id_Correo;
+                            newR.FechaEnvio = C.FechaCreacion;
+                        }
+                        else
+                        {   //si esta se edita
+                            Console.WriteLine(C.Id_Correo);
+                            //Recepcion Rec = await IRRe.GetRecepcionPorCorreo((int)C.Id_Correo);
+                            //Rec.Id_Correo = C.Id_Correo;
+            
+                            //await IRRe.NuevaRecepcion(Rec);
+                        }
 
 
-                            Console.WriteLine(U.Nombre_Completo);
-                            await IEC.CorreoRecepciones(U, subject, Id_LT);
+                      
 
-                            //cambiar estado ticket
-                            C.CorreosEnviados += 1;
-    
-                            C = await IRCo.ModificarCorreo(C);
-               
-                   
                     }
 
 
-                
                 }
                 return Ok("Correos enviados con exito");
 
@@ -207,7 +224,7 @@ namespace APIPortalTPC.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron liberadores ");
+                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron Receptores ");
             }
 
 

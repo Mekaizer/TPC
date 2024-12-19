@@ -110,7 +110,10 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Reemplazo con = {id} no encontrado");
 
-                return await RR.ModificarReemplazos(R);
+                Modificar.Comentario = R.Comentario;
+                Console.WriteLine(Modificar.Comentario);
+
+                return await RR.ModificarReemplazos(Modificar);
             }
             catch (Exception ex)
             {

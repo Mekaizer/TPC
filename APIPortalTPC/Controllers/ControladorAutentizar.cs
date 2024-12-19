@@ -43,9 +43,9 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-               // int codigo = await RA.MFA(User.Correo_Usuario);
-               // User.CodigoMFA = codigo;
-               // await RU.ModificarUsuario(User);
+               //int codigo = await RA.MFA(User.Correo_Usuario);
+               //User.CodigoMFA = codigo;
+               //await RU.ModificarUsuario(User);
                 return User;
             }
             return NotFound("Usuario no activado");
@@ -123,7 +123,7 @@ namespace APIPortalTPC.Controllers
                 //luego mandas un correo para confirmar y ahi se hace el cambio de contraseña
                 if (U != null)
                 {
-                    await IEC.RecuperarPass(U);
+                    //await IEC.RecuperarPass(U);
                     return Ok(U);
                 }
                 return BadRequest("No hay usuario para ese correo");

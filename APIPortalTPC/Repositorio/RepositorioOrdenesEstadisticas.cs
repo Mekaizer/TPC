@@ -142,8 +142,10 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo " +
                     "FROM dbo.Ordenes_estadisticas OE " +
-                    "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco "; // leer base datos 
+                    "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco " +
+                    "where OE.Activado = @A"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
@@ -262,7 +264,8 @@ namespace APIPortalTPC.Repositorio
                     "WHERE Id_Orden_Estadistica = @Id_Orden_Estadistica";
                 Comm.CommandType = CommandType.Text;
 
-                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = OE;
+                Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE;
+                Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     OEmod = await GetOE(Convert.ToInt32(reader["Id_Orden_Estadistica"]));

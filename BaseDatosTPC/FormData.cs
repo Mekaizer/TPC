@@ -11,7 +11,7 @@ namespace BaseDatosTPC
         public int? iD_Bien_Servicio { get; set; }
         public string? Mensaje { get; set; }
         public string? Proveedor { get; set; }
-        public string Id_Cotizacion { get; set; }  
+        public string? Id_Cotizacion { get; set; } = "0";
 
     }
 }

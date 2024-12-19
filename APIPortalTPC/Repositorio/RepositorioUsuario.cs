@@ -533,17 +533,8 @@ namespace APIPortalTPC.Repositorio
                 {
 
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
-                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
-                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = (Convert.ToBoolean(reader["Tipo_Liberador"]));
-                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
-                    U.Activado = Convert.ToBoolean(reader["Activado"]);
-                    U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
                     U.CodigoMFA = 0;
 
                 }

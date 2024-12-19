@@ -442,7 +442,7 @@ namespace APIPortalTPC.Repositorio
             sqlConexion.Open();
             Comm = sqlConexion.CreateCommand();
             Comm.CommandText = "UPDATE dbo.Proveedores SET " +
-                "Activado = @Activado " +
+                "Estado = @Activado " +
                 "WHERE ID_Proveedores = @ID_Proveedores";
             Comm.CommandType = CommandType.Text;
             Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;

@@ -180,20 +180,23 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
+
                 if (id != OC.Id_Orden_Compra)
                     return BadRequest("La Id no coincide");
+
+  
+                OC =await ROC.ModificarOC(OC);
+  
 
                 var Modificar = await ROC.GetOC(id);
 
                 if (Modificar == null)
                     return NotFound($"Orden de compra con = {id} no encontrado");
 
-                OC =await ROC.ModificarOC(OC);
-                //int id_T = (int)OC.Id_Ticket;
+                int id_T = (int)Modificar.Id_Ticket;
                 //aprovecha de modificar los tickets!!!
-                //Ticket t = await RT.GetTicket(id_T);
-
-
+   
+                await RT.ActualizarEstadoTicket(id_T);
                 return Ok("Cambios realizados");
             }
             catch (Exception ex)

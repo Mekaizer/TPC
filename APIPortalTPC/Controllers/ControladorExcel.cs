@@ -1,6 +1,8 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
+using OfficeOpenXml;
 
 namespace APIPortalTPC.Controllers
 {
@@ -103,69 +105,23 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-            /// <summary>
-            /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos, tambien añade las ordenes estadisticas!!!
-            /// </summary>
-            /// <returns></returns>
-        [HttpPost("CeCo")]
-        public async Task<ActionResult> ExcelCeCo([FromForm] IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Please select a file to upload.");
-            }
-
+        /// <summary>
+        /// Metodo que lee un archivo excel que tiene orden de compra y lo actualiza en la base de datos
+        /// </summary>
+        /// <returns></returns>
+[HttpPost("OCA")]
+public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
+{
+  
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
                 byte[] Archivo = memoryStream.ToArray();
                 try
                 {
-                    {
-                        //string path = @"C:\Users\drako\Desktop\cap.xlsx";
-                        var original = (await IRC.GetAllCeCo());
-                        foreach (CentroCosto c in original)
-                        {
-                            await IRC.EliminarCeCo(c.Id_Ceco);
-                        }
-
-
-                        List<CentroCosto> lc = (await Excel.LeerExcelCeCo(Archivo));
-                        foreach (CentroCosto cc in lc)
-                        {
-                            string res = await IRC.Existe(cc.Codigo_Ceco);
-                            if (res == "ok")
-                                await IRC.Nuevo_CeCo(cc);
-
-                            else
-                            {
-                                cc.Activado = true;
-                                await IRC.ModificarCeCo(cc);
-                            }
-                        }
-
-                        return Ok(true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-                }
-            }
-        }
-        /// <summary>
-        /// Metodo que lee un archivo excel que tiene orden de compra y lo actualiza en la base de datos
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("OCA")]
-        public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
-        {
-  
-       try
-                {
                     //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
-
-                    return Ok();
+                    Console.WriteLine();
+                    return Ok(await Excel.ActualizarOC(Archivo));
 
                 }
                 catch (Exception ex)
@@ -229,7 +185,6 @@ namespace APIPortalTPC.Controllers
                     
                     return Ok(await Excel.LeerExcelOC(Archivo));
 
-
                 }
 
             }
@@ -238,9 +193,66 @@ namespace APIPortalTPC.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
             }
-            }
         }
 
-      
-    }
+        /// <summary>
+        /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos, tambien añade las ordenes estadisticas!!!
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("CeCo")]
+        public async Task<ActionResult> ExcelCeCo([FromForm] FormData formData)
+        {
 
+            try
+            {
+                using (var stream = formData.file.OpenReadStream())
+                using (var package = new ExcelPackage(stream))
+                using (var memoryStream = new MemoryStream())
+                {
+
+                    byte[] Archivo = memoryStream.ToArray();
+
+                    {
+
+
+                        List<CentroCosto> lc = (await Excel.LeerExcelCeCo(Archivo));
+                        //string path = @"C:\Users\drako\Desktop\cap.xlsx";
+                        var original = (await IRC.GetAllCeCo());
+
+                        foreach (CentroCosto c in original)
+                        {
+                            await IRC.EliminarCeCo(c.Id_Ceco);
+                        }
+                        var OELista = (await IRE.GetAllOE());
+
+                        foreach (OrdenesEstadisticas oe in OELista)
+                        {
+                            await IRE.EliminarOE(oe.Id_Orden_Estadistica);
+                        }
+
+                        foreach (CentroCosto cc in lc)
+                        {
+                            string res = await IRC.Existe(cc.Codigo_Ceco);
+                            if (res == "ok")
+                                await IRC.Nuevo_CeCo(cc);
+                                
+                            else
+                            {
+                                cc.Activado = true;
+                                await IRC.ModificarCeCo(cc);
+                            }
+                        }
+
+                        return Ok("Generado correctamente");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
+            }
+        }
+    }
+}
+
+     

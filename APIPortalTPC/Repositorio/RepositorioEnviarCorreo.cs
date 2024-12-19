@@ -146,7 +146,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="subject"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> CorreoRecepciones(Usuario U, string subject, List<int> Id_Ticket)
+        public async Task<string> CorreoRecepciones(Usuario U, string subject, int Id_Ticket)
         {
             //al solicitante no fue recepcionada, no se sabe el estado, parcialmente y cuando no hay respuesta
             // Configuración del servidor SMTP
@@ -160,10 +160,7 @@ namespace APIPortalTPC.Repositorio
             StringBuilder sb = new StringBuilder();
 
             string resultado = "";
-            foreach (int numero in Id_Ticket)
-            {
-                resultado += $"N° Ticket: {numero} \n\n\n";
-            }
+
             string htmlBody = $@"
             <html>
 
@@ -174,7 +171,7 @@ namespace APIPortalTPC.Repositorio
                     <div style='padding: 20px; font-family: Arial, sans-serif;'>
                         <p>Estimado(a):</p>
                         <p>Por favor, confirmar recepción del siguiente Ticket:</p>
-                            {Id_Ticket[0]}
+                            {Id_Ticket}
                             <table>
 
                         </div>
@@ -217,21 +214,21 @@ namespace APIPortalTPC.Repositorio
 
         public async Task<string> CorreoUsuarioPass(Usuario U)
         {
-            // Configuración del servidor SMTP
+           // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
             string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             //Nombre del mensaje
-            string subject = "Contraseña nueva";
+            string subject = "Recuperar contraseña";
             // Cuerpo del mensaje en HTML sobre la liberación urgente
             string htmlBody = $@"<html>
             <head></head>
             <body>
             <p style='font-size: 16px; color: #333;'>Estimado/a {U.Nombre_Usuario},</p>
 
-                <p>Su contraseña para activar su cuenta es la siguiente: </p>
+                <p>Su contraseña: </p>
                 <ul>
                 <li>{U.Contraseña_Usuario}</li> 
                 </ul>
@@ -239,6 +236,7 @@ namespace APIPortalTPC.Repositorio
                 <strong>Terminal Puerto de Coquimbo</strong></p>
             </body>
         </html>";
+
 
             try
             {

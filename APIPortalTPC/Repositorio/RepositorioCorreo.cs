@@ -275,6 +275,7 @@ namespace APIPortalTPC.Repositorio
                     C.detalle = Convert.ToString(reader["detalle"]).Trim();
                     C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
                     C.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                   
                 }
             }
             catch (SqlException ex)

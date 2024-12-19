@@ -157,12 +157,16 @@ namespace APIPortalTPC.Repositorio
                 while (reader.Read())
                 {
                     Reemplazos R = new();
+
                     R.ID_Reemplazos = Convert.ToInt32(reader["ID_Reemplazos"]);
                     R.Id_Usuario_Vacaciones = Convert.ToString(reader["U_Vacaciones"]).Trim();
                     R.Id_Usuario_Reemplazante = Convert.ToString(reader["U_Reemplazo"]).Trim();
                     R.Comentario = Convert.ToString(reader["Comentario"]).Trim();
                     R.Fecha_Retorno = (DateTime)reader["Fecha_Retorno"];
                     R.Valido = Convert.ToBoolean(reader["Valido"]);
+                    R.N_IdV = Convert.ToInt32(reader["Id_Usuario_Vacaciones"]);
+                    R.N_IdR = Convert.ToInt32(reader["Id_Usuario_Reemplazante"]);
+
 
                     lista.Add(R);
                 }
@@ -198,18 +202,17 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Reemplazos SET " +
-                    "Id_Usuario_Vacaciones = @Id_Usuario_Vacaciones, " +
-                    "Id_Usuario_Reemplazante = @Id_Usuario_Reemplazante, " +
+                    "Id_Usuario_Vacaciones = @IDV, " +
+                    "Id_Usuario_Reemplazante = @IDR, " +
                     "Comentario = @Comentario, " +
-                    "Fecha_Retorno = @Fecha_Retorno," +
+     
                     "Valido = @Valido " +
                     "WHERE ID_Reemplazos = @ID_Reemplazos";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = R.ID_Reemplazos;
-                Comm.Parameters.Add("@Id_Usuario_Vacaciones", SqlDbType.Int).Value = R.N_IdV;
-                Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.N_IdR;
+                Comm.Parameters.Add("@IDV", SqlDbType.Int).Value = R.N_IdV;
+                Comm.Parameters.Add("@IDR", SqlDbType.Int).Value = R.N_IdR;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
-                Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
                 Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;
 
                 reader = await Comm.ExecuteReaderAsync();

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Repositorio\RepositorioDepartamentoUsuario.cs~RFae641f8.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="EPPlus" Version="7.5.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />

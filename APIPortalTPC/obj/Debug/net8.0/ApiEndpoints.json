@@ -948,32 +948,32 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ContentType",
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Asunto",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ContentDisposition",
+        "Name": "iD_Bien_Servicio",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Mensaje",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Headers",
-        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
-        "IsRequired": false
-      },
-      {
-        "Name": "Length",
-        "Type": "System.Int64",
-        "IsRequired": false
-      },
-      {
-        "Name": "Name",
+        "Name": "Proveedor",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "FileName",
+        "Name": "Id_Cotizacion",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -2113,6 +2113,32 @@
         "Type": "ClasesBaseDatosTPC.Usuario",
         "IsRequired": true
       },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ClasesBaseDatosTPC.Usuario",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorUsuario",
+    "Method": "Eliminar",
+    "RelativePath": "api/ControladorUsuario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
         "Name": "id",
         "Type": "System.Int32",

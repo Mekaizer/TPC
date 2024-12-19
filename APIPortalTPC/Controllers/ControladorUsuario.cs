@@ -148,97 +148,98 @@ namespace APIPortalTPC.Controllers
         [HttpGet("Imprimir")]
         public async Task<IActionResult> DescargarExcel()
         {
-
-            // Configurar la licencia para EPPlus
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            var memoryStream = new MemoryStream();
-            // URL del archivo Excel (cambiar a una URL válida)
-
-            var LU = await RU.GetAllUsuario();
-            // Descargar o crear el archivo
             try
             {
-
-
-                // Crear un archivo Excel si falla la descarga
+                var LU = await RU.GetAllUsuario();
+                // Crear un nuevo archivo Excel
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var memoryStream = new MemoryStream();
                 using (ExcelPackage package = new ExcelPackage())
                 {
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaUsuario");
+
+                    // Encabezado
+                    worksheet.Cells[1, 1].Value = "ID Usuario";
+                    worksheet.Cells[1, 2].Value = "Nombre Usuario";
+                    worksheet.Cells[1, 3].Value = "Apellido Paterno";
+                    worksheet.Cells[1, 4].Value = "Apellido Materno";
+                    worksheet.Cells[1, 5].Value = "Rut";
+                    worksheet.Cells[1, 6].Value = "Correo Usuario";
+                    worksheet.Cells[1, 7].Value = "Contraseña Usuario";
+                    worksheet.Cells[1, 8].Value = "Activado";
+                    worksheet.Cells[1, 9].Value = "Liberador";
+                    worksheet.Cells[1, 10].Value = "En vacaciones";
+                    worksheet.Cells[1, 11].Value = "Admin";
+                    int row = 2;
+                    foreach (var U in LU)
                     {
+                        worksheet.Cells[row, 1].Value = U.Id_Usuario;
+                        worksheet.Cells[row, 2].Value = U.Nombre_Usuario;
+                        worksheet.Cells[row, 3].Value = U.Apellido_paterno;
+                        worksheet.Cells[row, 4].Value = U.Apellido_materno;
+                        worksheet.Cells[row, 5].Value = U.Rut_Usuario;
+                        worksheet.Cells[row, 6].Value = U.Correo_Usuario;
+                        worksheet.Cells[row, 7].Value = U.Contraseña_Usuario;
+                        worksheet.Cells[row, 8].Value = U.Activado;
+                        if (U.Activado == true)
+                            worksheet.Cells[row, 8].Value = "Si";
+                        else
+                            worksheet.Cells[row, 8].Value = "No";
 
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaUsuario");
+                        worksheet.Cells[row, 9].Value = U.Tipo_Liberador;
+                        if (U.Tipo_Liberador == true)
+                            worksheet.Cells[row, 9].Value = "Si";
+                        else
+                            worksheet.Cells[row, 9].Value = "No";
+                        worksheet.Cells[row, 10].Value = U.En_Vacaciones;
+                        if (U.En_Vacaciones == true)
+                            worksheet.Cells[row, 10].Value = "Si";
+                        else
+                            worksheet.Cells[row, 10].Value = "No";
 
-                        // Encabezado
-                        worksheet.Cells[1, 1].Value = "ID Usuario";
-                        worksheet.Cells[1, 2].Value = "Nombre Usuario";
-                        worksheet.Cells[1, 3].Value = "Apellido Paterno";
-                        worksheet.Cells[1, 4].Value = "Apellido Materno";
-                        worksheet.Cells[1, 5].Value = "Rut";
-                        worksheet.Cells[1, 6].Value = "Correo Usuario";
-                        worksheet.Cells[1, 7].Value = "Contraseña Usuario";
-                        worksheet.Cells[1, 8].Value = "Activado";
-                        worksheet.Cells[1, 9].Value = "Liberador";
-                        worksheet.Cells[1, 10].Value = "En vacaciones";
-                        worksheet.Cells[1, 11].Value = "Admin";
-                        int row = 2;
-                        foreach (var U in LU)
-                        {
-                            worksheet.Cells[row, 1].Value = U.Id_Usuario;
-                            worksheet.Cells[row, 2].Value = U.Nombre_Usuario;
-                            worksheet.Cells[row, 3].Value = U.Apellido_paterno;
-                            worksheet.Cells[row, 4].Value = U.Apellido_materno;
-                            worksheet.Cells[row, 5].Value = U.Rut_Usuario;
-                            worksheet.Cells[row, 6].Value = U.Correo_Usuario;
-                            worksheet.Cells[row, 7].Value = U.Contraseña_Usuario;
-                            worksheet.Cells[row, 8].Value = U.Activado;
-                            if (U.Activado == true)
-                                worksheet.Cells[row, 8].Value = "Si";
-                            else
-                                worksheet.Cells[row, 8].Value = "No";
-
-                            worksheet.Cells[row, 9].Value = U.Tipo_Liberador;
-                            if (U.Tipo_Liberador == true)
-                                worksheet.Cells[row, 9].Value = "Si";
-                            else
-                                worksheet.Cells[row, 9].Value = "No";
-                            worksheet.Cells[row, 10].Value = U.En_Vacaciones;
-                            if (U.En_Vacaciones == true)
-                                worksheet.Cells[row, 10].Value = "Si";
-                            else
-                                worksheet.Cells[row, 10].Value = "No";
-
-                            worksheet.Cells[row, 11].Value = U.Admin;
-                            if (U.Activado == true)
-                                worksheet.Cells[row, 11].Value = "Si";
-                            else
-                                worksheet.Cells[row, 11].Value = "No";
-                            row++;
-                        }
-
-
-                        package.SaveAs(memoryStream);
-                        memoryStream.Position = 0;
-
+                        worksheet.Cells[row, 11].Value = U.Admin;
+                        if (U.Activado == true)
+                            worksheet.Cells[row, 11].Value = "Si";
+                        else
+                            worksheet.Cells[row, 11].Value = "No";
+                        row++;
                     }
 
-                }
 
+
+                    package.SaveAs(memoryStream);
+                    memoryStream.Position = 0;
+
+                }
                 var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 var fileName = "ListaUsuario_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mmss") + ".xlsx";
                 return File(memoryStream, contentType, fileName, true);
             }
-        
-
-
-               
-      
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
-
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Usuario>> Eliminar(int id)
+        {
+            try
+            {
+                Usuario u = await RU.GetUsuario(id);
+                if (u == null)
+                {
+                    return NotFound("No se encontro el Usuario");
+                }
+                u.Activado = false;
+                return Ok(await RU.ModificarUsuario(u));
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
+            }
+        }
     }
 }

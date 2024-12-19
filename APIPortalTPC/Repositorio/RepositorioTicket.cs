@@ -356,7 +356,7 @@ namespace APIPortalTPC.Repositorio
 
                 }
                 if (cont == 0)
-                    T.Estado = "Espera de liberacion";
+                    T.Estado = "OC Enviada";
 
                 else if (cont == total)
                     T.Estado = "OC Recepcionada";

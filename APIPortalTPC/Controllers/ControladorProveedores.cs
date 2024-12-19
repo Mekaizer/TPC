@@ -108,16 +108,14 @@ namespace APIPortalTPC.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Proveedores>> Modificar(Proveedores P, int id)
         {
+            Console.WriteLine(P.Estado);
+
             try
             {
                 if (id != P.ID_Proveedores)
                     return BadRequest("La Id no coincide");
 
-                var Modificar = await RP.GetProveedor(id);
-
-                if (Modificar == null)
-                    return NotFound($"Proveedor con = {id} no encontrado");
-
+              
                 return await RP.ModificarProveedor(P);
             }
             catch (Exception ex)
