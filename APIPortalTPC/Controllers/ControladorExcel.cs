@@ -138,7 +138,7 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
         public async Task<ActionResult> ExcelBS([FromForm]IFormFile file)
         {
             if (file == null || file.Length == 0)
-            {
+            { 
                 return BadRequest("Please select a file to upload.");
             }
 
@@ -192,59 +192,82 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-            }
-        }
+            }            }
 
         /// <summary>
         /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos, tambien añade las ordenes estadisticas!!!
         /// </summary>
         /// <returns></returns>
         [HttpPost("CeCo")]
-        public async Task<ActionResult> ExcelCeCo([FromForm] FormData formData)
+        public async Task<ActionResult> ExcelCeCo([FromForm] IFormFile file)
         {
-
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please select a file to upload.");
+            }
             try
             {
-                using (var stream = formData.file.OpenReadStream())
-                using (var package = new ExcelPackage(stream))
                 using (var memoryStream = new MemoryStream())
-                {
 
+                {
+                    await file.CopyToAsync(memoryStream);
                     byte[] Archivo = memoryStream.ToArray();
 
                     {
 
 
-                        List<CentroCosto> lc = (await Excel.LeerExcelCeCo(Archivo));
                         //string path = @"C:\Users\drako\Desktop\cap.xlsx";
-                        var original = (await IRC.GetAllCeCo());
+                        var original = await IRE.GetAllOE();
 
-                        foreach (CentroCosto c in original)
+                        foreach (OrdenesEstadisticas c in original)
                         {
-                            await IRC.EliminarCeCo(c.Id_Ceco);
+                    
+                             await IRE.EliminarOE(c.Id_Orden_Estadistica);
                         }
-                        var OELista = (await IRE.GetAllOE());
+                        var lc = (await Excel.LeerExcel(Archivo));
 
-                        foreach (OrdenesEstadisticas oe in OELista)
+                        foreach (OrdenesEstadisticas cc in (List<OrdenesEstadisticas>)lc)
                         {
-                            await IRE.EliminarOE(oe.Id_Orden_Estadistica);
-                        }
+                            string CecoExiste = await IRC.Existe(cc.Id_Centro_de_Costo);
+                            CentroCosto Ceco = new();
+                            if (CecoExiste == "ok")
+                            {
+                                //se crea
+                                Ceco.Codigo_Ceco = cc.Id_Centro_de_Costo;
+                                Ceco.Nombre = cc.nombreCeCo;
+                                Ceco = await IRC.Nuevo_CeCo(Ceco);
+                            }
+                            else
+                            {//se busca
+                                Ceco = await IRC.GetCeCo(cc.Id_Centro_de_Costo);
 
-                        foreach (CentroCosto cc in lc)
-                        {
-                            string res = await IRC.Existe(cc.Codigo_Ceco);
-                            if (res == "ok")
-                                await IRC.Nuevo_CeCo(cc);
-                                
+                            }
+
+                            cc.Id_Centro_de_Costo = Ceco.Id_Ceco.ToString();
+                            cc.Activado = true;
+                            string res = await IRE.Existe(cc.Codigo_OE);
+
+                            if (res == "ok") {
+                                cc.Id_CeCo = Ceco.Id_Ceco;
+
+                                await IRE.NuevoOE(cc);
+                            }
+
+
                             else
                             {
-                                cc.Activado = true;
-                                await IRC.ModificarCeCo(cc);
-                            }
-                        }
 
-                        return Ok("Generado correctamente");
+                            OrdenesEstadisticas old = await IRE.GetOECode(cc.Codigo_OE);
+                            cc.Activado = true;
+                            cc.Id_CeCo = old.Id_CeCo;
+                            cc.Id_Orden_Estadistica = old.Id_Orden_Estadistica;
+                            await IRE.ModificarOE(cc);
+                            }
+
+                        }
                     }
+
+                    return Ok(true);
                 }
             }
             catch (Exception ex)

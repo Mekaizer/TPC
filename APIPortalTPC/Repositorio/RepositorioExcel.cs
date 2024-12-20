@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using System.Globalization;
 using System.Collections.Generic;
 using NPOI.SS.UserModel;
+using NPOI.SS.Formula.Functions;
 
 
 
@@ -100,15 +101,15 @@ namespace APIPortalTPC.Repositorio
                 for (int row = 2; row <= rowCount; row++)
                 {
                     string Namea = "";
-                    if (worksheet.Cells[row, 4].Value is string)
+                    if (worksheet.Cells[row, 2].Value is string)
                     {
-                        Namea = worksheet.Cells[row, 4].Value.ToString();
+                        Namea = worksheet.Cells[row, 2].Value.ToString();
 
                     }
 
                     var centroCosto = new CentroCosto
                     {
-                        Codigo_Ceco = worksheet.Cells[row, 2].Value.ToString(),
+                        Codigo_Ceco = worksheet.Cells[row, 1].Value.ToString(),
 
                         Nombre = Namea
                     };
@@ -126,7 +127,7 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         public async Task<List<OrdenesEstadisticas>> LeerExcel(byte[] archivo)
         {
-            var LOE = new List<OrdenesEstadisticas>();
+            List<OrdenesEstadisticas> LOE = new List<OrdenesEstadisticas>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 
@@ -137,27 +138,28 @@ namespace APIPortalTPC.Repositorio
                 var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == "Hoja1") ??
                          package.Workbook.Worksheets.FirstOrDefault();
 
-
-                int rowCount = worksheet.Dimension.Rows;
-                for (int row = 2; row <= rowCount; row++)
-                {
-                    string Namea = "";
-                    if (worksheet.Cells[row, 3].Value is string)
+                int rowCount = worksheet.Dimension.Rows+3;
+                Console.WriteLine("Rcantida" + rowCount);
+                for (int row = 4; row <= rowCount; row++)
                     {
-                        Namea = worksheet.Cells[row, 3].Value.ToString();
+                    if (row != 4)
+                    {
+                        OrdenesEstadisticas OE = new();
+                        OE.Codigo_OE = worksheet.Cells[row, 2].Value?.ToString();
+                        OE.Nombre = worksheet.Cells[row, 3].Value?.ToString();
+                        OE.Id_Centro_de_Costo = worksheet.Cells[row, 4].Value?.ToString();
+                        OE.nombreCeCo = worksheet.Cells[row, 5].Value?.ToString();
+                        LOE.Add(OE);
+                     
+                    }
+                    //¿existe el centro de costo?
+                    
 
                     }
-
-                    var OE = new OrdenesEstadisticas
-                    {
-                        Codigo_OE = worksheet.Cells[row, 2].Value.ToString(),
-                        Id_Centro_de_Costo = worksheet.Cells[row, 2].Value.ToString(),
-                        Nombre = Namea
-                    };
-
-                    LOE.Add(OE);
                 }
-            }
+
+
+            Console.WriteLine(LOE.Count);
             return LOE;
         }
         /// <summary>

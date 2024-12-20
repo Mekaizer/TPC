@@ -53,7 +53,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.CommandText = "SELECT * FROM dbo.Centro_de_costo where Id_Ceco = @Id_Ceco";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = cc.Id_Ceco;
+                Comm.Parameters.Add("@Id_Ceco", SqlDbType.Int).Value = IdCECO;
                 //permite regresar objetos de la base de datos para que se puedan leer
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
@@ -195,7 +195,7 @@ namespace APIPortalTPC.Repositorio
             }
             catch (SqlException ex)
             {
-                throw new Exception("Error creando los datos en tabla Centro de costo " + ex.Message);
+                throw new Exception("Error creando los datos en tabla Centro de costo!! " + ex.Message);
             }
             finally
             {
@@ -272,6 +272,53 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Dispose();
             }
             return ccmod;
+        }
+        public async Task<CentroCosto> GetCeCo(string code)
+        {
+            //Parametro para guardar el objeto a mostrar
+            CentroCosto cc = new();
+            //Se realiza la conexion a la base de datos
+            SqlConnection sql = conectar();
+            //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
+            SqlCommand? Comm = null;
+            //parametro para leer los resultados de una consulta
+            SqlDataReader reader = null;
+            try
+            {
+                //Se crea la instancia con la conexion SQL para interactuar con la base de datos
+                sql.Open();
+                //se ejecuta la base de datos
+                Comm = sql.CreateCommand();
+                //se realiza la accion correspondiente en la base de datos
+                //muestra los datos de la tabla correspondiente con sus condiciones
+                Comm.CommandText = "SELECT * FROM dbo.Centro_de_costo where Codigo_Ceco = @Id_Ceco";
+                Comm.CommandType = CommandType.Text;
+                //se guarda el parametro 
+                Comm.Parameters.Add("@Id_Ceco", SqlDbType.VarChar).Value = code;
+                //permite regresar objetos de la base de datos para que se puedan leer
+                reader = await Comm.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    cc.Id_Ceco = Convert.ToInt32(reader["Id_CeCo"]);
+                    cc.Nombre = (Convert.ToString(reader["NombreCeCo"])).Trim();
+                    cc.Codigo_Ceco = (Convert.ToString(reader["Codigo_Ceco"])).Trim();
+                    cc.Activado = Convert.ToBoolean(reader["Activado"]);
+
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Error cargando los datos tabla Centro de costo " + ex.Message);
+            }
+            finally
+            {
+                //Se cierran los objetos 
+                reader.Close();
+                Comm.Dispose();
+                sql.Close();
+                sql.Dispose();
+            }
+            return cc;
         }
     }
 }

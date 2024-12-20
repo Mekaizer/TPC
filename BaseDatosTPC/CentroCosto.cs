@@ -23,5 +23,6 @@ namespace BaseDatosTPC
         public string? Nombre { get; set; }
 
         public bool Activado { get;set; }
+        
     }
 }

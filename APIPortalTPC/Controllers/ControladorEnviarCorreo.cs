@@ -161,7 +161,7 @@ namespace APIPortalTPC.Controllers
 
 
         /// <summary>
-        /// Solicitantes para confirmar que tienen OC pendientes de recepcionar!
+        /// Solicitantes para confirmar que tienen OC pendientes de recepcionar, tambien aumenta el contador de correos enviados y crea o actualiza la tabla de recepcion.
         /// </summary>
         /// <param name="LID"></param>
         /// <returns></returns>
@@ -180,7 +180,7 @@ namespace APIPortalTPC.Controllers
 
                     Ticket T = await IRT.GetTicket(i);
                     Correo C = await IRCo.GetCorreoPorTicket(T.ID_Ticket) ;
-                    Console.WriteLine(T.Id_U);
+     
                     Usuario U = await IRU.GetUsuario(T.Id_U);
                     if (U.Activado)
                     {
@@ -189,8 +189,9 @@ namespace APIPortalTPC.Controllers
                         //cambiar estado ticket
                         C.CorreosEnviados += 1;
                         C.UltimoCorreo = DateTime.Now;
+                        await IRCo.ModificarCorreo(C);
                         string res = await IRRe.Existe(C.Id_Correo);
-                        Correo newC = await IRCo.ModificarCorreo(C);
+                        Console.WriteLine(res);
          
                         //si existe recepcion
                         //buscar si esta en recepcion
@@ -201,17 +202,12 @@ namespace APIPortalTPC.Controllers
                             Recepcion newR = new Recepcion();
                             newR.Id_Correo = C.Id_Correo;
                             newR.FechaEnvio = C.FechaCreacion;
-                        }
-                        else
-                        {   //si esta se edita
-                            Console.WriteLine(C.Id_Correo);
-                            //Recepcion Rec = await IRRe.GetRecepcionPorCorreo((int)C.Id_Correo);
-                            //Rec.Id_Correo = C.Id_Correo;
-            
-                            //await IRRe.NuevaRecepcion(Rec);
+                            newR.Comentarios = C.detalle;
+                            newR.Respuesta = "";
+                            await IRRe.NuevaRecepcion(newR);
                         }
 
-
+                  
                       
 
                     }
@@ -224,7 +220,7 @@ namespace APIPortalTPC.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron Receptores ");
+                return StatusCode(StatusCodes.Status404NotFound, " No se encontraron Receptores "+ex);
             }
 
 

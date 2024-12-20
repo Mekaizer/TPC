@@ -8,6 +8,7 @@ namespace APIPortalTPC.Repositorio
         public Task <IEnumerable<Cotizacion>> GetAllCotizacion();
         public Task<Cotizacion> ModificarCotizacion(Cotizacion cotizacion);
         public Task<Cotizacion> EliminarCotizacion(int cotizacion);
+
         
     }
 }

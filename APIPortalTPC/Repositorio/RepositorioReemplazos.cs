@@ -202,15 +202,14 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Reemplazos SET " +
-                    "Id_Usuario_Vacaciones = @IDV, " +
+
                     "Id_Usuario_Reemplazante = @IDR, " +
                     "Comentario = @Comentario, " +
      
                     "Valido = @Valido " +
-                    "WHERE ID_Reemplazos = @ID_Reemplazos";
+                    "WHERE ID_Reemplazos = @ID_Reemplazos ";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@ID_Reemplazos", SqlDbType.Int).Value = R.ID_Reemplazos;
-                Comm.Parameters.Add("@IDV", SqlDbType.Int).Value = R.N_IdV;
                 Comm.Parameters.Add("@IDR", SqlDbType.Int).Value = R.N_IdR;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;

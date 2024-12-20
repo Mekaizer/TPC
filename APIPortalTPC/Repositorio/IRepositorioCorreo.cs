@@ -9,6 +9,7 @@ namespace APIPortalTPC.Repositorio
         public Task<IEnumerable<Correo>> GetAllCorreo();
         public Task<Correo> ModificarCorreo(Correo C);
         public Task<Correo> GetCorreoPorTicket(int id);
+        public Task<string> Existe(int id);
 
     }
 }

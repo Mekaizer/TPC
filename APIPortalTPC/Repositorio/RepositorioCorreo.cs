@@ -293,5 +293,30 @@ namespace APIPortalTPC.Repositorio
             return C;
         }
 
+        public async Task<string> Existe(int id)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Correo WHERE Id_Ticket = @T";
+                    command.Parameters.AddWithValue("@T", id);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "El Correo ya existe";
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
+        }
     }
 }

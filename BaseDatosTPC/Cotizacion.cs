@@ -17,6 +17,7 @@ namespace BaseDatosTPC
         /// Id del usuario que ha solicitado la solicitud
         /// </summary>
         public string? Id_Solicitante { get; set; }
+        public int? IdS { get; set; }
         /// <summary>
         /// Guarda la fecha de creacion
         /// </summary>

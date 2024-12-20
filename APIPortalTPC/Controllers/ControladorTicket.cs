@@ -144,6 +144,7 @@ namespace APIPortalTPC.Controllers
                         }
                         return Ticket;
                     }
+                   
  
                 }
 
@@ -257,7 +258,11 @@ namespace APIPortalTPC.Controllers
                 C.CeCo = T.Id_OE;
                 C.CorreosEnviados = 0;
                 C.detalle = T.Detalle;
-                await IRC.NuevoCorreo(C);
+                string res = await IRC.Existe((int)T.ID_Ticket);
+                if (res.Equals("ok"))
+                {
+                    await IRC.NuevoCorreo(C);
+                }
                 return Ok("Recepcionado con exito");
             }
             catch (Exception ex)

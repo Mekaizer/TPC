@@ -948,32 +948,32 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "file",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      },
-      {
-        "Name": "Asunto",
+        "Name": "ContentType",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "iD_Bien_Servicio",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "Mensaje",
+        "Name": "ContentDisposition",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Proveedor",
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Id_Cotizacion",
+        "Name": "FileName",
         "Type": "System.String",
         "IsRequired": false
       }

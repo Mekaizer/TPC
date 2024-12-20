@@ -11,5 +11,6 @@ namespace APIPortalTPC.Repositorio
         public Task<OrdenesEstadisticas> EliminarOE(int OE);
 
         public Task<string> Existe(string code);
+        public Task<OrdenesEstadisticas> GetOECode(string id);
     }
 }

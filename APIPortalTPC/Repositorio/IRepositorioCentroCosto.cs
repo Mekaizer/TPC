@@ -10,5 +10,6 @@ namespace APIPortalTPC.Repositorio
         public Task<CentroCosto> ModificarCeCo(CentroCosto CeCo);
         public Task<CentroCosto> EliminarCeCo(int CeCo);
         public Task<string> Existe(string Ceco);
+        public Task<CentroCosto> GetCeCo(string code);
     }
 }

@@ -52,7 +52,7 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio 
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
                 LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio 
@@ -72,6 +72,7 @@ namespace APIPortalTPC.Repositorio
                         //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                         ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
                         Id_Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim(),
+                        IdS = Convert.ToInt32(reader["Id_Solicitante"]),
                     };
 
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
@@ -121,7 +122,7 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio, b.ID_Bien_Servicio  
+                Comm.CommandText = @"SELECT c.*, u.Nombre_Usuario, b.Bien_Servicio, b.ID_Bien_Servicio  , u.Id_Usuario 
                 FROM dbo.Cotizacion c 
                 INNER JOIN dbo.Usuario u ON c.Id_Solicitante = u.Id_Usuario 
                 LEFT JOIN dbo.Bien_Servicio b ON c.ID_Bien_Servicio = b.ID_Bien_Servicio ";// leer base datos 
@@ -135,9 +136,11 @@ namespace APIPortalTPC.Repositorio
                         //Se asegura que no sean valores nulos, si es nulo se reemplaza por un valor valido
                         ID_Cotizacion = Convert.ToInt32(reader["ID_Cotizacion"]),
                         Id_Solicitante = Convert.ToString(reader["Nombre_Usuario"]).Trim(),
+                        IdS = Convert.ToInt32(reader["Id_Solicitante"]),
                     };
 
                     object fechaCreacionCotizacionObject = reader["Fecha_Creacion_Cotizacion"];
+
                     cot.Fecha_Creacion_Cotizacion = (DateTime)fechaCreacionCotizacionObject;
                     cot.Estado = (Convert.ToString(reader["Estado"])).Trim();
                     cot.Detalle = Convert.ToString(reader["Detalle"]).Trim();
@@ -170,8 +173,6 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        //OJO, quizas hay que mostrar mas si hay ID Orden Compra o Solped... no recuerdo que habia que mostrar
-
 
         /// <summary>
         /// Pide un objeto ya hecho para ser reemplazado por uno ya terminado
@@ -247,7 +248,7 @@ namespace APIPortalTPC.Repositorio
                     "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@ID_Bien_Servicio,@Detalle,@Solped) " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Solicitante;
+                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.IdS;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
                 if (cotizacion.Id_Bien_Servicio != null)

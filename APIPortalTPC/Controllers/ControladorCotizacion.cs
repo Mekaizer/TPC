@@ -92,6 +92,7 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
+
                 return Ok(await RC.GetAllCotizacion());
             }
             catch (Exception ex)

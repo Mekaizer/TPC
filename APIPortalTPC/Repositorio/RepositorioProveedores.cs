@@ -156,7 +156,7 @@ namespace APIPortalTPC.Repositorio
 
                     Comm.Parameters.Add("@N_Cuenta", SqlDbType.VarChar, 500).Value = P.N_Cuenta;
                     Comm.Parameters.Add("@Banco", SqlDbType.VarChar, 500).Value = P.Banco;
-                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 500).Value = P.Rut_Proveedor;
+                    Comm.Parameters.Add("@Swift", SqlDbType.VarChar, 500).Value = "0";
 
                     Comm.Parameters.Add("@ID_Proveedores", SqlDbType.Int).Value = P.ID_Proveedores;
 

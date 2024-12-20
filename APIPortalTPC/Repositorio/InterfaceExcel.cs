@@ -14,6 +14,7 @@ namespace APIPortalTPC.Repositorio
         public Task<string> ActualizarOC(byte[] archivo);
         public Task<List<BienServicio>> LeerBienServicio(byte[] archivo);
         public Task<string>  LeerExcelOC(byte[] archivo);
+        public Task<List<OrdenesEstadisticas>> LeerExcel(byte[] archivo);
 
 
     }

@@ -24,7 +24,8 @@ namespace BaseDatosTPC
         /// Id del centro de costo asociado
         /// </summary>
         public string? Id_Centro_de_Costo { get; set; }
-        public int Id_CeCo { get; set; }
+        public string? nombreCeCo { get; set;  }
+        public int? Id_CeCo { get; set; }
         public bool Activado { get; set; }
 
     }
