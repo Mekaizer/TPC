@@ -47,7 +47,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@PrimerCorreo", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@detalle", SqlDbType.VarChar, 500).Value = C.detalle;
-                Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = C.Numero_OC;
+                Comm.Parameters.Add("@Numero_OC", SqlDbType.BigInt).Value = C.Numero_OC;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 C.Id_Correo = (int)idDecimal;
             }
@@ -110,7 +110,7 @@ namespace APIPortalTPC.Repositorio
                     C.UltimoCorreo = Convert.ToDateTime(reader["UltimoCorreo"]);
                     C.detalle = Convert.ToString(reader["detalle"]).Trim();
                     C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
-                    C.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    C.Numero_OC = Convert.ToInt64(reader["Numero_OC"]);
                 }
             }
             catch (SqlException ex)
@@ -162,7 +162,7 @@ namespace APIPortalTPC.Repositorio
                     C.UltimoCorreo = Convert.ToDateTime(reader["UltimoCorreo"]);
                     C.detalle = Convert.ToString(reader["detalle"]).Trim();
                     C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
-                    C.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    C.Numero_OC = Convert.ToInt64(reader["Numero_OC"]);
                     lista.Add(C);
                 }
             }
@@ -199,7 +199,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Correo", SqlDbType.Int).Value = C.Id_Correo;
                 Comm.Parameters.Add("CorreosEnviados",SqlDbType.Int).Value = C.CorreosEnviados;
                 Comm.Parameters.Add("@detalle", SqlDbType.VarChar).Value = C.detalle;
-                Comm.Parameters.Add("@Numero_OC", SqlDbType.Int).Value = C.Numero_OC;
+                Comm.Parameters.Add("@Numero_OC", SqlDbType.BigInt).Value = C.Numero_OC;
                 Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = C.UltimoCorreo;
 
                 reader = await Comm.ExecuteReaderAsync();
@@ -274,7 +274,7 @@ namespace APIPortalTPC.Repositorio
                     C.UltimoCorreo = Convert.ToDateTime(reader["UltimoCorreo"]);
                     C.detalle = Convert.ToString(reader["detalle"]).Trim();
                     C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
-                    C.Numero_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    C.Numero_OC = Convert.ToInt64(reader["Numero_OC"]);
                    
                 }
             }

@@ -248,7 +248,7 @@ namespace APIPortalTPC.Repositorio
                     "VALUES (@Id_Solicitante,@Fecha_Creacion_Cotizacion,@Estado,@ID_Bien_Servicio,@Detalle,@Solped) " +
                     "SELECT SCOPE_IDENTITY() AS ID_Cotizacion";
                 Comm.CommandType = CommandType.Text;
-                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.IdS;
+                Comm.Parameters.Add("@Id_Solicitante", SqlDbType.Int).Value = cotizacion.Id_Bien_Servicio;
                 Comm.Parameters.Add("@Fecha_Creacion_Cotizacion", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@Estado", SqlDbType.VarChar, 50).Value = cotizacion.Estado;
                 if (cotizacion.Id_Bien_Servicio != null)

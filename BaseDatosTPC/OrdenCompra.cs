@@ -16,7 +16,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Codigo de la orden de compra
         /// </summary>
-        public int? Numero_OC { get; set; }
+        public long? Numero_OC { get; set; }
         /// <summary>
         /// Id del ticket asociado a la orden de compra
         /// </summary>
@@ -51,7 +51,7 @@ namespace BaseDatosTPC
         /// <summary>
         /// Codigo del material
         /// </summary>
-        public int? Material { get; set; }
+        public long? Material { get; set; }
         /// <summary>
         /// Valor del total
         /// </summary>

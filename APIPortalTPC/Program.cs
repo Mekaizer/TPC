@@ -51,15 +51,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-/* Certificado SSL
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.ConfigureHttpsDefaults(options =>
-    {
-        options.ServerCertificate = new X509Certificate2("ruta/a/tu/certificado.pfx", "tu_contraseña");
-    });
-});
-*/
+
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();

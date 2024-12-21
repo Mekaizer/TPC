@@ -1,8 +1,10 @@
 ﻿using APIPortalTPC.Datos;
 using ClasesBaseDatosTPC;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net.Mail;
+using System.Security.Policy;
 
 
 namespace APIPortalTPC.Repositorio
@@ -47,10 +49,9 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "SELECT * FROM dbo.Usuario " +
-                                   "WHERE Contraseña_Usuario = @pass AND Correo_Usuario = @correo";
+                                   "WHERE Correo_Usuario = @correo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.AddWithValue("@correo", correo);
-                Comm.Parameters.AddWithValue("@pass", pass);
 
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -86,9 +87,12 @@ namespace APIPortalTPC.Repositorio
                 sql.Close();
                 sql.Dispose();
             }
-            
+            Console.WriteLine(pass);
+            //if (BCrypt.Net.BCrypt.Verify(pass,U.Contraseña_Usuario)) return U;
 
-            return U;
+
+            //else
+                return new Usuario();
         }
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace APIPortalTPC.Repositorio
             int codigoVerificacion = random.Next(100000, 999999);
             string smtpServer = " tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP
             int smtpPort = 25; // Cambia el puerto si es necesario
-            string fromEmail = "portaldeadq@tpc.cl"; // Cambia esto a tu correo
+            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto a tu correo
             string subject = "Código de Verificación - Autenticación en dos pasos";
             // Crear el cuerpo del mensaje
             string body = $@"

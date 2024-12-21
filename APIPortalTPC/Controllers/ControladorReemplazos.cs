@@ -129,13 +129,13 @@ namespace APIPortalTPC.Controllers
             try
             {
                 //sacar a ambos usuarios
-                Console.WriteLine(id);
+
                 Reemplazos R = await RR.GetReemplazo(id);
                 //luego desactivar Reemplazo
                 R.Valido = false;
 
                 Usuario U = await RU.GetUsuario(R.N_IdV);
-                Console.WriteLine(R.N_IdV);
+
                 if (U.Id_Usuario != 0)
                 {
                     await RU.ModificarUsuario(U);

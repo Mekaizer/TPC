@@ -23,7 +23,7 @@ namespace BaseDatosTPC
         public DateTime? PrimerCorreo { get; set; }
         public DateTime? UltimoCorreo { get; set; }
         public string? detalle { get; set; }    
-        public int Numero_OC { get; set; }
+        public long Numero_OC { get; set; }
 
     }
 }

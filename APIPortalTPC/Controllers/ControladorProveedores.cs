@@ -108,7 +108,7 @@ namespace APIPortalTPC.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Proveedores>> Modificar(Proveedores P, int id)
         {
-            Console.WriteLine(P.Estado);
+  
 
             try
             {

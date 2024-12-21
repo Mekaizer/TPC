@@ -129,7 +129,7 @@ namespace APIPortalTPC.Repositorio
                     string Prov = Convert.ToString(reader["ID_Proveedores"]);
                     Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     oc.Proveedor = Prov;
-                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.Material = Convert.ToInt64(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
                     oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
@@ -192,7 +192,7 @@ namespace APIPortalTPC.Repositorio
                     string Prov = Convert.ToString(reader["ID_Proveedores"]);
                     Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     oc.Proveedor = Prov;
-                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.Material = Convert.ToInt64(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
                     oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);
@@ -251,7 +251,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Mon", SqlDbType.VarChar, 100).Value = OC.Mon;
                 Comm.Parameters.Add("@PrcNeto", SqlDbType.Float).Value = OC.PrcNeto;
 
-                Comm.Parameters.Add("@Material", SqlDbType.Int).Value = OC.Material;
+                Comm.Parameters.Add("@Material", SqlDbType.BigInt).Value = OC.Material;
                 Comm.Parameters.Add("@ValorNeto", SqlDbType.Float).Value = OC.ValorNeto;
                 Comm.Parameters.Add("@Recepcion", SqlDbType.Bit).Value = OC.Recepcion;
 
@@ -362,7 +362,7 @@ namespace APIPortalTPC.Repositorio
                     string Prov = Convert.ToString(reader["ID_Proveedores"]);
                     Prov = Prov.Trim() + " " + Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     oc.Proveedor = Prov;
-                    oc.Material = Convert.ToInt32(reader["Material"]);
+                    oc.Material = Convert.ToInt64(reader["Material"]);
                     oc.ValorNeto = Convert.ToDecimal(reader["ValorNeto"]);
                     oc.Recepcion = Convert.ToBoolean(reader["Recepcion"]);
                     oc.Estado_OC = Convert.ToBoolean(reader["Estado_OC"]);

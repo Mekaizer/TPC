@@ -139,7 +139,7 @@ namespace APIPortalTPC.Repositorio
                          package.Workbook.Worksheets.FirstOrDefault();
 
                 int rowCount = worksheet.Dimension.Rows+3;
-                Console.WriteLine("Rcantida" + rowCount);
+
                 for (int row = 4; row <= rowCount; row++)
                     {
                     if (row != 4)
@@ -159,7 +159,6 @@ namespace APIPortalTPC.Repositorio
                 }
 
 
-            Console.WriteLine(LOE.Count);
             return LOE;
         }
         /// <summary>
@@ -205,7 +204,6 @@ namespace APIPortalTPC.Repositorio
 
 
 
-                        Console.WriteLine(columnaC);
 
                         SqlConnection sqlConexion = conectar();
                     SqlCommand? Comm = null;
@@ -377,10 +375,7 @@ namespace APIPortalTPC.Repositorio
                     OC.Id_Ticket = T.ID_Ticket;
                     T= await IRT.ModificarTicket(T);
                     OC= await IROC.NuevoOC(OC);
-                    Console.WriteLine(OC.Id_Orden_Compra);
-
-               
-
+            
 
 
                 }

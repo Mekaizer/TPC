@@ -22,7 +22,6 @@ namespace ClasesBaseDatosTPC
 
         public int? CodigoMFA { get; set; }
         public string? Nombre_Completo { get; set; }
-        public string? token { get; set; }
         public int Id_Departamento { get;set; }
 
 

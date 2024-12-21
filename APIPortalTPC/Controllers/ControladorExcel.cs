@@ -120,7 +120,7 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
                 try
                 {
                     //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
-                    Console.WriteLine();
+      
                     return Ok(await Excel.ActualizarOC(Archivo));
 
                 }

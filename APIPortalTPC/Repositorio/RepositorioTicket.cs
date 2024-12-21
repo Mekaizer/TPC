@@ -381,8 +381,6 @@ namespace APIPortalTPC.Repositorio
             finally
             {
 
-                Console.WriteLine(total);
-                Console.WriteLine(cont);
                 //Se cierran los objetos 
                 reader.Close();
                 Comm.Dispose();

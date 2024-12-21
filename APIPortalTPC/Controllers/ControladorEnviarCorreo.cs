@@ -53,11 +53,7 @@ namespace APIPortalTPC.Controllers
                      foreach (int ID in lis)
                      {
                     Proveedores P = await IRP.GetProveedor(ID);
-
-            
-
-                   //
-                   //await IEC.CorreoProveedores(P, formData);
+                    //await IEC.CorreoProveedores(P, formData);
     
                      }
 
@@ -121,15 +117,14 @@ namespace APIPortalTPC.Controllers
                     Ticket T = await IRT.GetTicket(id);
                     T.Estado = "OC Enviada";
                     await IRT.ModificarTicket(T);
-                    Console.WriteLine(T.Estado);
-
-                    Usuario U = await IRU.GetUsuario(T.ID_Ticket);
+            
+                    Usuario U = await IRU.GetUsuario(T.Id_U);
+       
                     bool enviado = false;
                     List<int> ldep = U.ListaIdDep;
                     int idT = 0;
                     foreach (int dep in ldep)
                     {
-
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
                         //await IEC.CorreoLiberador(U, subject);
@@ -139,8 +134,6 @@ namespace APIPortalTPC.Controllers
                     {
                         Liberadores lib = await IRL.Get(9);
                         //await IEC.CorreoLiberador(U, subject);
-            
-
                     }
                 }
          
@@ -191,7 +184,7 @@ namespace APIPortalTPC.Controllers
                         C.UltimoCorreo = DateTime.Now;
                         await IRCo.ModificarCorreo(C);
                         string res = await IRRe.Existe(C.Id_Correo);
-                        Console.WriteLine(res);
+
          
                         //si existe recepcion
                         //buscar si esta en recepcion

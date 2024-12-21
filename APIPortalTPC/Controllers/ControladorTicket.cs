@@ -112,7 +112,7 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Centro de Costo con = {id} no encontrado");
 
-                Console.WriteLine(T.Id_OE);
+
                 return await RT.ModificarTicket(T);
             }
             catch (Exception ex)
@@ -139,7 +139,7 @@ namespace APIPortalTPC.Controllers
                         var OC = await ROC.GetAllOCTicket(Ticket.ID_Ticket);
                         foreach (OrdenCompra cambia in OC)
                         {
-                            Console.Write(cambia.Id_Orden_Compra);
+                     
                             await ROC.ModificarOC(cambia);
                         }
                         return Ticket;

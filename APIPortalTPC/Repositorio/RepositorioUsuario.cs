@@ -4,7 +4,8 @@ using System.Data;
 using ClasesBaseDatosTPC;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
-
+using BCrypt.Net;
+using BaseDatosTPC;
 
 namespace APIPortalTPC.Repositorio
 {
@@ -46,6 +47,7 @@ namespace APIPortalTPC.Repositorio
             }
             else
             {
+
 
                 SqlConnection sql = conectar();
                 SqlCommand? Comm = null; ;
@@ -267,12 +269,16 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Rut_Usuario", SqlDbType.VarChar,50).Value = RutNormalizado(rut);
                 Comm.Parameters.Add("@Apellido_Materno", SqlDbType.VarChar, 50).Value = U.Apellido_materno;
                 Comm.Parameters.Add("@Correo_Usuario", SqlDbType.VarChar, 50).Value = U.Correo_Usuario;
-                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = U.Contraseña_Usuario;
+               
                 Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.Bit).Value = U.Tipo_Liberador;
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
-                if (U.CodigoMFA != null)
+                //if(U.CodigoMFA==0 || U.CodigoMFA== null)
+                    Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value =(U.Contraseña_Usuario);
+                //else
+                    //Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
+                if (U.CodigoMFA != null || U.CodigoMFA != 1)
                 {
                     Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = U.CodigoMFA;
                 }
@@ -531,11 +537,19 @@ namespace APIPortalTPC.Repositorio
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-
                     U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
+                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
+                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
+                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
                     U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
+                    U.Tipo_Liberador = (Convert.ToBoolean(reader["Tipo_Liberador"]));
+                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
+                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
+                    U.Activado = Convert.ToBoolean(reader["Activado"]);
+                    U.Admin = Convert.ToBoolean(reader["Admin"]);
                     U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    U.CodigoMFA = 0;
+                    U.Nombre_Completo = U.Nombre_Usuario + " " + U.Apellido_materno + " " + U.Apellido_paterno;
+                    U.CodigoMFA = 1;
 
                 }
             }
@@ -623,20 +637,6 @@ namespace APIPortalTPC.Repositorio
             return rutFormateado;
         }
 
-        /// <summary>
-        /// Metodo que transforma la contraseña a hashing
-        /// </summary>
-        /// <param name="password"></param>
-        /// <param name="salt"></param>
-        /// <returns></returns>
-        private static byte[] CrearHash(string pass, byte[] salt)
-        {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(pass, salt, 10000))
-            {
-                byte[] hash = pbkdf2.GetBytes(20); // 20 bytes para SHA-256
-                return hash;
-            }
-        }
     }
 
 

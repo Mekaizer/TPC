@@ -22,6 +22,7 @@ namespace APIPortalTPC.Repositorio
         public async Task<string> CorreoProveedores(Proveedores P, FormData formData)
         {
             // Configuración del servidor SMTP
+
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
             string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
@@ -29,7 +30,7 @@ namespace APIPortalTPC.Repositorio
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = P.Correo_Proveedor;
             string subject = formData.Asunto;
-            Console.WriteLine(formData.Mensaje);
+           
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
             string htmlBody = $@"
             <html>
@@ -92,10 +93,11 @@ namespace APIPortalTPC.Repositorio
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public async Task<string>   CorreoLiberador(Usuario U,string subject) {
+
             // Configuración del servidor SMTP
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "liberaciones@tpc.cl"; // Cambia esto por la dirección del remitente
+            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
             // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML sobre la liberación urgente
@@ -153,7 +155,7 @@ namespace APIPortalTPC.Repositorio
             //tienes una orden de compra pendiente a confirmar 
             string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
             int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "recepciones@tpc.cl"; // Cambia esto por la dirección del remitente
+            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
             // Pedir al usuario que ingrese el asunto del correo    
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado

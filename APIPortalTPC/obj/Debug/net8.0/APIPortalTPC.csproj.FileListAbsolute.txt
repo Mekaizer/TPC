@@ -121,3 +121,4 @@ C:\Users\drako\Documents\GitHub\TPC\APIPortalTPC\obj\Debug\net8.0\refint\APIPort
 C:\Users\drako\Documents\GitHub\TPC\APIPortalTPC\obj\Debug\net8.0\APIPortalTPC.pdb
 C:\Users\drako\Documents\GitHub\TPC\APIPortalTPC\obj\Debug\net8.0\APIPortalTPC.genruntimeconfig.cache
 C:\Users\drako\Documents\GitHub\TPC\APIPortalTPC\obj\Debug\net8.0\ref\APIPortalTPC.dll
+C:\Users\drako\Documents\GitHub\TPC\APIPortalTPC\bin\Debug\net8.0\BCrypt.Net.dll
