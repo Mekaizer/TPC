@@ -92,10 +92,6 @@ namespace APIPortalTPC.Controllers
                     //Se crea el bien y servicio
                     await IRP.NuevoProveedor(P);
                     return Ok(true);
-
-
-               
-              
                 }
                 catch (Exception ex)
                 {
@@ -119,7 +115,6 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
                 byte[] Archivo = memoryStream.ToArray();
                 try
                 {
-                    //string path = @"C:\Users\drako\Desktop\OrdenCompra.xls";
       
                     return Ok(await Excel.ActualizarOC(Archivo));
 
@@ -148,7 +143,7 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
                 byte[] Archivo = memoryStream.ToArray();
                 try
                 {
-                    //string path = @"C:\Users\drako\Desktop\BienServicio.xlsx";
+                 
                     List<BienServicio> lista = (await Excel.LeerBienServicio(Archivo));
                     foreach (BienServicio bs in lista)
                     {
@@ -174,25 +169,20 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
         [HttpPost("poss")]
         public async Task<ActionResult> ExcelPos([FromForm] IFormFile file)
         {
-
-
             try
             {
                 using (var memoryStream = new MemoryStream())
                 {
                     await file.CopyToAsync(memoryStream);
                     byte[] Archivo = memoryStream.ToArray();
-                    
                     return Ok(await Excel.LeerExcelOC(Archivo));
-
                 }
-
             }
-
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error: " + ex.Message);
-            }            }
+            }
+        }
 
         /// <summary>
         /// Metodo que lee el archivo de los CentroCosto para agregarlos a la base de datos, tambien añade las ordenes estadisticas!!!
@@ -214,9 +204,6 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
                     byte[] Archivo = memoryStream.ToArray();
 
                     {
-
-
-                        //string path = @"C:\Users\drako\Desktop\cap.xlsx";
                         var original = await IRE.GetAllOE();
 
                         foreach (OrdenesEstadisticas c in original)
@@ -242,31 +229,23 @@ public async Task<ActionResult> ActualizarOC([FromForm] IFormFile file)
                                 Ceco = await IRC.GetCeCo(cc.Id_Centro_de_Costo);
 
                             }
-
                             cc.Id_Centro_de_Costo = Ceco.Id_Ceco.ToString();
                             cc.Activado = true;
                             string res = await IRE.Existe(cc.Codigo_OE);
-
                             if (res == "ok") {
                                 cc.Id_CeCo = Ceco.Id_Ceco;
-
                                 await IRE.NuevoOE(cc);
                             }
-
-
                             else
                             {
-
                             OrdenesEstadisticas old = await IRE.GetOECode(cc.Codigo_OE);
                             cc.Activado = true;
                             cc.Id_CeCo = old.Id_CeCo;
                             cc.Id_Orden_Estadistica = old.Id_Orden_Estadistica;
                             await IRE.ModificarOE(cc);
                             }
-
                         }
                     }
-
                     return Ok(true);
                 }
             }

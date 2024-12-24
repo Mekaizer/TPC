@@ -183,35 +183,24 @@ namespace APIPortalTPC.Controllers
                         worksheet.Cells[row, 6].Value = U.Correo_Usuario;
                         worksheet.Cells[row, 7].Value = U.Contraseña_Usuario;
                         worksheet.Cells[row, 8].Value = U.Activado;
-                        if (U.Activado == true)
-                            worksheet.Cells[row, 8].Value = "Si";
-                        else
-                            worksheet.Cells[row, 8].Value = "No";
-
+                        if (U.Activado == true) worksheet.Cells[row, 8].Value = "Si";
+                        else worksheet.Cells[row, 8].Value = "No";
                         worksheet.Cells[row, 9].Value = U.Tipo_Liberador;
                         if (U.Tipo_Liberador == true)
                             worksheet.Cells[row, 9].Value = "Si";
                         else
                             worksheet.Cells[row, 9].Value = "No";
                         worksheet.Cells[row, 10].Value = U.En_Vacaciones;
-                        if (U.En_Vacaciones == true)
-                            worksheet.Cells[row, 10].Value = "Si";
-                        else
-                            worksheet.Cells[row, 10].Value = "No";
+                        if (U.En_Vacaciones == true) worksheet.Cells[row, 10].Value = "Si";
+                        else worksheet.Cells[row, 10].Value = "No";
 
                         worksheet.Cells[row, 11].Value = U.Admin;
-                        if (U.Activado == true)
-                            worksheet.Cells[row, 11].Value = "Si";
-                        else
-                            worksheet.Cells[row, 11].Value = "No";
+                        if (U.Activado == true) worksheet.Cells[row, 11].Value = "Si";
+                        else worksheet.Cells[row, 11].Value = "No";
                         row++;
                     }
-
-
-
                     package.SaveAs(memoryStream);
                     memoryStream.Position = 0;
-
                 }
                 var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 var fileName = "ListaUsuario_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mmss") + ".xlsx";

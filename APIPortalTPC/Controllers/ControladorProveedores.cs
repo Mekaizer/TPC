@@ -11,7 +11,7 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
 
     public class ControladorProveedores : ControllerBase
     {
@@ -108,8 +108,6 @@ namespace APIPortalTPC.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Proveedores>> Modificar(Proveedores P, int id)
         {
-  
-
             try
             {
                 if (id != P.ID_Proveedores)
@@ -144,6 +142,11 @@ namespace APIPortalTPC.Controllers
             }
 
         }
+        /// <summary>
+        /// Metodo para desactivar un proveedor, para que no se pueda utilizar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Proveedores>> Eliminar(int id)
         {

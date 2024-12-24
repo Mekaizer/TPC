@@ -46,23 +46,15 @@ namespace APIPortalTPC.Controllers
         {
             try
             {
-
                 var lis = Array.ConvertAll<string, int>(formData.Proveedor.Split(','), Convert.ToInt32);
-    
-     
-                     foreach (int ID in lis)
-                     {
+                foreach (int ID in lis)
+                 {
                     Proveedores P = await IRP.GetProveedor(ID);
-                    //await IEC.CorreoProveedores(P, formData);
-    
-                     }
-
+                    await IEC.CorreoProveedores(P, formData);
+                 }
                 //procede a guardar el correo
-                if (formData.file == null || formData.file.Length == 0)
-                {
-                    return Ok("Correos enviados con exito"); // no se guarda archivo
-                }
-
+                if (formData.file == null || formData.file.Length == 0) return Ok("Correos enviados con exito"); // no se guarda archivo
+        
                 using (var memoryStream = new MemoryStream())
                 {
                     await formData.file.CopyToAsync(memoryStream);
@@ -74,7 +66,7 @@ namespace APIPortalTPC.Controllers
                     A = await IRA.NuevoArchivo(A);
                     //pedimos la cotizacion
                     int idCotizacion = Int32.Parse(formData.Id_Cotizacion);
-                    Cotizacion Cot = await IRC.GetCotizacion(idCotizacion);//formData.Id_Cotizacion
+                    Cotizacion Cot = await IRC.GetCotizacion(idCotizacion);
                     Cot.Estado = " Enviado";
                     Relacion R = new Relacion();
                     R.Id_Cotizacion=(Cot.ID_Cotizacion);
@@ -127,13 +119,13 @@ namespace APIPortalTPC.Controllers
                     {
                         Liberadores L = await IRL.GetDep(dep);
                         U = await IRU.GetUsuario(L.Id_Usuario);
-                        //await IEC.CorreoLiberador(U, subject);
+                        await IEC.CorreoLiberador(U, subject);
                         enviado = true;
                     }
                     if (enviado)
                     {
                         Liberadores lib = await IRL.Get(9);
-                        //await IEC.CorreoLiberador(U, subject);
+                        await IEC.CorreoLiberador(U, subject);
                     }
                 }
          
@@ -167,10 +159,7 @@ namespace APIPortalTPC.Controllers
             {
                 foreach (int i in lista)
                 {
-          
                     //se saca la lista con los ID de OC relacionadas al ticket del usuario
-         
-
                     Ticket T = await IRT.GetTicket(i);
                     Correo C = await IRCo.GetCorreoPorTicket(T.ID_Ticket) ;
      
@@ -178,7 +167,7 @@ namespace APIPortalTPC.Controllers
                     if (U.Activado)
                     {
                     int id = U.Id_Usuario;
-                        //await IEC.CorreoRecepciones(U, subject, (int)T.ID_Ticket);
+                        await IEC.CorreoRecepciones(U, subject, (int)T.ID_Ticket);
                         //cambiar estado ticket
                         C.CorreosEnviados += 1;
                         C.UltimoCorreo = DateTime.Now;
@@ -199,13 +188,7 @@ namespace APIPortalTPC.Controllers
                             newR.Respuesta = "";
                             await IRRe.NuevaRecepcion(newR);
                         }
-
-                  
-                      
-
                     }
-
-
                 }
                 return Ok("Correos enviados con exito");
 

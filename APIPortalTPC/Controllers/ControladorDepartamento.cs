@@ -127,6 +127,11 @@ namespace APIPortalTPC.Controllers
             }
 
         }
+        /// <summary>
+        /// Metodo que "elimina" un departamento, aunque lo que hace es que no sea accesible
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Departamento>> Eliminar(int id)
         {

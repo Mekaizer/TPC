@@ -53,9 +53,7 @@ namespace APIPortalTPC.Repositorio
                 {
                     // Seleccionar la primera hoja del archivo
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-
                     // Leer una celda específica (por ejemplo, B2)
-
                     P.Rut_Proveedor = worksheet.Cells["C19"].Text; //RUT PROVEEDOR CELDA C19
                     P.Razon_Social = worksheet.Cells["C17"].Text; // RAZON SOCIAL CELDA C17 
                     P.Nombre_Fantasia = worksheet.Cells["C17"].Text;  // NOMBRE FANTASIA CELDA C17
@@ -87,16 +85,11 @@ namespace APIPortalTPC.Repositorio
         {
             var centrosCostos = new List<CentroCosto>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-
             using (var memoryStream = new MemoryStream(archivo))
             using (ExcelPackage package = new ExcelPackage(memoryStream))
-
             {
                 var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == "Hoja1") ??
                          package.Workbook.Worksheets.FirstOrDefault();
-
- 
                 int rowCount = worksheet.Dimension.Rows;
                 for (int row = 2; row <= rowCount; row++)
                 {
@@ -106,14 +99,11 @@ namespace APIPortalTPC.Repositorio
                         Namea = worksheet.Cells[row, 2].Value.ToString();
 
                     }
-
                     var centroCosto = new CentroCosto
                     {
                         Codigo_Ceco = worksheet.Cells[row, 1].Value.ToString(),
-
                         Nombre = Namea
                     };
-
                     centrosCostos.Add(centroCosto);
                 }
             }
@@ -137,9 +127,7 @@ namespace APIPortalTPC.Repositorio
             {
                 var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == "Hoja1") ??
                          package.Workbook.Worksheets.FirstOrDefault();
-
                 int rowCount = worksheet.Dimension.Rows+3;
-
                 for (int row = 4; row <= rowCount; row++)
                     {
                     if (row != 4)
@@ -152,12 +140,8 @@ namespace APIPortalTPC.Repositorio
                         LOE.Add(OE);
                      
                     }
-                    //¿existe el centro de costo?
-                    
-
                     }
                 }
-
 
             return LOE;
         }
@@ -170,42 +154,29 @@ namespace APIPortalTPC.Repositorio
         public async Task<string> ActualizarOC(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            
-
             // Variables para almacenar datos de las columnas C y Q
             string columnaC;
-
             string columnaQ;
             DateTime hoy = (DateTime.Today);
             // Cargar el archivo Excel
             using (var memoryStream = new MemoryStream(archivo))
             using (ExcelPackage package = new ExcelPackage(memoryStream))
-
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Primera hoja del archivo
-
-                // Leer las columnas C, G y Q al mismo tiempo (empieza desde la fila 5)
-
-
-
                     int rowCount = worksheet.Dimension.Rows;
                 for (int row = 6; row <= rowCount; row++)
                 {
                  
                     if (worksheet.Cells[row, 3].Value != null || worksheet.Cells[row, 17].Value != null)
                     {
-                        // Agregar el valor de la columna C (Documentos) o una cadena vacía si es nulo
+                        // Agregar el valor de la columna C (Documentos) o una cadena vacía si es nulo, este es el numero de OC
                         columnaC = worksheet.Cells[row, 3].Value.ToString() ?? string.Empty;
 
 
-                    // Agregar el valor de la columna Q (Denominación StatLib) o una cadena vacía si es nulo
+                    // Agregar el valor de la columna Q (Denominación StatLib) o una cadena vacía si es nulo, este es el Estado
                     columnaQ = worksheet.Cells[row, 17].Text ?? string.Empty;
 
-
-
-
-                        SqlConnection sqlConexion = conectar();
+                    SqlConnection sqlConexion = conectar();
                     SqlCommand? Comm = null;
                     SqlDataReader reader = null;
                     try
@@ -215,22 +186,19 @@ namespace APIPortalTPC.Repositorio
                         Comm.CommandText = "UPDATE dbo.Ticket SET  " +
                             "Fecha_OC_Liberada = @FL , " +
                             "Estado = @E " +
-                            "WHERE ID_Ticket = @ID_Ticket ";
+                            "WHERE N_OC = @ID_Ticket ";
                         Comm.CommandType = CommandType.Text;
-
-                        if (columnaQ == "Liberación concluida")
-                        {
-                            Comm.Parameters.Add("@FL", SqlDbType.DateTime).Value = hoy;
-                            columnaQ = "OC Liberada";
-                            Comm.Parameters.Add("@E", SqlDbType.VarChar, 500).Value = columnaQ;
-
-                        }
-                        else
-                            Comm.Parameters.Add("@FL", SqlDbType.DateTime).Value = DBNull.Value;
-
-
-
-            
+                            if (columnaQ == "Liberación concluida")
+                            {
+                                Comm.Parameters.Add("@FL", SqlDbType.DateTime).Value = hoy;
+                                columnaQ = "OC Liberada";
+                            }
+                            else
+                            {
+                                Comm.Parameters.Add("@FL", SqlDbType.DateTime).Value = DBNull.Value;
+                                columnaQ = "Espera liberacion";
+                            }
+                        Comm.Parameters.Add("@E", SqlDbType.VarChar, 500).Value = columnaQ;
                         Comm.Parameters.Add("@ID_Ticket", SqlDbType.BigInt).Value = int.Parse(columnaC);
 
                         reader = await Comm.ExecuteReaderAsync();
@@ -254,7 +222,11 @@ namespace APIPortalTPC.Repositorio
 
             return "listo";
         }
-
+        /// <summary>
+        /// Metodo para leer un excel y añadirlo a la base de datos en la tabla BienServicio... inaccesible
+        /// </summary>
+        /// <param name="archivo"></param>
+        /// <returns></returns>
         public async Task<List<BienServicio>> LeerBienServicio(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -280,7 +252,12 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-
+        /// <summary>
+        /// Metodo para agregar varios Proveedores usando un excel... es inaccesible y se uso para transladar los datos de 
+        /// la base de datos anterior
+        /// </summary>
+        /// <param name="archivo"></param>
+        /// <returns></returns>
         public async Task<List<Proveedores>> LeerProveedores(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -323,7 +300,11 @@ namespace APIPortalTPC.Repositorio
 
 
 
-
+        /// <summary>
+        /// Metodo para leer las ordenes de compras y asociarlas a un ticket cuyo Numero OC sea identico a este
+        /// </summary>
+        /// <param name="archivo"></param>
+        /// <returns></returns>
         public async Task<string> LeerExcelOC(byte[] archivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -332,27 +313,19 @@ namespace APIPortalTPC.Repositorio
 
             int columna = 2;
             using (var memoryStream = new MemoryStream(archivo))
-            using (ExcelPackage package = new ExcelPackage(memoryStream))
-             
+            using (ExcelPackage package = new ExcelPackage(memoryStream)) 
             {
-   
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[hoja];
-
-
                 int rowCount = worksheet.Dimension.Rows;
                 List<string> datosColumna = new List<string>();
                 for (int row = 5; row <= rowCount; row++)
                 {
-
                     OrdenCompra OC = new OrdenCompra();
                     OC.posicion = Convert.ToString(worksheet.Cells[row, 2].Value?.ToString());
-
                     OC.Numero_OC = Convert.ToInt32(worksheet.Cells[row, 3].Value?.ToString());
-
                     OC.Cantidad = Convert.ToInt32(worksheet.Cells[row, 4].Value?.ToString());
                     OC.Mon = Convert.ToString(worksheet.Cells[row, 6].Value?.ToString());
                     OC.PrcNeto = Convert.ToDecimal(worksheet.Cells[row, 7].Value?.ToString());
-
                     OC.Texto = Convert.ToString(worksheet.Cells[row, 19].Value?.ToString());
                     string fechastring = Convert.ToString(worksheet.Cells[row, 21].Value?.ToString());
                     DateTime fecha = DateTime.ParseExact(fechastring, "dd.MM.yyyy", CultureInfo.InvariantCulture);
@@ -365,22 +338,18 @@ namespace APIPortalTPC.Repositorio
                     OC.Estado_OC = true;
                     OC.Id_Ticket = 0;
                     OC.Id_Orden_Compra = 0;
-
-         
                     Ticket T = await IRT.GetTicketOC((int)OC.Numero_OC);
- 
                     bool cont = true;
                     T.Estado = "Espera liberacion";
-          
                     OC.Id_Ticket = T.ID_Ticket;
                     T= await IRT.ModificarTicket(T);
-                    OC= await IROC.NuevoOC(OC);
-            
-
-
+                    string Ex = await IROC.Existe((long)OC.Numero_OC,OC.posicion);
+                    if(Ex == "ok")
+                    {
+                        OC = await IROC.NuevoOC(OC);
+                    }
                 }
             }
-
             return "listo";
         }
         }

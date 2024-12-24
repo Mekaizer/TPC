@@ -12,7 +12,7 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
 
     public class ControladorTicket : ControllerBase
     {
@@ -139,16 +139,11 @@ namespace APIPortalTPC.Controllers
                         var OC = await ROC.GetAllOCTicket(Ticket.ID_Ticket);
                         foreach (OrdenCompra cambia in OC)
                         {
-                     
                             await ROC.ModificarOC(cambia);
                         }
                         return Ticket;
                     }
-                   
- 
                 }
-
-      
                     return NotFound("Ticket no encontrado");
             }
             catch(Exception ex) 
@@ -238,10 +233,12 @@ namespace APIPortalTPC.Controllers
         [HttpPost("RecepcionTotal/{id:int}")]
         public async Task<ActionResult> RecepcionTotal(int id)
         {
+       
             try
             {
                 var ListaOC = await ROC.GetAllOCTicket(id);
                 Ticket T = await RT.GetTicket(id);
+         
                 T.Estado = "OC Recepcionada";
                 foreach(OrdenCompra OC in ListaOC)
                 {
@@ -250,6 +247,7 @@ namespace APIPortalTPC.Controllers
                     await ROC.ModificarOC(OC);
                 }
                 await RT.ModificarTicket(T);
+
                 //crear el objeto Correo
                 Correo C = new Correo();
                 C.Id_Ticket = T.ID_Ticket;
@@ -258,7 +256,8 @@ namespace APIPortalTPC.Controllers
                 C.CeCo = T.Id_OE;
                 C.CorreosEnviados = 0;
                 C.detalle = T.Detalle;
-                string res = await IRC.Existe((int)T.ID_Ticket);
+
+                string res = await IRC.Existe(T.ID_Ticket);
                 if (res.Equals("ok"))
                 {
                     await IRC.NuevoCorreo(C);

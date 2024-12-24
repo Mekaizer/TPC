@@ -46,9 +46,7 @@ namespace APIPortalTPC.Controllers
                 //int codigo = await RA.MFA(User.Correo_Usuario);
                 //User.CodigoMFA = codigo;
                 //await RU.ModificarUsuario(User);
-
-                Console.WriteLine(User.Contraseña_Usuario);
-                return User;
+            return User;
             }
             return NotFound("Usuario no activado");
 
@@ -70,7 +68,7 @@ namespace APIPortalTPC.Controllers
             {
                 U.CodigoMFA = 0;
                 RU.ModificarUsuario(U);
-                Console.WriteLine(U.Contraseña_Usuario);
+        
                 return U;
             }
                 
@@ -80,7 +78,7 @@ namespace APIPortalTPC.Controllers
             }
         }
         /// <summary>
-        /// Metodo
+        /// Metodo que valida usuario nuevo
         /// </summary>
         /// <param name="postrq"></param>
         /// <returns></returns>
@@ -110,12 +108,10 @@ namespace APIPortalTPC.Controllers
 
 
         /// <summary>
-        /// Metodo que envia un correo con la contraseña del usuario
-        /// </summary>
+        /// Metodo que envia un correo con la contraseña del usuario</summary>
         /// <param name="Correo"></param>
         /// <returns></returns>
         [HttpPost("pass")]
-
         public async Task<IActionResult> RecuperarContraseña(PostRq Correo)
         {
             try
@@ -131,7 +127,7 @@ namespace APIPortalTPC.Controllers
                     int newpass = random.Next(100000, 999999);
                     U.Contraseña_Usuario = newpass.ToString();
                     U.CodigoMFA = 1;
-                    //await IEC.RecuperarPass(U);
+                    await IEC.RecuperarPass(U);
                     U = await RU.ModificarUsuario(U);
                     return Ok(U);
                 }

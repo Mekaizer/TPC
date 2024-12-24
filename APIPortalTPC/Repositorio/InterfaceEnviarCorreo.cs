@@ -11,7 +11,6 @@ namespace APIPortalTPC.Repositorio
         public Task<string> CorreoProveedores(Proveedores P, FormData formData);
         public Task<string> CorreoLiberador(Usuario U, string subject);
         public Task<string> CorreoRecepciones(Usuario U, string subject, int Id_Ticket);
-        public Task<string> CorreoUsuarioPass(Usuario U);
         public Task<string> RecuperarPass(Usuario U);
 
     }

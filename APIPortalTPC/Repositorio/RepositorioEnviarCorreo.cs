@@ -1,6 +1,7 @@
 ﻿
 using BaseDatosTPC;
 using ClasesBaseDatosTPC;
+using NPOI.XWPF.UserModel;
 using System.Net.Mail;
 using System.Text;
 
@@ -11,6 +12,10 @@ namespace APIPortalTPC.Repositorio
 {
     public class RepositorioEnviarCorreo : InterfaceEnviarCorreo
     {
+        //Esto solo funciona con la IP del servidor
+        string smtpServer = " tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP
+        int smtpPort = 25; // Cambia el puerto si es necesario
+        string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto a tu correo
         /// <summary>
         /// Metodo que envia un correo al proveedor, indicando su correo y nombre
         /// </summary>
@@ -21,14 +26,16 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<string> CorreoProveedores(Proveedores P, FormData formData)
         {
-            // Configuración del servidor SMTP
-
-            string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
-            int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            //string archivo = @"C:\\Desktop\PRO4.xlsx"; //Direccion del archivo a enviar
-            // Pedir al usuario que ingrese el asunto del correo
-            string toEmail = P.Correo_Proveedor;
+        // Cambia esto según el servidor SMTP
+         string smtpServer = "smtp.office365.com";
+        // Cambia esto según el puerto que uses
+         int smtpPort = 25;
+        // Cambia esto por la dirección del remitente
+         string fromEmail = "aplicaciones@tpc.cl";
+        //"portaladquisiones@tpc.cl"; 
+         string password = "$547P%g6";
+        // Pedir al usuario que ingrese el asunto del correo
+        string toEmail = P.Correo_Proveedor;
             string subject = formData.Asunto;
            
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
@@ -46,7 +53,7 @@ namespace APIPortalTPC.Repositorio
                 <p>Agradecemos su pronta colaboración.</p>
                 <p>Saludos cordiales,</p>
                 <p>Equipo de Adquisiciones<br/>
-                <strong>Terminal Puerto de Coquimbo</strong></p>
+                <strong>Terminal Puerto Coquimbo</strong></p>
             </body>
         </html>";
 
@@ -64,20 +71,18 @@ namespace APIPortalTPC.Repositorio
                     if (formData.file != null)
                     {
                         mail.Attachments.Add(new Attachment(formData.file.OpenReadStream(), formData.file.FileName));
-
                     }
-                    
                     // Configurar el cliente SMTP
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
-                        // No se especifica credenciales ni SSL
-                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
-
+                  
+                        smtpClient.Credentials = new System.Net.NetworkCredential(fromEmail, password);
+                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient.EnableSsl = true; // Ajusta esto si es necesario
                         // Enviar el mensaje
                         smtpClient.Send(mail);
                     }
                 }
-
                 return "Correo enviado exitosamente.";
             }
             catch (Exception ex)
@@ -92,13 +97,8 @@ namespace APIPortalTPC.Repositorio
         /// <param name="subject"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string>   CorreoLiberador(Usuario U,string subject) {
+        public async Task<string>CorreoLiberador(Usuario U,string subject) {
 
-            // Configuración del servidor SMTP
-            string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
-            int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            // Pedir al usuario que ingrese el asunto del correo
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML sobre la liberación urgente
             string htmlBody = @"
@@ -117,20 +117,15 @@ namespace APIPortalTPC.Repositorio
                 {
                     mail.From = new MailAddress(fromEmail);
                     mail.To.Add(toEmail);
-
                     mail.Subject = subject;
                     mail.Body = htmlBody;
-                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
-
-                    // Configurar el cliente SMTP
+                    mail.IsBodyHtml = true;
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
-                        // No se especifica credenciales ni SSL
-                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
-
-                        // Enviar el mensaje
+                        smtpClient.EnableSsl = true; // Habilitar SSL si es necesario
                         smtpClient.Send(mail);
                     }
+                
                 }
 
                 return "Correo enviado exitosamente.";
@@ -151,11 +146,6 @@ namespace APIPortalTPC.Repositorio
         public async Task<string> CorreoRecepciones(Usuario U, string subject, int Id_Ticket)
         {
             //al solicitante no fue recepcionada, no se sabe el estado, parcialmente y cuando no hay respuesta
-            // Configuración del servidor SMTP
-            //tienes una orden de compra pendiente a confirmar 
-            string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
-            int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
             // Pedir al usuario que ingrese el asunto del correo    
             string toEmail = U.Correo_Usuario;
             // Cuerpo del mensaje en HTML con el bien o servicio ingresado
@@ -172,8 +162,8 @@ namespace APIPortalTPC.Repositorio
                     </div>
                     <div style='padding: 20px; font-family: Arial, sans-serif;'>
                         <p>Estimado(a):</p>
-                        <p>Por favor, confirmar recepción del siguiente Ticket:</p>
-                            {Id_Ticket}
+                        <p>Por favor, confirmar recepción del siguiente Ticket: {Id_Ticket} </p>
+          
                             <table>
 
                         </div>
@@ -189,20 +179,15 @@ namespace APIPortalTPC.Repositorio
                 {
                     mail.From = new MailAddress(fromEmail);
                     mail.To.Add(toEmail);
-
                     mail.Subject = subject;
                     mail.Body = htmlBody;
-                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
-
-                    // Configurar el cliente SMTP
+                    mail.IsBodyHtml = true;
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
-                        // No se especifica credenciales ni SSL
-                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
-
-                        // Enviar el mensaje
+                        smtpClient.EnableSsl = true; // Habilitar SSL si es necesario
                         smtpClient.Send(mail);
                     }
+
                 }
 
                 return "Correo enviado exitosamente.";
@@ -212,71 +197,16 @@ namespace APIPortalTPC.Repositorio
                 throw new Exception($"Error al enviar el correo: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Metodo para enviar la contraseña nueva al usuario 
+        /// </summary>
+        /// <param name="U"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
 
-
-        public async Task<string> CorreoUsuarioPass(Usuario U)
-        {
-           // Configuración del servidor SMTP
-            string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
-            int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            // Pedir al usuario que ingrese el asunto del correo
-            string toEmail = U.Correo_Usuario;
-            //Nombre del mensaje
-            string subject = "Recuperar contraseña";
-            // Cuerpo del mensaje en HTML sobre la liberación urgente
-            string htmlBody = $@"<html>
-            <head></head>
-            <body>
-            <p style='font-size: 16px; color: #333;'>Estimado/a {U.Nombre_Usuario},</p>
-
-                <p>Su contraseña: </p>
-                <ul>
-                <li>{U.Contraseña_Usuario}</li> 
-                </ul>
-                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo.En caso de cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
-                <strong>Terminal Puerto de Coquimbo</strong></p>
-            </body>
-        </html>";
-
-
-            try
-            {
-                // Crear el mensaje de correo
-                using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress(fromEmail);
-                    mail.To.Add(toEmail);
-
-                    mail.Subject = subject;
-                    mail.Body = htmlBody;
-                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
-
-                    // Configurar el cliente SMTP
-                    using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
-                    {
-                        // No se especifica credenciales ni SSL
-                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
-
-                        // Enviar el mensaje
-                        smtpClient.Send(mail);
-                    }
-                }
-
-                return "Correo enviado exitosamente.";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al enviar el correo: {ex.Message}");
-            }
-        }
         public async Task<string> RecuperarPass(Usuario U)
         {
-            // Configuración del servidor SMTP
-            string smtpServer = "tpc-cl.mail.protection.outlook.com"; // Cambia esto según el servidor SMTP  
-            int smtpPort = 25; // Cambia esto según el puerto que uses
-            string fromEmail = "portaladquisiones@tpc.cl"; // Cambia esto por la dirección del remitente
-            // Pedir al usuario que ingrese el asunto del correo
+           // Configuración del servidor SMTP
             string toEmail = U.Correo_Usuario;
             //Nombre del mensaje
             string subject = "Recuperar contraseña";
@@ -285,7 +215,6 @@ namespace APIPortalTPC.Repositorio
             <head></head>
             <body>
             <p style='font-size: 16px; color: #333;'>Estimado/a {U.Nombre_Usuario},</p>
-
                 <p>Su contraseña: </p>
                 <ul>
                 <li>{U.Contraseña_Usuario}</li> 
@@ -294,7 +223,6 @@ namespace APIPortalTPC.Repositorio
                 <strong>Terminal Puerto de Coquimbo</strong></p>
             </body>
         </html>";
-
             try
             {
                 // Crear el mensaje de correo
@@ -302,20 +230,15 @@ namespace APIPortalTPC.Repositorio
                 {
                     mail.From = new MailAddress(fromEmail);
                     mail.To.Add(toEmail);
-
                     mail.Subject = subject;
                     mail.Body = htmlBody;
-                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
-
-                    // Configurar el cliente SMTP
+                    mail.IsBodyHtml = true;
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
-                        // No se especifica credenciales ni SSL
-                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
-
-                        // Enviar el mensaje
+                        smtpClient.EnableSsl = true; // Habilitar SSL si es necesario
                         smtpClient.Send(mail);
                     }
+
                 }
 
                 return "Correo enviado exitosamente.";
@@ -325,6 +248,7 @@ namespace APIPortalTPC.Repositorio
                 throw new Exception($"Error al enviar el correo: {ex.Message}");
             }
         }
+
     }
 }
 

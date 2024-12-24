@@ -12,7 +12,7 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
 
     public class ControladorOrdenesEstadisticas : ControllerBase
     {
@@ -115,6 +115,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos " +ex.Message);
             }
         }
+        /// <summary>
+        /// Metodo para "eliminar" una Orden estadistica, asi no se puede utilizar y no se vera
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<OrdenesEstadisticas>> Eliminar(int id)
         {

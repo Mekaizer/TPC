@@ -275,9 +275,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
                 //if(U.CodigoMFA==0 || U.CodigoMFA== null)
-                    Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value =(U.Contraseña_Usuario);
-                //else
-                    //Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
+                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value =(U.Contraseña_Usuario);
+                //else Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
                 if (U.CodigoMFA != null || U.CodigoMFA != 1)
                 {
                     Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = U.CodigoMFA;
@@ -408,54 +407,7 @@ namespace APIPortalTPC.Repositorio
             }
             return lista;
         }
-        
-        public async Task<IEnumerable<Usuario>> GetAllUsuarioReceptores()
-        {
-            List<Usuario> lista = new List<Usuario>();
-            SqlConnection sql = conectar();
-            SqlCommand? Comm = null;
-            SqlDataReader? reader = null;
-            try
-            {
-                sql.Open();
-                Comm = sql.CreateCommand();
-                Comm.CommandText = @"select U.*
-                from Usuario U
-                inner join Ticket T on U.Id_Usuario = T.Id_Usuario
-                inner join Orden_de_Compra OC on T.ID_Ticket= OC.Id_Ticket
-                where lower(T.Estado) != lower('LIBERACIÓN CONCLUIDA') "; // leer base datos 
-                Comm.CommandType = CommandType.Text;
-                reader = await Comm.ExecuteReaderAsync();
-                while (reader.Read())
-                {
-                    Usuario U = new();
-                    U.Nombre_Usuario = (Convert.ToString(reader["Nombre_Usuario"])).Trim();
-                    U.Apellido_paterno = (Convert.ToString(reader["Apellido_Paterno"])).Trim();
-                    U.Apellido_materno = (Convert.ToString(reader["Apellido_Materno"])).Trim();
-                    U.Correo_Usuario = (Convert.ToString(reader["Correo_Usuario"])).Trim();
-                    U.Contraseña_Usuario = (Convert.ToString(reader["Contraseña_Usuario"])).Trim();
-                    U.Tipo_Liberador = Convert.ToBoolean(reader["Tipo_Liberador"]);
-                    U.En_Vacaciones = Convert.ToBoolean(reader["En_Vacaciones"]);
-                    U.Rut_Usuario = Convert.ToString(reader["Rut_Usuario"]).Trim();
-                    U.Activado = Convert.ToBoolean(reader["Activado"]);
-                    U.Admin = Convert.ToBoolean(reader["Admin"]);
-                    U.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
-                    lista.Add(U);
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Error cargando los datos tabla Usuario " + "aaa" + ex.Message);
-            }
-            finally
-            {
-                reader?.Close();
-                Comm?.Dispose();
-                sql.Close();
-                sql.Dispose();
-            }
-            return lista;
-        }
+
 
     /// <summary>
     /// Metodo que busca por Id el Usuario para "eliminarlo"
@@ -500,7 +452,7 @@ namespace APIPortalTPC.Repositorio
         }
         
         /// <summary>
-        /// Metodo que permite que el Usuario pueda registarse en la platora
+        /// Metodo que permite que el Usuario pueda registarse en la plataforma
         /// </summary>
         /// <param name="U"></param>
         /// <returns></returns>
@@ -577,11 +529,8 @@ namespace APIPortalTPC.Repositorio
         public bool CalcularDigitoVerificador(string rut)
         {
             string rutSinDV = rut.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
-
             string digito = rutSinDV.Substring(rutSinDV.Length - 1).ToUpper();
-
             rutSinDV = rutSinDV.Substring(0, rutSinDV.Length - 1);
-
             if (rutSinDV.Length < 7 || rutSinDV.Length > 9)
                 return false;
             else if (!Regex.IsMatch(rutSinDV, @"^[0-9]+$"))
@@ -590,22 +539,18 @@ namespace APIPortalTPC.Repositorio
             }
             int suma = 0;
             int multiplicador = 2;
-
             // Iterar sobre los dígitos del RUT de derecha a izquierda
             for (int i = rutSinDV.Length - 1; i >= 0; i--)
             {
                 suma += (int)char.GetNumericValue(rutSinDV[i]) * multiplicador;
                 multiplicador = multiplicador == 7 ? 2 : multiplicador + 1;
             }
-
             int resto = 11 - (suma % 11);
-
             // Si el resto es 11, el dígito verificador es 0. Si es 10, es 'K'.
             if (resto == 11)
             {
                 return digito.Equals("0");
             }
-
             else if (resto == 10) return digito.Equals("K");
             else return digito.Equals(resto.ToString());
         }

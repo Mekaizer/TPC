@@ -287,6 +287,12 @@ namespace APIPortalTPC.Repositorio
             }
             return OEmod;
         }
+        /// <summary>
+        /// Metodo que obtienes una Orden Estadistica por su Codigo, no por su iD
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<OrdenesEstadisticas> GetOECode(string code)
         {
             //Parametro para guardar el objeto a mostrar

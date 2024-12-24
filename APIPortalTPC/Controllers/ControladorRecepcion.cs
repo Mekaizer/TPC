@@ -55,7 +55,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al obtener el archivo: " + ex.Message);
             }
         }
-
+        /// <summary>
+        /// Crea una nueva recepcion
+        /// </summary>
+        /// <param name="R"></param>
+        /// <returns></returns>
 
         [HttpPost]
         public async Task<ActionResult<Recepcion>> Nuevo(Recepcion R)
@@ -73,7 +77,12 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error de " + ex);
             }
         }
-
+        /// <summary>
+        /// Metodo para modificar una recepcion (el correo con fecha de envio)
+        /// </summary>
+        /// <param name="R"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Recepcion>> Modificar(Recepcion R, int id)

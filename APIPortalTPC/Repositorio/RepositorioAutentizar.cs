@@ -82,13 +82,13 @@ namespace APIPortalTPC.Repositorio
 
             finally
             {
-                //MFA(U.Correo_Usuario);
+                MFA(U.Correo_Usuario);
                 Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
             Console.WriteLine(pass);
-            //if (BCrypt.Net.BCrypt.Verify(pass,U.Contraseña_Usuario)) return U;
+            if (BCrypt.Net.BCrypt.Verify(pass,U.Contraseña_Usuario)) return U;
 
 
             //else

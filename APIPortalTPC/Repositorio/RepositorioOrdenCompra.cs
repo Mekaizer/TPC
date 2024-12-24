@@ -384,7 +384,40 @@ namespace APIPortalTPC.Repositorio
             return lista;
         }
 
+        /// <summary>
+        /// Metodo que se asegura de que una OC sea unica, para ser unica, su Numero_OC y posicion NO deben repetirse
+        /// </summary>
+        /// <param name="Numero_OC"></param>
+        /// <param name="posicion"></param>
+        /// <returns></returns>
+        public async Task<string> Existe(long Numero_OC, string posicion)
+        {
+            using (SqlConnection sqlConnection = conectar())
+            {
+                sqlConnection.Open();
 
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = sqlConnection;
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Orden_de_Compra WHERE Numero_OC = @OC and Posicion =@P ";
+                    command.Parameters.AddWithValue("@OC", Numero_OC);
+                    command.Parameters.AddWithValue("@OC", posicion);
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
+                    if (reader.HasRows)
+                    {
+                        reader.Close();
+                        return "La posicion ya existe";
+                    }
+                    else
+                    {
+                        
+                        reader.Close();
+                        return "ok";
+                    }
+                }
+            }
+
+        }
     }
 }

@@ -235,6 +235,13 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
+        
+        /// <summary>
+        /// Metodo para "eliminar" un CeCo y evitar que se use para otros procesos
+        /// </summary>
+        /// <param name="CeCo"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<CentroCosto> EliminarCeCo(int CeCo)
         {
             CentroCosto ccmod = null;
@@ -273,6 +280,12 @@ namespace APIPortalTPC.Repositorio
             }
             return ccmod;
         }
+        /// <summary>
+        /// Obtienes un CeCo por su codigo unico
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<CentroCosto> GetCeCo(string code)
         {
             //Parametro para guardar el objeto a mostrar

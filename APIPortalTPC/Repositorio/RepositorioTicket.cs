@@ -278,7 +278,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = T.Detalle;
 
-                Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
+                Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = T.Solped;
 
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.N_OE;
 
@@ -594,7 +594,12 @@ namespace APIPortalTPC.Repositorio
 
             return lista;
         }
-
+        /// <summary>
+        /// Metodo que permite un ticket mediande el numero de OC
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Ticket> GetTicketOC(int id)
         {
             //Parametro para guardar el objeto a mostrar

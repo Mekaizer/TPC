@@ -8,6 +8,6 @@ namespace APIPortalTPC.Repositorio
         public Task<Archivo> GetArchivo(int id);
         public Task<IEnumerable<Archivo>> GetAllArchivo();
         public Task<Archivo> ModificarArchivo(Archivo A);
-        public Task<Archivo> DescargarArchivo(int id);
+ 
     }
 }

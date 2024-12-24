@@ -1,7 +1,7 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using Microsoft.AspNetCore.Mvc;
-using NPOI.HPSF;
+
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -10,7 +10,6 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     public class ControladorArchivo : ControllerBase
     {
@@ -111,21 +110,5 @@ namespace APIPortalTPC.Controllers
             }
         }
 
-
-        [HttpGet("Descargar{id:int}")]
-        public async Task<ActionResult> Descargar(int id)
-        {
-            Archivo Archivo= await RA.DescargarArchivo(id);
-
-            if(Archivo!= null)
-            {
-                string contentType = "application/octet-stream";
-                string nombre = Archivo.NombreDoc + ".xlsx";
-
-                return File(Archivo.ArchivoDoc, contentType, nombre);
-            }
-            else
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
-        }
     }
 }

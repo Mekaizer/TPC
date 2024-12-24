@@ -250,7 +250,12 @@ namespace APIPortalTPC.Repositorio
                 }
             }
         }
-
+        /// <summary>
+        /// Metodo par obtener un liberador
+        /// </summary>
+        /// <param name="dep"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<Liberadores> GetDep(int dep)
         {
             //Parametro para guardar el objeto a mostrar

@@ -13,3 +13,4 @@ namespace APIPortalTPC.Repositorio
         public Task<CentroCosto> GetCeCo(string code);
     }
 }
+

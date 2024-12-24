@@ -13,7 +13,7 @@ namespace APIPortalTPC.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
 
     public class ControladorOrdenCompra : ControllerBase
     {
@@ -47,7 +47,6 @@ namespace APIPortalTPC.Controllers
                 using (ExcelPackage package = new ExcelPackage())
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ListaOrdenCompras");
-
                     // Encabezado
                     worksheet.Cells[1, 1].Value = "Ticket";
                     worksheet.Cells[1, 2].Value = "Numero de Orden Compra";
@@ -88,12 +87,8 @@ namespace APIPortalTPC.Controllers
                             worksheet.Cells[row, 13].Value = "No";
                         row++;
                     }
-                    
-          
-               
                         package.SaveAs(memoryStream);
                         memoryStream.Position = 0;
-                  
                 }
                 var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 var fileName = "ListaOrdenCompra_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mmss") + ".xlsx";
@@ -204,7 +199,11 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos "+ex.Message);
             }
         }
-
+        /// <summary>
+        /// Metodo para eliminar una Orden de Compra y asi no se pueda acceder
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<OrdenCompra>> Eliminar(int id)
         {
