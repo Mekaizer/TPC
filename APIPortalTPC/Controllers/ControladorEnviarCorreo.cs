@@ -55,29 +55,13 @@ namespace APIPortalTPC.Controllers
                 //procede a guardar el correo
                 if (formData.file == null || formData.file.Length == 0) return Ok("Correos enviados con exito"); // no se guarda archivo
         
-                using (var memoryStream = new MemoryStream())
-                {
-                    await formData.file.CopyToAsync(memoryStream);
-                    //guardamos el archivo y cambiamos el estado de la cotizacion 
-            
-                    Archivo A = new Archivo();
-                    A.ArchivoDoc = memoryStream.ToArray();
-                    A.NombreDoc =formData.file.Name;
-                    A = await IRA.NuevoArchivo(A);
-                    //pedimos la cotizacion
-                    int idCotizacion = Int32.Parse(formData.Id_Cotizacion);
-                    Cotizacion Cot = await IRC.GetCotizacion(idCotizacion);
-                    Cot.Estado = " Enviado";
-                    Relacion R = new Relacion();
-                    R.Id_Cotizacion=(Cot.ID_Cotizacion);
+                //Se busca la cotizacion
+                int idCotizacion = Int32.Parse(formData.Id_Cotizacion);
+                Cotizacion Cot = await IRC.GetCotizacion(idCotizacion);
+                Cot.Estado = " Enviado";
 
-                    R.Id_Archivo = A.Id_Archivo;
-                    Cot.Estado = "Enviado";
-                    await IRC.ModificarCotizacion(Cot);
-                    await IRR.NuevaRelacion(R);
-
-                    //guardamos el correo
-                }
+                await IRC.ModificarCotizacion(Cot);
+              
                 return Ok("Correos enviados con exito");
 
             }
@@ -107,7 +91,7 @@ namespace APIPortalTPC.Controllers
                 {
                     //cambiar estado ticket!!!
                     Ticket T = await IRT.GetTicket(id);
-                    T.Estado = "OC Enviada";
+                    T.Estado = "Espera liberacion";
                     await IRT.ModificarTicket(T);
             
                     Usuario U = await IRU.GetUsuario(T.Id_U);
@@ -124,6 +108,7 @@ namespace APIPortalTPC.Controllers
                     }
                     if (enviado)
                     {
+                        //Dejar que el departamento Todos sea el 9
                         Liberadores lib = await IRL.Get(9);
                         await IEC.CorreoLiberador(U, subject);
                     }
@@ -170,6 +155,7 @@ namespace APIPortalTPC.Controllers
                         await IEC.CorreoRecepciones(U, subject, (int)T.ID_Ticket);
                         //cambiar estado ticket
                         C.CorreosEnviados += 1;
+                        C.Activado = true;
                         C.UltimoCorreo = DateTime.Now;
                         await IRCo.ModificarCorreo(C);
                         string res = await IRRe.Existe(C.Id_Correo);

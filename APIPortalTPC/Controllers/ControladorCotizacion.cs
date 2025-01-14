@@ -1,7 +1,11 @@
 ﻿using APIPortalTPC.Repositorio;
 using BaseDatosTPC;
 using Microsoft. AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
+using NPOI.SS.Formula.Functions;
 using OfficeOpenXml;
+using Org.BouncyCastle.Crypto;
+using System.IO;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
  * **/
@@ -17,14 +21,18 @@ namespace APIPortalTPC.Controllers
 
         //Se usa readonly para evitar que se pueda modificar pero se necesita inicializar y evitar que se reemplace por otra instancia
         private readonly IRepositorioCotizacion RC;
+        private readonly IRepositorioArchivo IRA;
+        private readonly IRepositorioRelacion IRR;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RC">Interface de RepositorioCotizacion</param>
 
-        public ControladorCotizacion(IRepositorioCotizacion RC)
+        public ControladorCotizacion(IRepositorioCotizacion RC, IRepositorioArchivo IRA, IRepositorioRelacion IRR)
         {
             this.RC = RC;
+            this.IRA = IRA;
+            this.IRR = IRR;
         }
         /// <summary>
         /// Metodo que descarga en un Excel todas las cotizaciones
@@ -126,17 +134,42 @@ namespace APIPortalTPC.Controllers
         /// <summary>
         /// Metodo asincrónico para crear nuevo objeto
         /// </summary>
-        /// <param name="c">Objeto tipo cotizacion que se quiere agregar a la base de datos</param>
+        /// <param name="c">Objeto tipo que tiene los datos para crear una cotizacion y ademas el archivo a subir con el nombre de este que se quiere agregar a la base de datos</param>
         /// <returns>Se muestra el objeto agregado</returns>
         [HttpPost]
-        public async Task<ActionResult<Cotizacion>> Nuevo(Cotizacion c)
+        public async Task<ActionResult<Cotizacion>> Nuevo(Archivo_Cotizacion c)
+ 
         {
             try
             {
-                if (c == null)
-                    return BadRequest();
+                if (c == null) return BadRequest();
 
-                Cotizacion nuevac = await RC.NuevaCotizacion(c);
+
+                Cotizacion nuevac = new Cotizacion
+                {
+                    Id_Solicitante = c.Id_Solicitante,
+                    Fecha_Creacion_Cotizacion = c.Fecha_Creacion_Cotizacion,
+                    Estado= c.Estado,
+                    Id_Bien_Servicio= c.Id_Bien_Servicio,
+                    Solped= c.Solped,
+                    Detalle=c.Detalle,
+                    Activado = true
+                };
+                nuevac= await RC.NuevaCotizacion(nuevac);
+                using (var memoryStream = new MemoryStream())
+                {
+                    await c.file.CopyToAsync(memoryStream);
+                    //guardamos el archivo y cambiamos el estado de la cotizacion 
+                    Archivo A = new Archivo();
+                    A.ArchivoDoc = memoryStream.ToArray();
+                    string Extension = Path.GetExtension(c.file.FileName);
+                    A.NombreDoc = c.fileName.Trim();
+                    A = await IRA.NuevoArchivo(A);
+                    Relacion R = new Relacion();
+                    R.Id_Cotizacion = (nuevac.ID_Cotizacion);
+                    R.Id_Archivo = A.Id_Archivo;
+                    await IRR.NuevaRelacion(R);
+                }
                 return nuevac;
             }
             catch (Exception ex)
@@ -185,5 +218,29 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error actualizando datos" + ex);
             }
         }
+
+        /// <summary>
+        /// Obtener el archivo relacionado a la cotizacion
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("Archivo/{id:int}")]
+        public async Task<ActionResult<Archivo>> GetArchivo(int id)
+        {
+            try
+            {
+                Relacion R = await IRR.GetRelacion(id);
+                Archivo A = await IRA.GetArchivo((int)R.Id_Archivo);
+
+                return A;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error sacando archivo: " + ex);
+            }
+        }
+
     }
+
+
 }

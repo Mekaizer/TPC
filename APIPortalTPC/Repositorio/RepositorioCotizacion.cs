@@ -266,7 +266,7 @@ namespace APIPortalTPC.Repositorio
                 }
                 else
                 {
-                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = 0;
+                    Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = 0;
                 }
 
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();

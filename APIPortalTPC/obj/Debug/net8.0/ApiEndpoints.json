@@ -517,9 +517,64 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "c",
-        "Type": "BaseDatosTPC.Cotizacion",
-        "IsRequired": true
+        "Name": "ID_Cotizacion",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_Solicitante",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdS",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Fecha_Creacion_Cotizacion",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Bien_Servicio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_Bien_Servicio",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Detalle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Solped",
+        "Type": "System.Nullable\u00601[[System.Int64, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Activado",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -598,6 +653,32 @@
     "ReturnTypes": [
       {
         "Type": "BaseDatosTPC.Cotizacion",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorCotizacion",
+    "Method": "GetArchivo",
+    "RelativePath": "api/ControladorCotizacion/Archivo/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Archivo",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1048,7 +1129,7 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
-    "Method": "ExcelProveedor",
+    "Method": "ExcelProveedores",
     "RelativePath": "api/ControladorExcel/Proveedor",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1089,7 +1170,7 @@
   },
   {
     "ContainingType": "APIPortalTPC.Controllers.ControladorExcel",
-    "Method": "ExcelProveedores",
+    "Method": "ExcelProveedor",
     "RelativePath": "api/ControladorExcel/Proveedores",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1858,9 +1939,89 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "T",
-        "Type": "BaseDatosTPC.Ticket",
-        "IsRequired": true
+        "Name": "ID_Ticket",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Fecha_Creacion_OC",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_Usuario",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_U",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID_Proveedor",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Detalle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Solped",
+        "Type": "System.Nullable\u00601[[System.Int64, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id_OE",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "N_OE",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Numero_OC",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Fecha_OC_Recepcionada",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Fecha_OC_Enviada",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Fecha_OC_Liberada",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Activado",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -1939,6 +2100,32 @@
     "ReturnTypes": [
       {
         "Type": "BaseDatosTPC.Ticket",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "APIPortalTPC.Controllers.ControladorTicket",
+    "Method": "GetArchivo",
+    "RelativePath": "api/ControladorTicket/Archivo/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "BaseDatosTPC.Archivo",
         "MediaTypes": [
           "text/plain",
           "application/json",

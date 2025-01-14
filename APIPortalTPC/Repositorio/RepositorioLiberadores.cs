@@ -73,6 +73,7 @@ namespace APIPortalTPC.Repositorio
         {
             //Parametro para guardar el objeto a mostrar
             Liberadores L = new();
+            Console.WriteLine(id);
             //Se realiza la conexion a la base de datos
             SqlConnection sql = conectar();
             //parametro que representa comando o instrucion en SQL para ejecutarse en una base de datos
@@ -87,19 +88,18 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , u.Correo_Usuario, d.Nombre,d.Id_Departamento " +
+                Comm.CommandText = "SELECT L.* , u.Nombre_Usuario, u.Correo_Usuario, d.Nombre  " +
                     "FROM dbo.Liberadores L " +
                     "INNER JOIN dbo.Usuario u ON u.Id_Usuario = L.Id_Usuario " +
                     "INNER JOIN dbo.Departamento d ON L.Id_Departamento = d.Id_Departamento " +
-                    "where L.Id_Liberador = @Id_Liberador";
+                    "where L.Id_Liberador = @id ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@Id_Liberador", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-
                     L.Id_Liberador = Convert.ToInt32(reader["Id_Liberador"]);
                     L.Nombre_Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
                     L.Id_Usuario = Convert.ToInt32(reader["Id_Usuario"]);
@@ -137,10 +137,10 @@ namespace APIPortalTPC.Repositorio
             {
                 sql.Open();
                 Comm = sql.CreateCommand();
-                Comm.CommandText = @"SELECT L.Id_Liberador, u.Nombre_Usuario,u.Id_Usuario , d.Nombre,d.Id_Departamento, u.Correo_Usuario 
-                FROM dbo.Liberadores L
-                INNER JOIN dbo.Usuario u ON u.Id_Usuario = L.Id_Usuario
-                INNER JOIN dbo.Departamento d ON L.Id_Departamento = d.Id_Departamento ";  // leer base datos 
+                Comm.CommandText = @"SELECT L.* , u.Nombre_Usuario , d.Nombre, u.Correo_Usuario 
+                FROM dbo.Liberadores L 
+                INNER JOIN dbo.Usuario u ON u.Id_Usuario = L.Id_Usuario 
+                INNER JOIN dbo.Departamento d ON L.Id_Departamento = d.Id_Departamento  ";  // leer base datos 
                 Comm.CommandType = CommandType.Text;
                 reader = await Comm.ExecuteReaderAsync();
 
@@ -154,7 +154,8 @@ namespace APIPortalTPC.Repositorio
                     L.Nombre_Departamento = Convert.ToString(reader["Nombre"]).Trim();
                     L.Id_Departamento = Convert.ToInt32(reader["Id_Departamento"]);
                     L.Correo = Convert.ToString(reader["Correo_Usuario"]);
-                    
+
+
                     lista.Add(L);
                 }
             }
@@ -224,7 +225,7 @@ namespace APIPortalTPC.Repositorio
         /// <param name="Usuario"></param>
         /// <param name="dep"></param>
         /// <returns></returns>
-        public async Task<string> Existe(string Usuario, string dep)
+        public async Task<string> Existe(int Usuario, int  dep)
         {
             using (SqlConnection sqlConnection = conectar())
             {
@@ -232,6 +233,7 @@ namespace APIPortalTPC.Repositorio
 
                 using (SqlCommand command = new SqlCommand())
                 {
+   
                     command.Connection = sqlConnection;
                     command.CommandText = "SELECT Top 1 1 FROM dbo.Liberadores WHERE Id_Usuario = @Id_Usuario and Id_Departamento = @Id_Departamento";
                     command.Parameters.AddWithValue("@Id_Usuario", Usuario);

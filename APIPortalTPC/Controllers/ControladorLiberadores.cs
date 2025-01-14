@@ -73,7 +73,7 @@ namespace APIPortalTPC.Controllers
                 if (L == null)
                     return BadRequest();
 
-                string res = await IRL.Existe(L.Nombre_Usuario, L.Nombre_Departamento);
+                string res = await IRL.Existe(L.Id_Usuario, L.Id_Departamento);
                 if (res == "ok")
                 {
                     Liberadores nuevo = await IRL.Nuevo(L);
@@ -106,7 +106,7 @@ namespace APIPortalTPC.Controllers
                     return BadRequest("La Id no coincide");
 
 
-                string res = await IRL.Existe(L.Nombre_Usuario, L.Nombre_Departamento);
+                string res = await IRL.Existe(L.Id_Usuario, L.Id_Departamento);
                 if (res == "ok")
                 {
                     return await IRL.Modificar(L);

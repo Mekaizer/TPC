@@ -37,8 +37,8 @@ namespace APIPortalTPC.Repositorio
                 sql.Open();
                 Comm = sql.CreateCommand();
                 Comm.CommandText = "INSERT INTO Correo " +
-                    "(Id_Ticket,FechaCreacion,CorreosEnviados,PrimerCorreo,UltimoCorreo,detalle,Numero_OC) " +
-                    "VALUES (@Id_Ticket,@FechaCreacion,@CorreosEnviados,@PrimerCorreo,@UltimoCorreo,@detalle,@Numero_OC) " +
+                    "(Id_Ticket,FechaCreacion,CorreosEnviados,PrimerCorreo,UltimoCorreo,detalle,Numero_OC,Activado) " +
+                    "VALUES (@Id_Ticket,@FechaCreacion,@CorreosEnviados,@PrimerCorreo,@UltimoCorreo,@detalle,@Numero_OC,@Activado) " +
                     "SELECT SCOPE_IDENTITY() AS Id_Correo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Ticket", SqlDbType.Int).Value = C.Id_Ticket;
@@ -48,6 +48,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = DateTime.Now;
                 Comm.Parameters.Add("@detalle", SqlDbType.VarChar, 500).Value = C.detalle;
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.BigInt).Value = C.Numero_OC;
+                Comm.Parameters.Add("Activado", SqlDbType.Bit).Value = true;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 C.Id_Correo = (int)idDecimal;
             }
@@ -144,8 +145,10 @@ namespace APIPortalTPC.Repositorio
                 Inner join Usuario U on U.Id_Usuario = T.Id_Usuario
                 Inner join Proveedores P on P.Id_Proveedores = T.Id_Proveedor
                 Inner join Ordenes_estadisticas OE on T.Id_OE = OE.Id_Orden_Estadistica
-                Inner join Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco  "; // leer base datos 
+                Inner join Centro_de_costo CeCo on OE.Id_Centro_de_Costo = CeCo.Id_Ceco  
+                where C.Activado = @A"; // leer base datos 
                 Comm.CommandType = CommandType.Text;
+                Comm.Parameters.Add("@A", SqlDbType.Int).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
 
                 while (reader.Read())
@@ -163,6 +166,7 @@ namespace APIPortalTPC.Repositorio
                     C.detalle = Convert.ToString(reader["detalle"]).Trim();
                     C.Id_Correo = Convert.ToInt32(reader["Id_Correo"]);
                     C.Numero_OC = Convert.ToInt64(reader["Numero_OC"]);
+                    C.Activado = Convert.ToBoolean(reader["Activado"]);
                     lista.Add(C);
                 }
             }
@@ -193,7 +197,8 @@ namespace APIPortalTPC.Repositorio
                     "CorreosEnviados = @CorreosEnviados," +
                     "UltimoCorreo = @UltimoCorreo," +
                     "detalle = @detalle, " +
-                    "Numero_OC = @Numero_OC " +
+                    "Numero_OC = @Numero_OC, " +
+                    "Activado = @A " +
                     "WHERE Id_Correo = @Id_Correo";
                 Comm.CommandType = CommandType.Text;
                 Comm.Parameters.Add("@Id_Correo", SqlDbType.Int).Value = C.Id_Correo;
@@ -202,6 +207,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Numero_OC", SqlDbType.BigInt).Value = C.Numero_OC;
                 Comm.Parameters.Add("@UltimoCorreo", SqlDbType.DateTime).Value = C.UltimoCorreo;
 
+                Comm.Parameters.Add("@A", SqlDbType.Bit).Value = C.Activado;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Cmod = await GetCorreo(Convert.ToInt32(reader["Id_Correo"]));

@@ -89,10 +89,9 @@ namespace APIPortalTPC.Repositorio
 
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo,CeCo.Id_Centro_de_Costo, CeCo.Id_Ceco " +
+                Comm.CommandText = "SELECT OE.*,CeCo.NombreCeCo,CeCo.Id_Ceco, CeCo.Id_Ceco " +
                     "FROM dbo.Ordenes_estadisticas OE " +
                     "Inner join dbo.Centro_de_costo CeCo ON OE.Id_Centro_de_Costo = CeCo.Id_Ceco " +
-
                     "where OE.Id_Orden_Estadistica = @Id_Orden_Estadistica ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
@@ -157,6 +156,7 @@ namespace APIPortalTPC.Repositorio
                     OE.Id_Orden_Estadistica = Convert.ToInt32(reader["Id_Orden_Estadistica"]);
                     OE.Activado = Convert.ToBoolean(reader["Activado"]);
                     OE.Id_CeCo = Convert.ToInt32(reader["Id_Ceco"]);
+          
                     lista.Add(OE);
                 }
             }
@@ -200,7 +200,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Orden_Estadistica", SqlDbType.Int).Value = OE.Id_Orden_Estadistica;
                 Comm.Parameters.Add("@Nombre", SqlDbType.VarChar, 50).Value = OE.Nombre;
                 Comm.Parameters.Add("@Codigo_OE", SqlDbType.VarChar, 50).Value = OE.Codigo_OE;
-                Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = OE.Id_CeCo ;
+                Comm.Parameters.Add("@Id_Centro_de_Costo", SqlDbType.Int).Value = Int32.Parse(OE.Id_Centro_de_Costo) ;
                 Comm.Parameters.Add("@A", SqlDbType.Bit).Value = true;
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())

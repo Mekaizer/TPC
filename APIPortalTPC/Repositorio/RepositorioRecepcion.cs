@@ -111,7 +111,7 @@ namespace APIPortalTPC.Repositorio
                     R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
                     R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     R.Usuario= Convert.ToString(reader["Nombre_Usuario"]).Trim();
-                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_OC = Convert.ToInt64(reader["Numero_OC"]);
                     R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                 }
             }
@@ -164,7 +164,7 @@ namespace APIPortalTPC.Repositorio
                     R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
                     R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     R.Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
-                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_OC = Convert.ToInt64(reader["Numero_OC"]);
                     R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                     lista.Add(R);
                 }
@@ -270,7 +270,7 @@ namespace APIPortalTPC.Repositorio
                     R.Ceco = Convert.ToString(reader["NombreCeCo"]).Trim();
                     R.Proveedor = Convert.ToString(reader["Nombre_Fantasia"]).Trim();
                     R.Usuario = Convert.ToString(reader["Nombre_Usuario"]).Trim();
-                    R.N_OC = Convert.ToInt32(reader["Numero_OC"]);
+                    R.N_OC = Convert.ToInt64(reader["Numero_OC"]);
                     R.N_Ticket = Convert.ToInt32(reader["Id_Ticket"]);
                 }
             }

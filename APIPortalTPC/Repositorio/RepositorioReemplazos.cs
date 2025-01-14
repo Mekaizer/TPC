@@ -49,7 +49,7 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Id_Usuario_Reemplazante", SqlDbType.Int).Value = R.Id_Usuario_Reemplazante;
                 Comm.Parameters.Add("@Comentario", SqlDbType.VarChar).Value = R.Comentario;
                 Comm.Parameters.Add("@Fecha_Retorno", SqlDbType.DateTime).Value = R.Fecha_Retorno;
-                Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = R.Valido;
+                Comm.Parameters.Add("@Valido", SqlDbType.Bit).Value = true;
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                 R.ID_Reemplazos = (int)idDecimal;
             }

@@ -24,6 +24,7 @@ namespace BaseDatosTPC
         public DateTime? UltimoCorreo { get; set; }
         public string? detalle { get; set; }    
         public long Numero_OC { get; set; }
+        public bool Activado { get; set; }
 
     }
 }

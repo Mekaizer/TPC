@@ -25,7 +25,8 @@ namespace APIPortalTPC.Controllers
             this.IEC = IEC;
         }
         /// <summary>
-        ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia, tambien añade la clave MFA para
+        ///  Recibe una clase que contiene el correo electrónico y la contraseña para validar su existencia, 
+        ///  tambien añade la clave MFA para
         ///  poder ser usada para confirmar
         /// </summary>
         /// <param name="postrq">Objeto que guarda el correo y contraseña a comprobar>
@@ -43,9 +44,9 @@ namespace APIPortalTPC.Controllers
 
             if (activado)
             {
-                //int codigo = await RA.MFA(User.Correo_Usuario);
-                //User.CodigoMFA = codigo;
-                //await RU.ModificarUsuario(User);
+                int codigo = await RA.MFA(User.Correo_Usuario);
+                User.CodigoMFA = codigo;
+                await RU.ModificarUsuario(User);
             return User;
             }
             return NotFound("Usuario no activado");
@@ -59,7 +60,6 @@ namespace APIPortalTPC.Controllers
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public async Task<ActionResult<Usuario>> MFA1(MFA mfa)
         {
             int id = mfa.Id_Usuario;
@@ -129,6 +129,7 @@ namespace APIPortalTPC.Controllers
                     U.CodigoMFA = 1;
                     await IEC.RecuperarPass(U);
                     U = await RU.ModificarUsuario(U);
+   
                     return Ok(U);
                 }
                 return BadRequest("No hay usuario para ese correo");

@@ -16,7 +16,7 @@ namespace BaseDatosTPC
         public string? Respuesta { get; set; }
         public string? Comentarios { get; set; }
         public int N_Ticket { get; set; }
-        public int N_OC { get; set; }
+        public long N_OC { get; set; }
         public string? Usuario { get; set; }
         public string? Proveedor { get; set; }
         public string Ceco { get; set; }

@@ -94,10 +94,11 @@ namespace APIPortalTPC.Controllers
                     DepartamentoUsuario DU = new DepartamentoUsuario();
                     DU.Id_Departamento = U.Id_Departamento;
                     DU.Id_Usuario = U.Id_Usuario;
+                    Console.WriteLine(nuevo.CodigoMFA);
                     await IRDU.Nuevo(DU);
                     nuevo = await RU.ActivarUsuario(nuevo);
                     await RU.ModificarUsuario(nuevo);
-                    //await IEC.CorreoUsuarioPass(nuevo);
+                    await IEC.CorreoUsuarioPass(nuevo);
                     return nuevo;
                 }
                 else
@@ -223,6 +224,7 @@ namespace APIPortalTPC.Controllers
                     return NotFound("No se encontro el Usuario");
                 }
                 u.Activado = false;
+                u.Correo_Usuario = "";
                 return Ok(await RU.ModificarUsuario(u));
 
             }

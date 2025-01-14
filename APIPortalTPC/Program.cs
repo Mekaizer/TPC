@@ -25,6 +25,7 @@ builder.Services.AddScoped<InterfaceExcel, RepositorioExcel>();
 builder.Services.AddScoped<InterfaceEnviarCorreo, RepositorioEnviarCorreo>();
 builder.Services.AddScoped<IRepositorioCorreo,RepositorioCorreo>();
 builder.Services.AddScoped<IRepositorioRecepcion, RepositorioRecepcion>();
+builder.Services.AddScoped<IRepositorioIdRelacionTicket, RepositorioIdRelacionTicket>();
 builder.Services.AddScoped<IRepositorioLiberadores, RepositorioLiberadores>();
 
 var config = builder.Configuration;

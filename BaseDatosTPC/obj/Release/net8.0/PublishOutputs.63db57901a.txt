@@ -1,6 +1,7 @@
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\BaseDatosTPC.dll
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\BaseDatosTPC.deps.json
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\BaseDatosTPC.pdb
+C:\Users\drako\Desktop\TPCFront\LocalhostBack\BCrypt.Net.dll
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\BouncyCastle.Cryptography.dll
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\Dapper.dll
 C:\Users\drako\Desktop\TPCFront\LocalhostBack\Enums.NET.dll

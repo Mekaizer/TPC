@@ -3,6 +3,8 @@ using BaseDatosTPC;
 using ClasesBaseDatosTPC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Crypto;
 using System.Collections.Generic;
 /*
  * Este controlador permite conectar Base datos y el repositorio correspondiente para ejecutar los metodos necesarios
@@ -21,16 +23,20 @@ namespace APIPortalTPC.Controllers
         private readonly IRepositorioTicket RT;
         private readonly IRepositorioOrdenCompra ROC;
         private readonly IRepositorioCorreo IRC;
+        private readonly IRepositorioIdRelacionTicket IRRT;
+        private readonly IRepositorioArchivo IRA;
         /// <summary>
         /// Se inicializa la Interface Repositorio
         /// </summary>
         /// <param name="RT">Interface de RepositorioTicket</param>
 
-        public ControladorTicket(IRepositorioCorreo IRC,IRepositorioTicket RT, IRepositorioOrdenCompra ROC)
+        public ControladorTicket(IRepositorioArchivo IRA, IRepositorioCorreo IRC,IRepositorioTicket RT, IRepositorioOrdenCompra ROC, IRepositorioIdRelacionTicket IRRT)
         {
             this.RT = RT;
             this.ROC = ROC;
             this.IRC = IRC;
+            this.IRRT = IRRT;
+            this.IRA = IRA;
         }
         /// <summary>
         /// Metodo asincrónico para obtener todos los objetos de la tabla
@@ -77,14 +83,43 @@ namespace APIPortalTPC.Controllers
         /// <param name="T">Objeto del tipo Ticket que se quiere agregar a la base de datos</param>
         /// <returns>Retorna el objeto Ticket que se agrego a la base de datos</returns>
         [HttpPost]
-        public async Task<ActionResult<Ticket>> Nuevo(Ticket T)
+        public async Task<ActionResult<Ticket>> Nuevo(Archivo_Ticket T)
         {
+            Console.WriteLine("Estoy aqui");
             try
             {
                 if (T == null)
                     return BadRequest();
 
-                Ticket nuevo = await RT.NewTicket(T);
+                Ticket nuevo =new Ticket
+                {
+                    Estado= T.Estado,
+                    Fecha_Creacion_OC=T.Fecha_Creacion_OC,
+                    Id_Usuario=T.Id_Usuario,
+                    ID_Proveedor= T.ID_Proveedor, 
+                    Fecha_OC_Recepcionada= T.Fecha_OC_Recepcionada, 
+                    Fecha_OC_Enviada= T.Fecha_OC_Enviada, 
+                    Fecha_OC_Liberada= T.Fecha_OC_Liberada, 
+                    Detalle= T.Detalle ?? " ", 
+                    Solped=T.Solped ?? 0, 
+                    Id_OE= T.Id_OE
+                };
+                nuevo = await RT.NewTicket(nuevo);
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await T.file.CopyToAsync(memoryStream);
+                    //guardamos el archivo y cambiamos el estado de la cotizacion 
+                    Archivo A = new Archivo();
+                    A.ArchivoDoc = memoryStream.ToArray();
+                    A.NombreDoc = T.fileName.Trim();
+                    A = await IRA.NuevoArchivo(A);
+                    Id_RelacionTicket R = new Id_RelacionTicket();
+                    //pasaaaaaaarl ID Ticket y archivo
+                    R.Id_Ticket = (nuevo.ID_Ticket);
+                    R.Id_Archivo = A.Id_Archivo;
+                    await IRRT.NuevaRelacion(R);
+                }
                 return nuevo;
             }
             catch (Exception ex)
@@ -112,8 +147,38 @@ namespace APIPortalTPC.Controllers
                 if (Modificar == null)
                     return NotFound($"Centro de Costo con = {id} no encontrado");
 
+                Correo C = new Correo();
+                await RT.ModificarTicket(T);
+                if(T.Estado == "OC Enviada")
+                {
 
-                return await RT.ModificarTicket(T);
+                    //crear el objeto Correo
+               
+                    C.Id_Ticket = T.ID_Ticket;
+                    C.Numero_OC = T.Numero_OC;
+                    C.Proveedor = T.ID_Proveedor;
+                    C.CeCo = T.Id_OE;
+                    C.CorreosEnviados = 0;
+                    C.detalle = T.Detalle;
+
+                    string res = await IRC.Existe(T.ID_Ticket);
+                    if (res.Equals("ok"))
+                    {
+                        await IRC.NuevoCorreo(C);
+                    }
+                }else
+                    if (T.Estado == "OC Recepcionada"|| T.Estado == "OC Cancelada")
+                {
+                  C = await IRC.GetCorreoPorTicket((T.ID_Ticket));
+                    if (C.Id_Ticket != 0)
+                    {
+                        C.Activado = false;
+
+                        await IRC.ModificarCorreo(C);
+                    }
+
+                }
+                return T;
             }
             catch (Exception ex)
             {
@@ -134,7 +199,7 @@ namespace APIPortalTPC.Controllers
                 var Ticket = await RT.ActualizarEstadoTicket(id);
                 if (Ticket.ID_Ticket != 0) 
                 {
-                    if ( Ticket.Estado.Equals("OC Parcial") || Ticket.Estado.Equals("OC Recepcionada") || Ticket.Estado.Equals("Espera de liberacion", StringComparison.OrdinalIgnoreCase))
+                    if ( Ticket.Estado.Equals("OC Parcial") || Ticket.Estado.Equals("Espera de liberacion", StringComparison.OrdinalIgnoreCase))
                     {
                         var OC = await ROC.GetAllOCTicket(Ticket.ID_Ticket);
                         foreach (OrdenCompra cambia in OC)
@@ -165,7 +230,15 @@ namespace APIPortalTPC.Controllers
                 var u = RT.GetTicket(id);
                 if (u == null)
                 {
+
                     return NotFound("No se encontro el ticket");
+                }
+                Correo C = await IRC.GetCorreoPorTicket((id));
+                if (C.Id_Ticket != 0)
+                {
+                    C.Activado = false;
+
+                    await IRC.ModificarCorreo(C);
                 }
                 return Ok(await RT.EliminarTicket(id));
 
@@ -248,19 +321,13 @@ namespace APIPortalTPC.Controllers
                 }
                 await RT.ModificarTicket(T);
 
-                //crear el objeto Correo
-                Correo C = new Correo();
-                C.Id_Ticket = T.ID_Ticket;
-                C.Numero_OC = T.Numero_OC;
-                C.Proveedor = T.ID_Proveedor;
-                C.CeCo = T.Id_OE;
-                C.CorreosEnviados = 0;
-                C.detalle = T.Detalle;
-
-                string res = await IRC.Existe(T.ID_Ticket);
-                if (res.Equals("ok"))
+                //comprobar que exista el correo correspondiente
+                Correo C = await IRC.GetCorreoPorTicket((T.ID_Ticket));
+                if (C.Id_Ticket!=0)
                 {
-                    await IRC.NuevoCorreo(C);
+                    C.Activado = false;
+
+                    await IRC.ModificarCorreo(C);
                 }
                 return Ok("Recepcionado con exito");
             }
@@ -270,7 +337,21 @@ namespace APIPortalTPC.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error : " + ex.Message);
             }
         }
-    
+        [HttpGet("Archivo/{id:int}")]
+        public async Task<ActionResult<Archivo>> GetArchivo(int id)
+        {
+            try
+            {
+                Id_RelacionTicket R = await IRRT.GetRelacion(id);
+                Archivo A = await IRA.GetArchivo((int)R.Id_Archivo);
+
+                return A;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error sacando archivo: " + ex);
+            }
+        }
 
 
     }

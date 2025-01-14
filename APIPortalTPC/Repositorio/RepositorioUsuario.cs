@@ -56,8 +56,8 @@ namespace APIPortalTPC.Repositorio
                     sql.Open();
                     Comm = sql.CreateCommand();
                     Comm.CommandText = "INSERT INTO Usuario" +
-                        "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario, Apellido_Materno, Correo_Usuario,  Tipo_Liberador, En_Vacaciones, Admin) " +
-                        "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario, @Apellido_Materno, @Correo_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin) " +
+                        "(Nombre_Usuario, Apellido_Paterno, Rut_Usuario, Apellido_Materno, Correo_Usuario,  Tipo_Liberador, En_Vacaciones, Admin, Activado) " +
+                        "VALUES (@Nombre_Usuario, @Apellido_Paterno, @Rut_Usuario, @Apellido_Materno, @Correo_Usuario, @Tipo_Liberador, @En_Vacaciones,@Admin,@Activado) " +
                         "SELECT SCOPE_IDENTITY() AS Id_Usuario";
                     Comm.CommandType = CommandType.Text;
                     Comm.Parameters.Add("@Nombre_Usuario", SqlDbType.VarChar, 50).Value = U.Nombre_Usuario;
@@ -68,6 +68,7 @@ namespace APIPortalTPC.Repositorio
                     Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                     Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                     Comm.Parameters.Add("@Tipo_Liberador", SqlDbType.Bit).Value = U.Tipo_Liberador;
+                    Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = false;
    
                     decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
                     int id = (int)idDecimal;
@@ -238,8 +239,8 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<Usuario> ModificarUsuario(Usuario U)
         {
-            string rut = U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper(); 
-
+            string rut = U.Rut_Usuario.Replace(".", "").Replace("-", "").Replace(" ", "").ToUpper();
+            
             if (!CalcularDigitoVerificador(rut))
                 throw new Exception("Error de Rut ");
             Usuario? Umod = null;
@@ -274,19 +275,27 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@En_Vacaciones", SqlDbType.Bit).Value = U.En_Vacaciones;
                 Comm.Parameters.Add("@Admin", SqlDbType.Bit).Value = U.Admin;
                 Comm.Parameters.Add("@Activado", SqlDbType.Bit).Value = U.Activado;
-                //if(U.CodigoMFA==0 || U.CodigoMFA== null)
-                Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value =(U.Contraseña_Usuario);
-                //else Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
-                if (U.CodigoMFA != null || U.CodigoMFA != 1)
+                if(U.CodigoMFA==1)
+                    Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
+                else
+                    if (U.Contraseña_Usuario == U.CodigoMFA.ToString())
+
+                      Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = BCrypt.Net.BCrypt.HashPassword(U.Contraseña_Usuario);
+                else
+                            Comm.Parameters.Add("@Contraseña_Usuario", SqlDbType.VarChar, 100).Value = (U.Contraseña_Usuario);
+               
+
+                if (U.CodigoMFA != 1)
                 {
                     Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = U.CodigoMFA;
                 }
                 else
                 {
                     Comm.Parameters.Add("@CodigoMFA", SqlDbType.Int).Value = 0;
+
                 }
                 Comm.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = U.Id_Usuario;
-
+                
                 reader = await Comm.ExecuteReaderAsync();
                 if (reader.Read())
                     Umod = await GetUsuario(Convert.ToInt32(reader["Id_Usuario"]));
@@ -330,16 +339,18 @@ namespace APIPortalTPC.Repositorio
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario = @rut";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Rut_Usuario = @rut and Activado = @A";
                     command.Parameters.AddWithValue("@rut", rut);
+                    command.Parameters.AddWithValue("@A", true);
                     SqlDataReader reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
                         return "El rut ya existe";
                     }
                     reader.Close();
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Correo_Usuario = @correo";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Usuario WHERE Correo_Usuario = @correo and Activado = @Ac";
                     command.Parameters.AddWithValue("@correo", correo);
+                    command.Parameters.AddWithValue("@Ac", true);
                     reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {

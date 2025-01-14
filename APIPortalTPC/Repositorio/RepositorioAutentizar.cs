@@ -82,12 +82,11 @@ namespace APIPortalTPC.Repositorio
 
             finally
             {
-                MFA(U.Correo_Usuario);
+               
                 Comm?.Dispose();
                 sql.Close();
                 sql.Dispose();
             }
-            Console.WriteLine(pass);
             if (BCrypt.Net.BCrypt.Verify(pass,U.Contraseña_Usuario)) return U;
 
 
@@ -131,6 +130,7 @@ namespace APIPortalTPC.Repositorio
                     <p>Equipo de Soporte</p>
                 </body>
             </html>";
+           
             try
             {
                 using (MailMessage mail = new MailMessage())

@@ -88,17 +88,17 @@ namespace APIPortalTPC.Repositorio
                 Comm = sql.CreateCommand();
                 //se realiza la accion correspondiente en la base de datos
                 //muestra los datos de la tabla correspondiente con sus condiciones
-                Comm.CommandText = "SELECT * FROM dbo.Relacion, A.Nombre " +
-                    "where Id_Relacion = @Id_Relacion";
+                Comm.CommandText = "SELECT * FROM dbo.Relacion " +
+                    "where ID_Cotizacion  = @ID_Cotizacion ";
                 Comm.CommandType = CommandType.Text;
                 //se guarda el parametro 
-                Comm.Parameters.Add("@Id_Relacion", SqlDbType.Int).Value = id;
+                Comm.Parameters.Add("@ID_Cotizacion", SqlDbType.Int).Value = id;
 
                 reader = await Comm.ExecuteReaderAsync();
                 while (reader.Read())
                 {
                     R.Id_Archivo = Convert.ToInt32(reader["Id_Archivo"]);
-                    R.Id_Cotizacion = reader["Id_Cotizacion"] is DBNull ? 0 : Convert.ToInt32(reader["Id_Cotizacion"]);
+                    R.Id_Cotizacion = reader["ID_Cotizacion"] is DBNull ? 0 : Convert.ToInt32(reader["ID_Cotizacion"]);
                     R.Id_Relacion = Convert.ToInt32(reader["Id_Relacion"]);
                 }
             }

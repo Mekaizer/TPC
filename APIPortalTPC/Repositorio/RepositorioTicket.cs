@@ -57,8 +57,8 @@ namespace APIPortalTPC.Repositorio
                 Comm.Parameters.Add("@Detalle", SqlDbType.VarChar, 50).Value = T.Detalle;
 
                 if (T.Solped != null)
-                    Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = T.Solped;
-                else Comm.Parameters.Add("@Solped", SqlDbType.Int).Value = DBNull.Value;
+                    Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = T.Solped;
+                else Comm.Parameters.Add("@Solped", SqlDbType.BigInt).Value = DBNull.Value;
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.Id_OE;
 
                 decimal idDecimal = (decimal)await Comm.ExecuteScalarAsync();
@@ -127,8 +127,8 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
-                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Numero_OC = Convert.ToInt64(reader["N_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (long)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.N_OE = Convert.ToInt32(reader["Id_OE"]);
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
@@ -195,8 +195,8 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
-                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Numero_OC = Convert.ToInt64(reader["N_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (long)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
@@ -282,7 +282,7 @@ namespace APIPortalTPC.Repositorio
 
                 Comm.Parameters.Add("@Id_OE", SqlDbType.Int).Value = T.N_OE;
 
-                Comm.Parameters.Add("@N_OC", SqlDbType.Int).Value = T.Numero_OC;
+                Comm.Parameters.Add("@N_OC", SqlDbType.BigInt).Value = T.Numero_OC;
 
                 Comm.Parameters.Add("@ID_Ticket", SqlDbType.Int).Value = T.ID_Ticket;
 
@@ -496,8 +496,8 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
-                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt64(reader["Numero_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (long)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
@@ -569,8 +569,8 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt32(reader["Numero_OC"]);
-                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Numero_OC = reader.IsDBNull(reader.GetOrdinal("Numero_OC")) ? 0 : Convert.ToInt64(reader["Numero_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (long)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.Activado = Convert.ToBoolean(reader["Activado"]);
                     T.ID_Ticket = Convert.ToInt32(reader["ID_Ticket"]);
@@ -643,8 +643,8 @@ namespace APIPortalTPC.Repositorio
                     T.Fecha_OC_Enviada = reader["Fecha_OC_Enviada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Enviada"];
                     T.Fecha_OC_Liberada = reader["Fecha_OC_Liberada"] is DBNull ? (DateTime?)null : (DateTime)reader["Fecha_OC_Liberada"];
                     T.Detalle = Convert.ToString(reader["Detalle"]).Trim();
-                    T.Numero_OC = Convert.ToInt32(reader["N_OC"]);
-                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (int)reader["Solped"];
+                    T.Numero_OC = Convert.ToInt64(reader["N_OC"]);
+                    T.Solped = reader.IsDBNull(reader.GetOrdinal("Solped")) ? 0 : (long)reader["Solped"];
                     T.Id_OE = Convert.ToString(reader["Nombre"]).Trim();
                     T.N_OE = Convert.ToInt32(reader["Id_OE"]);
                     T.Activado = Convert.ToBoolean(reader["Activado"]);

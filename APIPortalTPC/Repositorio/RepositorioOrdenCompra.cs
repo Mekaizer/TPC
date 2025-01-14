@@ -231,7 +231,7 @@ namespace APIPortalTPC.Repositorio
                 sqlConexion.Open();
                 Comm = sqlConexion.CreateCommand();
                 Comm.CommandText = "UPDATE dbo.Orden_de_Compra SET " +
-                                   "Numero_OC = @Numero_OC, " +  // Add comma after Solped
+                                   "Numero_OC = @Numero_OC, " +  
                                    "Posicion = @Posicion, " +
                                    "Texto = @Texto, " +
                                    "Cantidad = @Cantidad, " +
@@ -395,13 +395,12 @@ namespace APIPortalTPC.Repositorio
             using (SqlConnection sqlConnection = conectar())
             {
                 sqlConnection.Open();
-
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = sqlConnection;
-                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Orden_de_Compra WHERE Numero_OC = @OC and Posicion =@P ";
+                    command.CommandText = "SELECT TOP 1 1 FROM dbo.Orden_de_Compra WHERE Numero_OC = @OC and Posicion =@OP";
                     command.Parameters.AddWithValue("@OC", Numero_OC);
-                    command.Parameters.AddWithValue("@OC", posicion);
+                    command.Parameters.AddWithValue("@OP", posicion);
                     SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     if (reader.HasRows)

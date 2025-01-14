@@ -26,14 +26,6 @@ namespace APIPortalTPC.Repositorio
         /// <exception cref="Exception"></exception>
         public async Task<string> CorreoProveedores(Proveedores P, FormData formData)
         {
-        // Cambia esto según el servidor SMTP
-         string smtpServer = "smtp.office365.com";
-        // Cambia esto según el puerto que uses
-         int smtpPort = 25;
-        // Cambia esto por la dirección del remitente
-         string fromEmail = "aplicaciones@tpc.cl";
-        //"portaladquisiones@tpc.cl"; 
-         string password = "$547P%g6";
         // Pedir al usuario que ingrese el asunto del correo
         string toEmail = P.Correo_Proveedor;
             string subject = formData.Asunto;
@@ -49,7 +41,7 @@ namespace APIPortalTPC.Repositorio
                     <li>{P.ID_Bien_Servicio}</li> 
                 </ul>
                 <p> {formData.Mensaje} </p>
-                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo. Para enviar su cotización o cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
+                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo. Para enviar su cotización o cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisiciones@tpc.cl</strong>.</p>
                 <p>Agradecemos su pronta colaboración.</p>
                 <p>Saludos cordiales,</p>
                 <p>Equipo de Adquisiciones<br/>
@@ -62,24 +54,19 @@ namespace APIPortalTPC.Repositorio
                 // Crear el mensaje de correo
                 using (MailMessage mail = new MailMessage())
                 {
-                    mail.From = new MailAddress(fromEmail);
-                    mail.To.Add(toEmail);
-
-                    mail.Subject = subject;
-                    mail.Body = htmlBody;
-                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
                     if (formData.file != null)
                     {
                         mail.Attachments.Add(new Attachment(formData.file.OpenReadStream(), formData.file.FileName));
                     }
                     // Configurar el cliente SMTP
+                    mail.From = new MailAddress(fromEmail);
+                    mail.To.Add(toEmail);
+                    mail.Subject = subject;
+                    mail.Body = htmlBody;
+                    mail.IsBodyHtml = true;
                     using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                     {
-                  
-                        smtpClient.Credentials = new System.Net.NetworkCredential(fromEmail, password);
-                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                        smtpClient.EnableSsl = true; // Ajusta esto si es necesario
-                        // Enviar el mensaje
+                        smtpClient.EnableSsl = true; // Habilitar SSL si es necesario
                         smtpClient.Send(mail);
                     }
                 }
@@ -198,7 +185,7 @@ namespace APIPortalTPC.Repositorio
             }
         }
         /// <summary>
-        /// Metodo para enviar la contraseña nueva al usuario 
+        /// Metodo para recuperar una nueva contraseña
         /// </summary>
         /// <param name="U"></param>
         /// <returns></returns>
@@ -215,11 +202,12 @@ namespace APIPortalTPC.Repositorio
             <head></head>
             <body>
             <p style='font-size: 16px; color: #333;'>Estimado/a {U.Nombre_Usuario},</p>
-                <p>Su contraseña: </p>
+                <p>Su nueva contraseña: </p>
                 <ul>
                 <li>{U.Contraseña_Usuario}</li> 
                 </ul>
-                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo.En caso de cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisicionestpc@tpc.cl</strong>.</p>
+                <p>No olvide cambiarla en Administracion -> Usuarios -> Su perfil </p>
+                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo.En caso de cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisiciones@tpc.cl</strong>.</p>
                 <strong>Terminal Puerto de Coquimbo</strong></p>
             </body>
         </html>";
@@ -240,6 +228,64 @@ namespace APIPortalTPC.Repositorio
                     }
 
                 }
+                return "Correo enviado exitosamente.";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al enviar el correo: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// Metodo para enviar la contraseña nueva al usuario 
+        /// </summary>
+        /// <param name="U"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<string> CorreoUsuarioPass(Usuario U)
+        {
+            // Pedir al usuario que ingrese el asunto del correo
+            string toEmail = U.Correo_Usuario;
+            //Nombre del mensaje
+            string subject = "Nueva contraseña";
+            // Cuerpo del mensaje en HTML sobre la liberación urgente
+            string htmlBody = $@"<html>
+            <head></head>
+            <body>
+            <p style='font-size: 16px; color: #333;'>Estimado/a {U.Nombre_Usuario},</p>
+
+                <p>Su contraseña: </p>
+                <ul>
+                <li>{U.Contraseña_Usuario}</li> 
+                </ul>
+                <p>Por favor, tenga en cuenta que este es un mensaje generado automáticamente. No responda a este correo.En caso de cualquier consulta, favor de contactarnos a través del correo electrónico: <strong>adquisiciones@tpc.cl</strong>.</p>
+                <strong>Terminal Puerto de Coquimbo</strong></p>
+            </body>
+        </html>";
+
+
+            try
+            {
+                // Crear el mensaje de correo
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(fromEmail);
+                    mail.To.Add(toEmail);
+
+                    mail.Subject = subject;
+                    mail.Body = htmlBody;
+                    mail.IsBodyHtml = true; // Indica que el cuerpo del mensaje es HTML
+
+                    // Configurar el cliente SMTP
+                    using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+                    {
+                        // No se especifica credenciales ni SSL
+                        smtpClient.EnableSsl = false; // Ajusta esto si es necesario
+
+                        // Enviar el mensaje
+                        smtpClient.Send(mail);
+                    }
+                }
+
 
                 return "Correo enviado exitosamente.";
             }
@@ -248,7 +294,6 @@ namespace APIPortalTPC.Repositorio
                 throw new Exception($"Error al enviar el correo: {ex.Message}");
             }
         }
-
     }
 }
 
